@@ -1,0 +1,422 @@
+
+=== STEP 217 ===
+Created At: 2026-10-11T12:07:17+07:00
+Completed At: 2026-10-11T12:07:17+07:00
+File Path: `file:///d:/FILE%20ALL/%21%21File%20porto/web/lib/physicsEngine.ts`
+Total Lines: 614
+Total Bytes: 19828
+Showing lines 1 to 150
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: // ============================================================================
+2: // Physics Engine v2 — Semi-Fixed Timestep, NaN Guard, Gaussian Noise,
+3: // Circular Dead-Time Buffer (Zero-Copy), Unit-Aware Gravity
+4: // ============================================================================
+5: 
+6: import {
+7:   PlantParameters,
+8:   PlantState,
+9:   PIDConfig,
+10:   PIDGains,
+11:   ControllerState,
+12:   DataPoint,
+13:   StepResponseMetrics,
+14:   SimulationStatus,
+15:   NoiseConfig,
+16: } from '@/types/simulation';
+17: 
+18: // ---------------------------------------------------------------------------
+19: // Constants
+20: // ---------------------------------------------------------------------------
+21: 
+22: /** Fixed physics timestep (seconds). Never changes regardless of frame rate. */
+23: export const PHYSICS_DT = 0.005; // 5 ms → 200 Hz
+24: 
+25: /** Maximum accumulated time per frame (prevents spiral-of-death on tab switch). */
+26: const MAX_ACCUMULATOR = 0.2; // 200 ms cap
+27: 
+28: /** Default divergence threshold — if |x[0]| exceeds this, system is runaway. */
+29: const DEFAULT_DIVERGENCE_LIMIT = 1e6;
+30: 
+31: // ---------------------------------------------------------------------------
+32: // Utility: Clamp
+33: // ---------------------------------------------------------------------------
+34: export function clamp(value: number, min: number, max: number): number {
+35:   return Math.max(min, Math.min(max, value));
+36: }
+37: 
+38: // ---------------------------------------------------------------------------
+39: // Utility: Box-Muller Gaussian White Noise
+40: // ---------------------------------------------------------------------------
+41: let _spareNormal: number | null = null;
+42: 
+43: export function gaussianNoise(sigma: number): number {
+44:   if (_spareNormal !== null) {
+45:     const n = _spareNormal * sigma;
+46:     _spareNormal = null;
+47:     return n;
+48:   }
+49:   let u: number, v: number, s: number;
+50:   do {
+51:     u = Math.random() * 2 - 1;
+52:     v = Math.random() * 2 - 1;
+53:     s = u * u + v * v;
+54:   } while (s >= 1 || s === 0);
+55:   const mul = Math.sqrt(-2.0 * Math.log(s) / s);
+56:   _spareNormal = v * mul;
+57:   return u * mul * sigma;
+58: }
+59: 
+60: // ---------------------------------------------------------------------------
+61: // NaN / Infinity Safety Guard
+62: // ---------------------------------------------------------------------------
+63: function isSafe(x: number): boolean {
+64:   return Number.isFinite(x);
+65: }
+66: 
+67: function sanitizeState(x: number[]): number[] {
+68:   return x.map((v) => (isSafe(v) ? v : 0));
+69: }
+70: 
+71: // ---------------------------------------------------------------------------
+72: // Plant State Initialization
+73: // Uses Float64Array for dead-time buffer (zero-copy circular writes).
+74: // ---------------------------------------------------------------------------
+75: export function createPlantState(plant: PlantParameters): PlantState {
+76:   const capacity = Math.max(2, Math.ceil(plant.deadTime / PHYSICS_DT) + 1);
+77:   return {
+78:     x: plant.order === 1 ? [0] : [0, 0],
+79:     measuredOutput: 0,
+80:     deadTimeBuffer: new Float64Array(capacity),
+81:     deadTimeIndex: 0,
+82:     deadTimeCapacity: capacity,
+83:   };
+84: }
+85: 
+86: // ---------------------------------------------------------------------------
+87: // Second-Order Plant ODE: ẍ + 2ζωn·ẋ + ωn²·x = K·ωn²·u
+88: // With friction and unit-aware gravity torque.
+89: // ---------------------------------------------------------------------------
+90: function plantDerivatives(
+91:   x: number[],
+92:   u: number,
+93:   plant: PlantParameters,
+94:   gravityInRadians: boolean
+95: ): number[] {
+96:   const { dampingRatio: z, naturalFrequency: wn, gain: K, friction, gravityTorque } = plant;
+97: 
+98:   if (plant.order === 1) {
+99:     // First order: τ·ẋ + x = K·u
+100:     const tau = plant.timeConstant > 0 ? plant.timeConstant : 0.01;
+101:     const frictionTerm = friction * Math.sign(x[0]) * Math.abs(x[0]);
+102:     const dx = (K * u - x[0] - frictionTerm) / tau;
+103:     return [isSafe(dx) ? dx : 0];
+104:   }
+105: 
+106:   // Second order
+107:   const velocity = x[1];
+108:   const frictionForce = friction * Math.sign(velocity) * Math.abs(velocity);
+109: 
+110:   // Gravity: if the archetype operates in radians internally (e.g. inverted pendulum),
+111:   // use sin(x[0]) directly. Otherwise convert degrees → radians for the trig.
+112:   const gravityLoad = gravityTorque > 0
+113:     ? gravityTorque * Math.sin(gravityInRadians ? x[0] : x[0] * Math.PI / 180)
+114:     : 0;
+115: 
+116:   const accel =
+117:     K * wn * wn * u -
+118:     2 * z * wn * velocity -
+119:     wn * wn * x[0] -
+120:     frictionForce -
+121:     gravityLoad;
+122: 
+123:   return [velocity, isSafe(accel) ? accel : 0];
+124: }
+125: 
+126: // ---------------------------------------------------------------------------
+127: // RK4 Integrator
+128: // ---------------------------------------------------------------------------
+129: export function rk4Step(
+130:   x: number[],
+131:   u: number,
+132:   dt: number,
+133:   plant: PlantParameters,
+134:   gravityInRadians: boolean = false
+135: ): number[] {
+136:   const k1 = plantDerivatives(x, u, plant, gravityInRadians);
+137:   const x2 = x.map((xi, i) => xi + 0.5 * dt * k1[i]);
+138:   const k2 = plantDerivatives(x2, u, plant, gravityInRadians);
+139:   const x3 = x.map((xi, i) => xi + 0.5 * dt * k2[i]);
+140:   const k3 = plantDerivatives(x3, u, plant, gravityInRadians);
+141:   const x4 = x.map((xi, i) => xi + dt * k3[i]);
+142:   const k4 = plantDerivatives(x4, u, plant, gravityInRadians);
+143: 
+144:   const result = x.map(
+145:     (xi, i) => xi + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i])
+146:   );
+147: 
+148:   return sanitizeState(result);
+149: }
+150: 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+
+=== STEP 218 ===
+
+
+=== STEP 219 ===
+Created At: 2026-10-11T12:07:20+07:00
+Completed At: 2026-10-11T12:07:20+07:00
+File Path: `file:///d:/FILE%20ALL/%21%21File%20porto/web/lib/physicsEngine.ts`
+Total Lines: 614
+Total Bytes: 19828
+Showing lines 151 to 300
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+151: // ---------------------------------------------------------------------------
+152: // Dead-Time Buffer — Circular Write (Zero-Copy, In-Place Mutation)
+153: // ---------------------------------------------------------------------------
+154: export function applyDeadTime(
+155:   output: number,
+156:   state: PlantState,
+157:   dt: number
+158: ): number {
+159:   const cap = state.deadTimeCapacity;
+160:   if (cap <= 1) return output;
+161: 
+162:   // Write current output into ring buffer
+163:   state.deadTimeBuffer[state.deadTimeIndex] = output;
+164: 
+165:   // Advance write head
+166:   state.deadTimeIndex = (state.deadTimeIndex + 1) % cap;
+167: 
+168:   // Read from the oldest entry (which is now at the write head position)
+169:   const readIdx = state.deadTimeIndex % cap;
+170:   const delayed = state.deadTimeBuffer[readIdx];
+171: 
+172:   return isSafe(delayed) ? delayed : output;
+173: }
+174: 
+175: // ---------------------------------------------------------------------------
+176: // PID Controller — Discrete Parallel Form with Industrial Enhancements
+177: // ---------------------------------------------------------------------------
+178: export function createControllerState(): ControllerState {
+179:   return {
+180:     error: 0,
+181:     prevError: 0,
+182:     integral: 0,
+183:     prevMeasurement: 0,
+184:     filteredDerivative: 0,
+185:     pTerm: 0,
+186:     iTerm: 0,
+187:     dTerm: 0,
+188:     controlOutput: 0,
+189:     controlOutputUnsat: 0,
+190:     isSaturated: false,
+191:   };
+192: }
+193: 
+194: export function pidStep(
+195:   setpoint: number,
+196:   measurement: number,
+197:   config: PIDConfig,
+198:   state: ControllerState,
+199:   actuatorLimits: [number, number]
+200: ): ControllerState {
+201:   const dt = config.dt;
+202: 
+203:   // Guard against NaN inputs
+204:   if (!isSafe(setpoint) || !isSafe(measurement)) {
+205:     return { ...state, error: 0, pTerm: 0, iTerm: 0, dTerm: 0, controlOutput: 0, controlOutputUnsat: 0 };
+206:   }
+207: 
+208:   const error = setpoint - measurement;
+209: 
+210:   // ── P-term ──
+211:   const pTerm = config.Kp * error;
+212: 
+213:   // ── I-term with anti-windup back-calculation ──
+214:   let integral = state.integral + error * dt;
+215: 
+216:   // Back-calculation anti-windup: correct integral based on saturation
+217:   if (state.isSaturated) {
+218:     const satError = state.controlOutput - state.controlOutputUnsat;
+219:     integral += config.antiWindupKb * satError * dt;
+220:   }
+221: 
+222:   // Integral clamping
+223:   integral = clamp(integral, config.integralClamp[0], config.integralClamp[1]);
+224:   if (!isSafe(integral)) integral = 0;
+225: 
+226:   const iTerm = config.Ki * integral;
+227: 
+228:   // ── D-term ──
+229:   let rawDerivative: number;
+230:   if (config.derivativeOnMeasurement) {
+231:     // Derivative-on-measurement: avoids derivative kick
+232:     rawDerivative = -(measurement - state.prevMeasurement) / dt;
+233:   } else {
+234:     rawDerivative = (error - state.prevError) / dt;
+235:   }
+236:   if (!isSafe(rawDerivative)) rawDerivative = 0;
+237: 
+238:   // Low-pass filter on derivative: α = N·dt / (1 + N·dt)
+239:   const alpha =
+240:     config.derivativeFilterN > 0
+241:       ? (config.derivativeFilterN * dt) / (1 + config.derivativeFilterN * dt)
+242:       : 1;
+243:   let filteredDerivative = alpha * rawDerivative + (1 - alpha) * state.filteredDerivative;
+244:   if (!isSafe(filteredDerivative)) filteredDerivative = 0;
+245: 
+246:   const dTerm = config.Kd * filteredDerivative;
+247: 
+248:   // ── Total control output ──
+249:   let controlOutputUnsat = pTerm + iTerm + dTerm;
+250:   if (!isSafe(controlOutputUnsat)) controlOutputUnsat = 0;
+251: 
+252:   const controlOutput = clamp(controlOutputUnsat, actuatorLimits[0], actuatorLimits[1]);
+253:   const isSaturated = Math.abs(controlOutput - controlOutputUnsat) > 1e-6;
+254: 
+255:   return {
+256:     error,
+257:     prevError: error,
+258:     integral,
+259:     prevMeasurement: measurement,
+260:     filteredDerivative,
+261:     pTerm,
+262:     iTerm,
+263:     dTerm,
+264:     controlOutput,
+265:     controlOutputUnsat,
+266:     isSaturated,
+267:   };
+268: }
+269: 
+270: // ---------------------------------------------------------------------------
+271: // Full Simulation Step: PID → Plant → Dead Time → Noise → Output
+272: // CRITICAL FIX: Plant integrator state x[] is NEVER overwritten by delayed
+273: // output. The delayed+noisy value is stored in plantState.measuredOutput
+274: // and that is what the PID reads. The RK4 integrator always uses raw x[].
+275: // ---------------------------------------------------------------------------
+276: export function simulationStep(
+277:   setpoint: number,
+278:   plantState: PlantState,
+279:   controllerState: ControllerState,
+280:   plant: PlantParameters,
+281:   pidConfig: PIDConfig,
+282:   disturbance: number = 0,
+283:   noiseConfig?: NoiseConfig,
+284:   gravityInRadians: boolean = false,
+285:   divergenceLimit: number = DEFAULT_DIVERGENCE_LIMIT,
+286: ): {
+287:   plantState: PlantState;
+288:   controllerState: ControllerState;
+289:   processVariable: number;
+290:   controlEffort: number;
+291:   status: SimulationStatus;
+292: } {
+293:   const dt = pidConfig.dt;
+294: 
+295:   // PID reads the MEASURED output (after dead time + noise), not raw plant state
+296:   const measurement = plantState.measuredOutput;
+297: 
+298:   // PID step
+299:   const newCtrl = pidStep(setpoint, measurement, pidConfig, controllerState, plant.actuatorLimits);
+300: 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+
+=== STEP 220 ===
+
+
+=== STEP 221 ===
+Created At: 2026-10-11T12:07:24+07:00
+Completed At: 2026-10-11T12:07:24+07:00
+File Path: `file:///d:/FILE%20ALL/%21%21File%20porto/web/lib/physicsEngine.ts`
+Total Lines: 614
+Total Bytes: 19828
+Showing lines 301 to 380
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+301:   // Apply control effort + disturbance
+302:   const u = newCtrl.controlOutput + disturbance;
+303: 
+304:   // Integrate plant ODE (RK4) using the RAW internal state
+305:   const newX = rk4Step(plantState.x, u, dt, plant, gravityInRadians);
+306: 
+307:   // ── Divergence check ──
+308:   const rawOutput = newX[0];
+309:   if (!isSafe(rawOutput) || Math.abs(rawOutput) > divergenceLimit) {
+310:     // Freeze physics — return frozen state with runaway status
+311:     return {
+312:       plantState: {
+313:         ...plantState,
+314:         x: sanitizeState(plantState.x),
+315:       },
+316:       controllerState: createControllerState(),
+317:       processVariable: plantState.measuredOutput,
+318:       controlEffort: 0,
+319:       status: 'runaway',
+320:     };
+321:   }
+322: 
+323:   // ── Dead-time delay (in-place circular buffer mutation) ──
+324:   const deadTimeOutput = plant.deadTime > 0
+325:     ? applyDeadTime(rawOutput, plantState, dt)
+326:     : rawOutput;
+327: 
+328:   // ── Sensor noise injection ──
+329:   let measuredPV = deadTimeOutput;
+330:   if (noiseConfig?.enabled && noiseConfig.sigma > 0) {
+331:     measuredPV += gaussianNoise(noiseConfig.sigma);
+332:   }
+333: 
+334:   // Build new plant state — x[] holds raw integrator state, measuredOutput holds what PID sees
+335:   const updatedPlantState: PlantState = {
+336:     x: newX,
+337:     measuredOutput: measuredPV,
+338:     deadTimeBuffer: plantState.deadTimeBuffer, // same typed array reference (zero-copy)
+339:     deadTimeIndex: plantState.deadTimeIndex,    // already advanced by applyDeadTime
+340:     deadTimeCapacity: plantState.deadTimeCapacity,
+341:   };
+342: 
+343:   // Determine status
+344:   let status: SimulationStatus = 'running';
+345:   if (Math.abs(newCtrl.error) < Math.abs(setpoint) * 0.02 + 0.01) {
+346:     status = 'stable';
+347:   }
+348: 
+349:   return {
+350:     plantState: updatedPlantState,
+351:     controllerState: newCtrl,
+352:     processVariable: measuredPV,
+353:     controlEffort: u,
+354:     status,
+355:   };
+356: }
+357: 
+358: // ---------------------------------------------------------------------------
+359: // Semi-Fixed Timestep Accumulator
+360: // Call this from requestAnimationFrame. It accumulates real wall-clock delta,
+361: // then ticks physics at fixed PHYSICS_DT steps. Returns interpolation alpha
+362: // for smooth rendering between discrete physics states.
+363: // ---------------------------------------------------------------------------
+364: export interface AccumulatorState {
+365:   accumulator: number;
+366:   prevTime: number;
+367: }
+368: 
+369: export function createAccumulator(): AccumulatorState {
+370:   return { accumulator: 0, prevTime: 0 };
+371: }
+372: 
+373: /**
+374:  * Advance the accumulator by the real frame delta.
+375:  * Returns how many fixed physics steps to execute this frame.
+376:  */
+377: export function advanceAccumulator(
+378:   acc: AccumulatorState,
+379:   nowMs: number,
+380:   speedMultiplier: number
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+
+=== STEP 222 ===
+

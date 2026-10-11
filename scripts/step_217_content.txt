@@ -1,0 +1,158 @@
+Created At: 2026-10-11T12:07:17+07:00
+Completed At: 2026-10-11T12:07:17+07:00
+File Path: `file:///d:/FILE%20ALL/%21%21File%20porto/web/lib/physicsEngine.ts`
+Total Lines: 614
+Total Bytes: 19828
+Showing lines 1 to 150
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: // ============================================================================
+2: // Physics Engine v2 — Semi-Fixed Timestep, NaN Guard, Gaussian Noise,
+3: // Circular Dead-Time Buffer (Zero-Copy), Unit-Aware Gravity
+4: // ============================================================================
+5: 
+6: import {
+7:   PlantParameters,
+8:   PlantState,
+9:   PIDConfig,
+10:   PIDGains,
+11:   ControllerState,
+12:   DataPoint,
+13:   StepResponseMetrics,
+14:   SimulationStatus,
+15:   NoiseConfig,
+16: } from '@/types/simulation';
+17: 
+18: // ---------------------------------------------------------------------------
+19: // Constants
+20: // ---------------------------------------------------------------------------
+21: 
+22: /** Fixed physics timestep (seconds). Never changes regardless of frame rate. */
+23: export const PHYSICS_DT = 0.005; // 5 ms → 200 Hz
+24: 
+25: /** Maximum accumulated time per frame (prevents spiral-of-death on tab switch). */
+26: const MAX_ACCUMULATOR = 0.2; // 200 ms cap
+27: 
+28: /** Default divergence threshold — if |x[0]| exceeds this, system is runaway. */
+29: const DEFAULT_DIVERGENCE_LIMIT = 1e6;
+30: 
+31: // ---------------------------------------------------------------------------
+32: // Utility: Clamp
+33: // ---------------------------------------------------------------------------
+34: export function clamp(value: number, min: number, max: number): number {
+35:   return Math.max(min, Math.min(max, value));
+36: }
+37: 
+38: // ---------------------------------------------------------------------------
+39: // Utility: Box-Muller Gaussian White Noise
+40: // ---------------------------------------------------------------------------
+41: let _spareNormal: number | null = null;
+42: 
+43: export function gaussianNoise(sigma: number): number {
+44:   if (_spareNormal !== null) {
+45:     const n = _spareNormal * sigma;
+46:     _spareNormal = null;
+47:     return n;
+48:   }
+49:   let u: number, v: number, s: number;
+50:   do {
+51:     u = Math.random() * 2 - 1;
+52:     v = Math.random() * 2 - 1;
+53:     s = u * u + v * v;
+54:   } while (s >= 1 || s === 0);
+55:   const mul = Math.sqrt(-2.0 * Math.log(s) / s);
+56:   _spareNormal = v * mul;
+57:   return u * mul * sigma;
+58: }
+59: 
+60: // ---------------------------------------------------------------------------
+61: // NaN / Infinity Safety Guard
+62: // ---------------------------------------------------------------------------
+63: function isSafe(x: number): boolean {
+64:   return Number.isFinite(x);
+65: }
+66: 
+67: function sanitizeState(x: number[]): number[] {
+68:   return x.map((v) => (isSafe(v) ? v : 0));
+69: }
+70: 
+71: // ---------------------------------------------------------------------------
+72: // Plant State Initialization
+73: // Uses Float64Array for dead-time buffer (zero-copy circular writes).
+74: // ---------------------------------------------------------------------------
+75: export function createPlantState(plant: PlantParameters): PlantState {
+76:   const capacity = Math.max(2, Math.ceil(plant.deadTime / PHYSICS_DT) + 1);
+77:   return {
+78:     x: plant.order === 1 ? [0] : [0, 0],
+79:     measuredOutput: 0,
+80:     deadTimeBuffer: new Float64Array(capacity),
+81:     deadTimeIndex: 0,
+82:     deadTimeCapacity: capacity,
+83:   };
+84: }
+85: 
+86: // ---------------------------------------------------------------------------
+87: // Second-Order Plant ODE: ẍ + 2ζωn·ẋ + ωn²·x = K·ωn²·u
+88: // With friction and unit-aware gravity torque.
+89: // ---------------------------------------------------------------------------
+90: function plantDerivatives(
+91:   x: number[],
+92:   u: number,
+93:   plant: PlantParameters,
+94:   gravityInRadians: boolean
+95: ): number[] {
+96:   const { dampingRatio: z, naturalFrequency: wn, gain: K, friction, gravityTorque } = plant;
+97: 
+98:   if (plant.order === 1) {
+99:     // First order: τ·ẋ + x = K·u
+100:     const tau = plant.timeConstant > 0 ? plant.timeConstant : 0.01;
+101:     const frictionTerm = friction * Math.sign(x[0]) * Math.abs(x[0]);
+102:     const dx = (K * u - x[0] - frictionTerm) / tau;
+103:     return [isSafe(dx) ? dx : 0];
+104:   }
+105: 
+106:   // Second order
+107:   const velocity = x[1];
+108:   const frictionForce = friction * Math.sign(velocity) * Math.abs(velocity);
+109: 
+110:   // Gravity: if the archetype operates in radians internally (e.g. inverted pendulum),
+111:   // use sin(x[0]) directly. Otherwise convert degrees → radians for the trig.
+112:   const gravityLoad = gravityTorque > 0
+113:     ? gravityTorque * Math.sin(gravityInRadians ? x[0] : x[0] * Math.PI / 180)
+114:     : 0;
+115: 
+116:   const accel =
+117:     K * wn * wn * u -
+118:     2 * z * wn * velocity -
+119:     wn * wn * x[0] -
+120:     frictionForce -
+121:     gravityLoad;
+122: 
+123:   return [velocity, isSafe(accel) ? accel : 0];
+124: }
+125: 
+126: // ---------------------------------------------------------------------------
+127: // RK4 Integrator
+128: // ---------------------------------------------------------------------------
+129: export function rk4Step(
+130:   x: number[],
+131:   u: number,
+132:   dt: number,
+133:   plant: PlantParameters,
+134:   gravityInRadians: boolean = false
+135: ): number[] {
+136:   const k1 = plantDerivatives(x, u, plant, gravityInRadians);
+137:   const x2 = x.map((xi, i) => xi + 0.5 * dt * k1[i]);
+138:   const k2 = plantDerivatives(x2, u, plant, gravityInRadians);
+139:   const x3 = x.map((xi, i) => xi + 0.5 * dt * k2[i]);
+140:   const k3 = plantDerivatives(x3, u, plant, gravityInRadians);
+141:   const x4 = x.map((xi, i) => xi + dt * k3[i]);
+142:   const k4 = plantDerivatives(x4, u, plant, gravityInRadians);
+143: 
+144:   const result = x.map(
+145:     (xi, i) => xi + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i])
+146:   );
+147: 
+148:   return sanitizeState(result);
+149: }
+150: 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

@@ -1,0 +1,6570 @@
+[
+  {
+    "viewport": "1920x1080",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1920x1080",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1366x768",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "path"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "span"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 48,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "1024x768",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 53,
+    "obscuredCount": 48,
+    "obscuredList": [
+      {
+        "tag": "button",
+        "text": "Export Controller Code",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ganti ke Tema Terang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Ciutkan Sidebar",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pilih Robot (Saat ini: Quadcopter Drone (Altitude))",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Mulai Simulasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Langkah Maju 1 Tick (Step +1dt)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset Plant State ke Nol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi Gangguan Gaya Transien",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.25x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 0.5x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 1x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kecepatan 2x",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kontrol",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Metrik",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Sinyal",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning redaman kritis untuk respon mulus tanpa goyang",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning agresif untuk tarikan cepat ke target",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tuning kurang teredam untuk demo fenomena osilasi",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Altitude",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kp",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Ki",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Info Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Kurangi Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Nilai Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tambah Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "input",
+        "text": "Slider Kd",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Tampilkan Bersebelahan (Bisa Digeser Boundary)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Oscilloscope",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Fokus Penuh Kinematika 2D",
+        "obscuringElementSelector": "h2#code-export-title"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri mendorong robot (injeksi gaya gangguan)",
+        "obscuringElementSelector": "div.p-4.border-b.border-[var(--border)]"
+      },
+      {
+        "tag": "button",
+        "text": "Klik kiri menggeser kamera viewport (Pan)",
+        "obscuringElementSelector": "button.px-2.5.py-1.5.rounded-md"
+      },
+      {
+        "tag": "button",
+        "text": "Injeksi gangguan gaya +4.5N seketika",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Pusatkan kamera pada robot (Shortcut: C)",
+        "obscuringElementSelector": "div.fixed.inset-0.bg-black/60"
+      },
+      {
+        "tag": "button",
+        "text": "Reset zoom/pan kamera dan rasio split 50:50",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      },
+      {
+        "tag": "button",
+        "text": "Reset state fisis plant ke 0",
+        "obscuringElementSelector": "p.text-[10px].text-slate-400"
+      }
+    ]
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "768x1024",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 18,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "control",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "metrics",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "tuning",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "closed",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "signal",
+    "sidebarWidth": 320,
+    "drawerState": "open",
+    "status": "VALID",
+    "totalTested": 16,
+    "obscuredCount": 0,
+    "obscuredList": []
+  },
+  {
+    "viewport": "390x844",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "control",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "metrics",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "tuning",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "closed",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  },
+  {
+    "viewport": "390x844",
+    "tab": "signal",
+    "sidebarWidth": 560,
+    "drawerState": "open",
+    "status": "N/A",
+    "reason": "Lebar sidebar 560px melebihi lebar viewport 390px"
+  }
+]
