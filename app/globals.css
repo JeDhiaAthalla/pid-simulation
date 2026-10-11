@@ -1,0 +1,293 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   PID Control Simulation — Design System
+   Swiss Engineering / Industrial Cyberpunk Minimalist Interface
+   ============================================================================ */
+
+/* ── CSS Custom Properties — Dark Mode (Default) ── */
+:root {
+  --bg-primary: #090D16;
+  --bg-secondary: #0E1320;
+  --bg-tertiary: #141B2A;
+  --panel-bg: #0C1121;
+  --input-bg: #111827;
+  --hover-bg: rgba(34, 211, 238, 0.05);
+
+  --text-primary: #E2E8F0;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+
+  --accent: #22D3EE;
+  --accent-glow: rgba(34, 211, 238, 0.15);
+  --accent-emerald: #22C55E;
+  --accent-amber: #FBBF24;
+  --accent-violet: #A78BFA;
+  --accent-rose: #F87171;
+
+  --border: rgba(148, 163, 184, 0.08);
+  --border-active: rgba(34, 211, 238, 0.25);
+
+  --slider-track: rgba(148, 163, 184, 0.1);
+  --slider-thumb: #22D3EE;
+
+  --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.08);
+  --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  color-scheme: dark;
+}
+
+/* ── Light Mode ── */
+.light {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #F1F5F9;
+  --bg-tertiary: #E2E8F0;
+  --panel-bg: #FFFFFF;
+  --input-bg: #F1F5F9;
+  --hover-bg: rgba(8, 145, 178, 0.05);
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+
+  --accent: #0891B2;
+  --accent-glow: rgba(8, 145, 178, 0.1);
+  --accent-emerald: #16A34A;
+  --accent-amber: #D97706;
+  --accent-violet: #7C3AED;
+  --accent-rose: #DC2626;
+
+  --border: rgba(15, 23, 42, 0.08);
+  --border-active: rgba(8, 145, 178, 0.3);
+
+  --slider-track: rgba(15, 23, 42, 0.08);
+  --slider-thumb: #0891B2;
+
+  --shadow-glow: 0 0 20px rgba(8, 145, 178, 0.05);
+  --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.06);
+
+  color-scheme: light;
+}
+
+/* ── Base Reset ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ── Slider Input ── */
+.slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  transition: opacity 0.15s;
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--slider-thumb);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-glow), 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 2px solid var(--bg-primary);
+}
+
+.slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 16px var(--accent-glow), 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.slider-input::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+}
+
+.slider-input::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--slider-thumb);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-glow);
+  border: 2px solid var(--bg-primary);
+}
+
+/* ── Metric Card ── */
+.metric-card {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.metric-card:hover {
+  border-color: var(--border-active);
+  background: var(--hover-bg);
+}
+
+/* ── Robot Selector Button ── */
+.robot-selector-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.robot-selector-btn:hover {
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ── Control Dashboard ── */
+.control-dashboard {
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border);
+}
+
+/* ── Viewport Container ── */
+.viewport-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-panel);
+}
+
+/* ── Tab Buttons ── */
+.tab-btn {
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.tab-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-secondary);
+}
+
+.tab-btn.active {
+  background: var(--accent-glow);
+  color: var(--accent);
+  border-color: var(--border-active);
+}
+
+/* ── Pulse Animation ── */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Scanline Effect (Dark Mode only) ── */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(transparent, rgba(34, 211, 238, 0.03), transparent);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Grid Pattern Background ── */
+.grid-pattern {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Status Dot ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.status-dot-live {
+  animation: blink 1s ease-in-out infinite;
+}
+
+/* ── Responsive Layout ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+@media (max-width: 1023px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .control-dashboard {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 50vh;
+  }
+}
+
+/* ── Font mono utility ── */
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+}
