@@ -35,6 +35,7 @@ const MetricCard = React.memo(function MetricCard({
   icon: Icon,
   color,
   hasData,
+  tooltip,
 }: {
   label: string;
   value: string | number | null;
@@ -42,9 +43,13 @@ const MetricCard = React.memo(function MetricCard({
   icon: React.ElementType;
   color?: string;
   hasData: boolean;
+  tooltip?: string;
 }) {
   return (
-    <div className="p-2.5 rounded-lg flex items-center gap-2.5 bg-[var(--input-bg)]/50 border border-[var(--border)] hover:border-white/20 transition-all">
+    <div
+      title={tooltip}
+      className="p-2.5 rounded-lg flex items-center gap-2.5 bg-[var(--input-bg)]/50 border border-[var(--border)] hover:border-white/20 transition-all"
+    >
       <div
         className="p-1.5 rounded-md flex-shrink-0"
         style={{ backgroundColor: `${color || 'var(--accent)'}18` }}
@@ -52,7 +57,7 @@ const MetricCard = React.memo(function MetricCard({
         <Icon size={14} style={{ color: color || 'var(--accent)' }} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[9px] font-mono opacity-50 uppercase tracking-wider">{label}</p>
+        <p className="text-[9px] font-mono text-[var(--text-muted)] font-semibold uppercase tracking-wider">{label}</p>
         <p
           className="text-xs font-mono font-bold truncate"
           style={{ color: hasData && color ? color : 'inherit' }}
@@ -78,6 +83,9 @@ export const MetricsTab = React.memo(function MetricsTab({
     metrics.settlingTime !== null ||
     (metrics.steadyStateError !== null && simTime > 0.1);
 
+  const isStepValid = metrics.isStepValid !== false;
+  const noStepTooltip = 'Tidak ada step (setpoint tidak berubah)';
+
   // Settling time format: finite number or "∞ / unsettled"
   const settlingTimeStr =
     metrics.settlingTime !== null
@@ -93,13 +101,13 @@ export const MetricsTab = React.memo(function MetricsTab({
   const getDampingBadgeStyle = () => {
     switch (metrics.dampingAssessment) {
       case 'unstable':
-        return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+        return 'bg-[var(--accent-red-bg)] text-[var(--accent-red)] border-[var(--accent-red)]/30';
       case 'underdamped':
-        return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        return 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)] border-[var(--accent-amber)]/30';
       case 'critically_damped':
-        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+        return 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border-[var(--accent-green)]/30';
       default:
-        return 'bg-slate-700/30 text-slate-400 border-slate-600/30';
+        return 'bg-[var(--surface-2)] text-[var(--text-muted)] border-[var(--border)]';
     }
   };
 
@@ -109,7 +117,7 @@ export const MetricsTab = React.memo(function MetricsTab({
       // Don't show well-tuned / info cards when there is no simulation data yet
       return rec.severity === 'critical' || rec.severity === 'warning';
     }
-    if (rec.title.includes('Excessive Overshoot') && (metrics.peakOvershoot === null || metrics.peakOvershoot > 500)) {
+    if (rec.title.includes('Excessive Overshoot') && (!isStepValid || metrics.peakOvershoot === null || metrics.peakOvershoot > 500)) {
       return false;
     }
     return true;
@@ -119,20 +127,21 @@ export const MetricsTab = React.memo(function MetricsTab({
     <div
       role="tabpanel"
       id="tabpanel-metrics"
+      data-tab-content="metrics"
       aria-labelledby="tab-metrics"
       className="p-3 space-y-3 font-mono"
     >
       {/* Header Info */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <BarChart3 size={13} className="text-cyan-400" />
-          <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">
+          <BarChart3 size={13} className="text-[var(--accent-cyan)]" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
             Metrik Respon Transien
           </span>
         </div>
         <span
           className={`text-[9px] px-1.5 py-0.5 rounded ${
-            isRunning ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-400 bg-white/5'
+            isRunning ? 'text-[var(--accent-green)] bg-[var(--accent-green-bg)]' : 'text-[var(--text-muted)] bg-[var(--surface-2)]'
           }`}
         >
           {isRunning ? '● Real-Time' : '○ Standby'}
@@ -141,8 +150,8 @@ export const MetricsTab = React.memo(function MetricsTab({
 
       {/* Empty State Banner if no data */}
       {!hasData && (
-        <div className="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-[10px] text-cyan-300 flex items-center gap-2">
-          <Info size={13} className="flex-shrink-0 text-cyan-400" />
+        <div className="p-2.5 rounded-lg bg-[var(--accent-cyan-bg)] border border-[var(--accent-cyan)]/20 text-[10px] text-[var(--accent-cyan)] flex items-center gap-2">
+          <Info size={13} className="flex-shrink-0 text-[var(--accent-cyan)]" />
           <span>Jalankan simulasi untuk melihat metrik respon transien live.</span>
         </div>
       )}
@@ -151,28 +160,30 @@ export const MetricsTab = React.memo(function MetricsTab({
       <div className="grid grid-cols-2 gap-2">
         <MetricCard
           label="Rise Time (Tr)"
-          value={metrics.riseTime !== null ? metrics.riseTime.toFixed(3) : null}
-          unit="s"
+          value={isStepValid && metrics.riseTime !== null ? metrics.riseTime.toFixed(3) : null}
+          unit={isStepValid ? 's' : ''}
           icon={TrendingUp}
-          color="#06B6D4"
-          hasData={hasData}
+          color="var(--accent-cyan)"
+          hasData={hasData && isStepValid}
+          tooltip={!isStepValid ? noStepTooltip : undefined}
         />
         <MetricCard
           label="Overshoot (Mp)"
-          value={metrics.peakOvershoot !== null ? metrics.peakOvershoot.toFixed(1) : null}
-          unit="%"
+          value={isStepValid && metrics.peakOvershoot !== null ? metrics.peakOvershoot.toFixed(1) : null}
+          unit={isStepValid ? '%' : ''}
           icon={Activity}
           color={
-            metrics.peakOvershoot !== null && metrics.peakOvershoot > 25 ? '#EF4444' : '#10B981'
+            metrics.peakOvershoot !== null && metrics.peakOvershoot > 25 ? 'var(--accent-red)' : 'var(--accent-green)'
           }
-          hasData={hasData}
+          hasData={hasData && isStepValid}
+          tooltip={!isStepValid ? noStepTooltip : undefined}
         />
         <MetricCard
           label="Settling Time (Ts)"
           value={settlingTimeStr}
           unit={settlingUnit}
           icon={Timer}
-          color="#A78BFA"
+          color="var(--accent-purple)"
           hasData={hasData}
         />
         <MetricCard
@@ -181,17 +192,17 @@ export const MetricsTab = React.memo(function MetricsTab({
           icon={Crosshair}
           color={
             metrics.steadyStateError !== null && Math.abs(metrics.steadyStateError) > 0.1
-              ? '#F59E0B'
-              : '#10B981'
+              ? 'var(--accent-amber)'
+              : 'var(--accent-green)'
           }
           hasData={hasData}
         />
       </div>
 
       {/* Damping Assessment & Oscillation Frequency Banner */}
-      <div className="p-2 rounded-lg bg-black/25 border border-white/10 flex items-center justify-between text-xs">
+      <div className="p-2 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between text-xs">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] opacity-60">Damping:</span>
+          <span className="text-[10px] text-[var(--text-muted)]">Damping:</span>
           <span
             className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${getDampingBadgeStyle()}`}
           >
@@ -200,7 +211,7 @@ export const MetricsTab = React.memo(function MetricsTab({
         </div>
 
         {metrics.oscillationFrequency !== null && hasData && (
-          <span className="text-[10px] text-amber-300 opacity-80 flex items-center gap-1">
+          <span className="text-[10px] text-[var(--accent-amber)] opacity-90 flex items-center gap-1">
             <Waves size={11} />
             {metrics.oscillationFrequency.toFixed(1)} Hz
           </span>

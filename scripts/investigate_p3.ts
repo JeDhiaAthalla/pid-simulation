@@ -78,7 +78,7 @@ function runTest(label: string, customPlant = plant, distAtT?: { t: number; mag:
 runTest('1. Headless Murni (No noise, No disturbance)');
 
 // 2. Headless dengan Noise (misal Gaussian noise stdDev = 0.05)
-runTest('2. Dengan Sensor Noise (stdDev = 0.02)', plant, undefined, { enabled: true, type: 'gaussian', stdDev: 0.02, seed: 42 });
+runTest('2. Dengan Sensor Noise (stdDev = 0.02)', plant, undefined, { enabled: true, stdDev: 0.02, seed: 42 } as any);
 
 // 3. Headless dengan Push 4.5N pada t = 10s selama 0.35s
 runTest('3. Dengan Push Gangguan +4.5N pada t = 10s', plant, { t: 10, mag: 4.5, dur: 0.35 });

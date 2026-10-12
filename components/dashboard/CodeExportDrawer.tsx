@@ -222,20 +222,20 @@ class PIDController:
       {/* Slide-over Drawer Panel */}
       <div
         ref={drawerRef}
-        className="relative z-50 h-full bg-[var(--panel-bg)] border-l border-[var(--border)] shadow-2xl flex flex-col font-mono text-xs overflow-hidden animate-in slide-in-from-right duration-200"
+        className="relative z-50 h-full bg-[var(--surface)] border-l border-[var(--border)] shadow-2xl flex flex-col font-mono text-xs overflow-hidden animate-in slide-in-from-right duration-200"
         style={{ width: 'min(480px, 100vw)' }}
       >
         {/* Header */}
-        <div className="p-4 border-b border-[var(--border)] bg-black/30 flex items-center justify-between shrink-0">
+        <div className="p-4 border-b border-[var(--border)] bg-[var(--surface-2)] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+            <div className="p-1.5 rounded-lg bg-[var(--accent-cyan-bg)] border border-[var(--border-active)] text-[var(--accent-cyan)]">
               <FileCode2 size={16} />
             </div>
             <div>
-              <h2 id="code-export-title" className="font-bold text-sm text-[var(--text-primary)]">
+              <h2 id="code-export-title" className="font-bold text-sm text-[var(--text)]">
                 Export Controller Code
               </h2>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-[var(--text-muted)]">
                 {selectedRobot.name} (dt = {pidConfig.dt}s)
               </p>
             </div>
@@ -246,9 +246,9 @@ class PIDController:
               type="button"
               aria-label="Salin snippet kode"
               onClick={handleCopy}
-              className="px-2.5 py-1.5 rounded-md bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 flex items-center gap-1.5 text-[11px] font-bold transition-all active:scale-95 border border-cyan-500/30 shadow-sm"
+              className="px-2.5 py-1.5 rounded-md bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] hover:brightness-110 flex items-center gap-1.5 text-[11px] font-bold transition-all active:scale-95 border border-[var(--border-active)] shadow-sm"
             >
-              {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+              {copied ? <Check size={13} className="text-[var(--accent-green)]" /> : <Copy size={13} />}
               <span>{copied ? 'Tersalin!' : 'Copy'}</span>
             </button>
 
@@ -256,7 +256,7 @@ class PIDController:
               type="button"
               aria-label="Tutup drawer ekspor kode"
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
             >
               <X size={16} />
             </button>
@@ -264,7 +264,7 @@ class PIDController:
         </div>
 
         {/* Format Selector Tabs */}
-        <div className="px-4 py-2.5 border-b border-[var(--border)] bg-black/15 flex items-center gap-1.5 shrink-0">
+        <div className="px-4 py-2.5 border-b border-[var(--border)] bg-[var(--surface-2)]/50 flex items-center gap-1.5 shrink-0">
           {(['cpp', 'python', 'json'] as const).map((tab) => (
             <button
               key={tab}
@@ -272,8 +272,8 @@ class PIDController:
               onClick={() => setExportTab(tab)}
               className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all ${
                 exportTab === tab
-                  ? 'bg-cyan-400 text-slate-900 shadow-md'
-                  : 'bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10'
+                  ? 'bg-[var(--accent-cyan)] text-white shadow-md'
+                  : 'bg-[var(--surface-2)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--hover-bg)]'
               }`}
             >
               {tab === 'cpp' ? 'C++ / Arduino' : tab === 'python' ? 'Python' : 'JSON Schema'}
@@ -282,14 +282,14 @@ class PIDController:
         </div>
 
         {/* Code Preview Body (Scrollable) */}
-        <div className="flex-1 p-4 overflow-y-auto custom-scrollbar bg-slate-950/80">
-          <pre className="p-3.5 rounded-xl bg-slate-950 text-[10px] text-cyan-300/90 overflow-x-auto leading-relaxed border border-white/10 font-mono shadow-inner">
+        <div className="flex-1 p-4 overflow-y-auto custom-scrollbar bg-[var(--bg)]">
+          <pre className="p-3.5 rounded-xl bg-[var(--surface)] text-[10px] text-[var(--text)] overflow-x-auto leading-relaxed border border-[var(--border)] font-mono shadow-inner">
             {exportTab === 'cpp' ? snippets.cpp : exportTab === 'python' ? snippets.python : snippets.json}
           </pre>
         </div>
 
         {/* Footer info */}
-        <div className="p-3 border-t border-[var(--border)] bg-black/40 text-[10px] text-slate-400 flex items-center justify-between shrink-0">
+        <div className="p-3 border-t border-[var(--border)] bg-[var(--surface-2)] text-[10px] text-[var(--text-muted)] flex items-center justify-between shrink-0">
           <span>Target SP: {setpoint.toFixed(2)}</span>
           <span>Esc untuk menutup</span>
         </div>

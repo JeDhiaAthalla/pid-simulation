@@ -35,10 +35,10 @@ export const SidebarTabs = React.memo(function SidebarTabs({
 
   // Health indicator dot for Metrics tab
   const getMetricsDotColor = () => {
-    if (metrics.dampingAssessment === 'unstable') return 'bg-rose-400';
-    if (metrics.dampingAssessment === 'underdamped') return 'bg-amber-400';
-    if (metrics.dampingAssessment === 'critically_damped') return 'bg-emerald-400';
-    return 'bg-slate-500';
+    if (metrics.dampingAssessment === 'unstable') return 'bg-[var(--accent-red)]';
+    if (metrics.dampingAssessment === 'underdamped') return 'bg-[var(--accent-amber)]';
+    if (metrics.dampingAssessment === 'critically_damped') return 'bg-[var(--accent-green)]';
+    return 'bg-[var(--text-faint)]';
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
@@ -51,11 +51,13 @@ export const SidebarTabs = React.memo(function SidebarTabs({
     }
   };
 
+  const showLabel = sidebarWidth === undefined || sidebarWidth >= 360;
+
   return (
     <div
       role="tablist"
       aria-label="Navigasi Panel Sidebar"
-      className="px-2 pt-1.5 border-b border-[var(--border)] bg-[var(--panel-bg)]/95 flex items-center justify-between font-mono sticky top-0 z-20"
+      className="px-2 pt-1 min-h-[36px] border-b border-[var(--border)] bg-[var(--surface)] flex items-center justify-between font-mono sticky top-0 z-20 gap-1"
     >
       {tabs.map((tab, idx) => {
         const Icon = tab.icon;
@@ -66,6 +68,7 @@ export const SidebarTabs = React.memo(function SidebarTabs({
             key={tab.key}
             role="tab"
             id={`tab-${tab.key}`}
+            data-tab-id={tab.key}
             aria-selected={isActive}
             aria-label={tab.label}
             title={tab.label}
@@ -73,16 +76,17 @@ export const SidebarTabs = React.memo(function SidebarTabs({
             tabIndex={isActive ? 0 : -1}
             onClick={() => onTabChange(tab.key)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
-            className={`flex-1 py-1.5 px-1 flex items-center justify-center gap-1.5 text-xs font-bold transition-all relative border-b-2 rounded-t-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 ${
+            className={`flex-1 min-h-[32px] py-1 px-1.5 min-w-0 flex items-center justify-center gap-1.5 text-xs font-bold transition-all relative border-b-2 rounded-t-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--focus-ring)] ${
               isActive
-                ? 'text-cyan-400 border-cyan-400 bg-cyan-500/10'
-                : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-white/5'
+                ? 'text-[var(--accent-cyan)] border-[var(--accent-cyan)] bg-[var(--accent-cyan-bg)]'
+                : 'text-[var(--text-muted)] hover:text-[var(--text)] border-transparent hover:bg-[var(--hover-bg)]'
             }`}
           >
-            <Icon size={13} className="flex-shrink-0" />
+            <Icon size={14} className="flex-shrink-0" />
             <span
+              data-sidebar-tab-label="true"
               className={`text-[11px] truncate ${
-                sidebarWidth !== undefined && sidebarWidth < 360 ? 'hidden' : 'inline'
+                showLabel ? 'inline' : 'hidden'
               }`}
             >
               {tab.label}
@@ -98,7 +102,7 @@ export const SidebarTabs = React.memo(function SidebarTabs({
 
             {/* Recommendation badge for Tuning tab */}
             {tab.key === 'tuning' && recommendationsCount > 0 && (
-              <span className="px-1 py-0.2 rounded-full text-[9px] bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40">
+              <span className="px-1 py-0.2 rounded-full text-[9px] bg-[var(--accent-amber-bg)] text-[var(--accent-amber)] font-bold border border-[var(--accent-amber)]/40 flex-shrink-0">
                 {recommendationsCount}
               </span>
             )}

@@ -219,13 +219,33 @@ export function useSimulation(
     dataRef.current = ringBufferRef.current.toArray();
 
     // Update display state at ~30fps (throttled)
-    const metrics = dataRef.current.length > 20
+    const stepAmp = Math.abs(setpoint - stepInitialValueRef.current);
+    const minStepThr = Math.max(0.02 * Math.abs(setpoint), 1e-4);
+    const isValidStep = stepAmp >= minStepThr;
+
+    let metrics = dataRef.current.length > 20
       ? computeStepResponseMetrics(dataRef.current, setpoint, {
           stepStartTime: stepStartTimeRef.current,
           initialValue: stepInitialValueRef.current,
           actuatorLimits: plant.actuatorLimits,
         })
       : displayState.metrics;
+
+    if (!isValidStep) {
+      metrics = {
+        ...metrics,
+        riseTime: null,
+        peakOvershoot: null,
+        isStepValid: false,
+        stepAmplitude: stepAmp,
+      };
+    } else {
+      metrics = {
+        ...metrics,
+        isStepValid: true,
+        stepAmplitude: stepAmp,
+      };
+    }
 
     setDisplayState({
       time: timeRef.current,
@@ -331,13 +351,33 @@ export function useSimulation(
     });
     if (dataRef.current.length > 2000) dataRef.current.shift();
 
-    const metrics = dataRef.current.length > 20
+    const stepAmp = Math.abs(setpoint - stepInitialValueRef.current);
+    const minStepThr = Math.max(0.02 * Math.abs(setpoint), 1e-4);
+    const isValidStep = stepAmp >= minStepThr;
+
+    let metrics = dataRef.current.length > 20
       ? computeStepResponseMetrics(dataRef.current, setpoint, {
           stepStartTime: stepStartTimeRef.current,
           initialValue: stepInitialValueRef.current,
           actuatorLimits: plant.actuatorLimits,
         })
       : displayState.metrics;
+
+    if (!isValidStep) {
+      metrics = {
+        ...metrics,
+        riseTime: null,
+        peakOvershoot: null,
+        isStepValid: false,
+        stepAmplitude: stepAmp,
+      };
+    } else {
+      metrics = {
+        ...metrics,
+        isStepValid: true,
+        stepAmplitude: stepAmp,
+      };
+    }
 
     setDisplayState({
       time: timeRef.current,

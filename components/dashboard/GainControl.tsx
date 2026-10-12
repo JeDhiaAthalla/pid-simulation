@@ -117,7 +117,7 @@ export const GainControl = React.memo(function GainControl({
             type="button"
             aria-label={`Kurangi ${label}`}
             onClick={() => handleStep(-(step || 0.01))}
-            className="w-6 h-6 rounded bg-white/5 hover:bg-white/15 flex items-center justify-center text-[12px] font-mono font-bold opacity-70 hover:opacity-100 transition-colors active:scale-95 text-slate-300"
+            className="w-6 h-6 rounded bg-[var(--surface-2)] hover:bg-[var(--hover-bg)] border border-[var(--border)] flex items-center justify-center text-[12px] font-mono font-bold text-[var(--text)] transition-colors active:scale-95"
             title={`Kurangi ${step}`}
           >
             -
@@ -136,20 +136,20 @@ export const GainControl = React.memo(function GainControl({
               if (e.key === 'Enter') handleBlur();
             }}
             step={step}
-            className="w-16 px-1 py-0.5 text-right font-mono text-xs font-bold bg-black/40 border border-white/10 rounded focus:border-cyan-400 focus:outline-none"
-            style={{ color }}
+            className="w-16 px-1 py-0.5 text-right font-mono text-xs font-bold bg-[var(--input-bg)] border border-[var(--border)] rounded text-[var(--text)] focus:border-[var(--accent-cyan)] focus:outline-none"
+            style={{ color: color || 'var(--text)' }}
           />
           <button
             type="button"
             aria-label={`Tambah ${label}`}
             onClick={() => handleStep(step || 0.01)}
-            className="w-6 h-6 rounded bg-white/5 hover:bg-white/15 flex items-center justify-center text-[12px] font-mono font-bold opacity-70 hover:opacity-100 transition-colors active:scale-95 text-slate-300"
+            className="w-6 h-6 rounded bg-[var(--surface-2)] hover:bg-[var(--hover-bg)] border border-[var(--border)] flex items-center justify-center text-[12px] font-mono font-bold text-[var(--text)] transition-colors active:scale-95"
             title={`Tambah ${step}`}
           >
             +
           </button>
           {unit && (
-            <span className="text-[10px] font-mono opacity-50 ml-0.5 min-w-[14px]">
+            <span className="text-[10px] font-mono text-[var(--text-muted)] ml-0.5 min-w-[14px]">
               {unit}
             </span>
           )}

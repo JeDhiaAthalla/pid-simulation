@@ -255,14 +255,14 @@ export default function ControlDashboard({
   if (isCollapsed) {
     return (
       <aside
-        className="w-12 h-full border-r border-[var(--border)] bg-[var(--panel-bg)] flex flex-col items-center py-2.5 gap-3 select-none flex-shrink-0 z-20"
+        className="w-12 h-full border-r border-[var(--border)] bg-[var(--surface)] flex flex-col items-center py-2.5 gap-3 select-none flex-shrink-0 z-20"
         aria-label="Sidebar Rail Ciut"
       >
         <button
           type="button"
           aria-label="Perluas Sidebar"
           onClick={handleToggleCollapse}
-          className="p-2 rounded-lg hover:bg-[var(--hover-bg)] text-cyan-400 transition-colors"
+          className="p-2 rounded-lg hover:bg-[var(--hover-bg)] text-[var(--accent-cyan)] transition-colors"
           title="Perluas Sidebar"
         >
           <PanelLeftOpen size={16} />
@@ -277,8 +277,8 @@ export default function ControlDashboard({
           onClick={actions.toggleRunning}
           className={`p-2 rounded-lg transition-colors ${
             state.isRunning
-              ? 'text-amber-400 hover:bg-amber-500/20'
-              : 'text-emerald-400 hover:bg-emerald-500/20'
+              ? 'text-[var(--accent-amber)] hover:bg-[var(--accent-amber-bg)]'
+              : 'text-[var(--accent-green)] hover:bg-[var(--accent-green-bg)]'
           }`}
           title={state.isRunning ? 'PAUSE' : 'START'}
         >
@@ -290,7 +290,7 @@ export default function ControlDashboard({
           type="button"
           aria-label="Reset Simulasi"
           onClick={actions.reset}
-          className="p-2 rounded-lg text-rose-400 hover:bg-rose-500/20 transition-colors"
+          className="p-2 rounded-lg text-[var(--accent-red)] hover:bg-[var(--accent-red-bg)] transition-colors"
           title="Reset Plant"
         >
           <RotateCcw size={14} />
@@ -301,7 +301,7 @@ export default function ControlDashboard({
           type="button"
           aria-label="Injeksi Gangguan"
           onClick={handleDisturbance}
-          className="p-2 rounded-lg text-amber-400 hover:bg-amber-500/20 transition-colors"
+          className="p-2 rounded-lg text-[var(--accent-amber)] hover:bg-[var(--accent-amber-bg)] transition-colors"
           title="Injeksi Gangguan"
         >
           <Zap size={14} />
@@ -318,7 +318,7 @@ export default function ControlDashboard({
             handleTabChange('control');
           }}
           className={`p-2 rounded-lg transition-colors text-xs ${
-            activeTab === 'control' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'
+            activeTab === 'control' ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
           title="Tab Kontrol"
         >
@@ -333,7 +333,7 @@ export default function ControlDashboard({
             handleTabChange('metrics');
           }}
           className={`p-2 rounded-lg transition-colors text-xs ${
-            activeTab === 'metrics' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'
+            activeTab === 'metrics' ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
           title="Tab Metrik"
         >
@@ -348,7 +348,7 @@ export default function ControlDashboard({
             handleTabChange('tuning');
           }}
           className={`p-2 rounded-lg transition-colors text-xs ${
-            activeTab === 'tuning' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'
+            activeTab === 'tuning' ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
           title="Tab Tuning"
         >
@@ -363,7 +363,7 @@ export default function ControlDashboard({
             handleTabChange('signal');
           }}
           className={`p-2 rounded-lg transition-colors text-xs ${
-            activeTab === 'signal' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'
+            activeTab === 'signal' ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
           title="Tab Sinyal"
         >
@@ -376,10 +376,10 @@ export default function ControlDashboard({
             type="button"
             aria-label="Ganti Tema"
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-[var(--hover-bg)] text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-2 rounded-lg hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
             title="Toggle Tema"
           >
-            {isDark ? <Sun size={14} className="text-amber-400" /> : <Moon size={14} className="text-indigo-400" />}
+            {isDark ? <Sun size={14} className="text-[var(--accent-amber)]" /> : <Moon size={14} className="text-[var(--accent-purple)]" />}
           </button>
         </div>
       </aside>
@@ -390,6 +390,7 @@ export default function ControlDashboard({
   return (
     <aside
       aria-label="Sidebar Kontrol PID & Telemetri"
+      data-sidebar-panel="true"
       className="h-full flex flex-row relative select-none flex-shrink-0 z-20"
       style={{ width: `${currentWidth}px` }}
     >
@@ -509,13 +510,13 @@ export default function ControlDashboard({
         onPointerCancel={handlePointerUp}
         onDoubleClick={() => handleWidthChange(380)}
         className={`w-2 -mr-1 h-full cursor-col-resize relative z-30 group touch-none flex items-center justify-center transition-colors ${
-          isResizing ? 'bg-cyan-500/30' : 'hover:bg-cyan-500/20'
+          isResizing ? 'bg-[var(--accent-cyan-bg)]' : 'hover:bg-[var(--hover-bg)]'
         }`}
         title="Tarik untuk mengubah lebar sidebar (320px - 560px). Dobel klik untuk reset ke 380px."
       >
         <div
           className={`w-0.5 h-8 rounded-full transition-colors ${
-            isResizing ? 'bg-cyan-400' : 'bg-white/20 group-hover:bg-cyan-400/80'
+            isResizing ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--border)] group-hover:bg-[var(--accent-cyan)]'
           }`}
         />
       </div>

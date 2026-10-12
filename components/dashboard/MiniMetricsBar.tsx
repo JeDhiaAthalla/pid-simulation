@@ -19,14 +19,19 @@ interface MiniMetricsBarProps {
 export const MiniMetricsBar = React.memo(function MiniMetricsBar({
   metrics,
 }: MiniMetricsBarProps) {
-  const trStr = metrics.riseTime !== null ? `${metrics.riseTime.toFixed(2)}s` : '—';
+  const isStepValid = metrics.isStepValid !== false;
+  const noStepTooltip = 'Tidak ada step (setpoint tidak berubah)';
+
+  const trTooltip = isStepValid ? 'Rise Time (10% → 90%)' : noStepTooltip;
+  const trStr = isStepValid && metrics.riseTime !== null ? `${metrics.riseTime.toFixed(2)}s` : '—';
 
   const formatOvershoot = (val: number | null): string => {
-    if (val === null) return '—';
+    if (!isStepValid || val === null) return '—';
     if (val > 999) return '>999%';
     return `${val.toFixed(1)}%`;
   };
   const osStr = formatOvershoot(metrics.peakOvershoot);
+  const osTooltip = isStepValid ? 'Peak Overshoot (%OS)' : noStepTooltip;
 
   const tsStr =
     metrics.settlingTime !== null
@@ -41,39 +46,41 @@ export const MiniMetricsBar = React.memo(function MiniMetricsBar({
       : '—';
 
   const osColor =
-    metrics.peakOvershoot !== null && metrics.peakOvershoot > 25
-      ? 'text-rose-400'
-      : metrics.peakOvershoot !== null && metrics.peakOvershoot <= 10
-      ? 'text-emerald-400'
-      : 'text-amber-400';
+    !isStepValid || metrics.peakOvershoot === null
+      ? 'text-[var(--text-muted)]'
+      : metrics.peakOvershoot > 25
+      ? 'text-[var(--accent-red)]'
+      : metrics.peakOvershoot <= 10
+      ? 'text-[var(--accent-green)]'
+      : 'text-[var(--accent-amber)]';
 
   return (
-    <div className="px-3 py-1.5 border-b border-[var(--border)] bg-black/40 grid grid-cols-4 gap-1 text-[10px] font-mono select-none">
+    <div className="px-3 py-1.5 border-b border-[var(--border)] bg-[var(--surface-2)]/60 grid grid-cols-4 gap-1 text-[10px] font-mono select-none">
       {/* Col 1: Tr */}
       <div
-        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-white/5 last:border-r-0"
-        title="Rise Time (10% → 90%)"
+        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-[var(--border-subtle)] last:border-r-0"
+        title={trTooltip}
       >
-        <span className="opacity-45 font-bold shrink-0">Tr:</span>
-        <span className="font-bold text-cyan-400 tabular-nums truncate">{trStr}</span>
+        <span className="text-[var(--text-muted)] font-bold shrink-0">Tr:</span>
+        <span className="font-bold text-[var(--accent-cyan)] tabular-nums truncate">{trStr}</span>
       </div>
 
       {/* Col 2: %OS */}
       <div
-        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-white/5 last:border-r-0"
-        title="Peak Overshoot (%OS)"
+        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-[var(--border-subtle)] last:border-r-0"
+        title={osTooltip}
       >
-        <span className="opacity-45 font-bold shrink-0">%OS:</span>
+        <span className="text-[var(--text-muted)] font-bold shrink-0">%OS:</span>
         <span className={`font-bold ${osColor} tabular-nums truncate`}>{osStr}</span>
       </div>
 
       {/* Col 3: Ts */}
       <div
-        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-white/5 last:border-r-0"
+        className="flex items-center justify-center gap-1 min-w-0 px-1 border-r border-[var(--border-subtle)] last:border-r-0"
         title="Settling Time (2% band)"
       >
-        <span className="opacity-45 font-bold shrink-0">Ts:</span>
-        <span className="font-bold text-purple-400 tabular-nums truncate">{tsStr}</span>
+        <span className="text-[var(--text-muted)] font-bold shrink-0">Ts:</span>
+        <span className="font-bold text-[var(--accent-purple)] tabular-nums truncate">{tsStr}</span>
       </div>
 
       {/* Col 4: Ess */}
@@ -81,8 +88,8 @@ export const MiniMetricsBar = React.memo(function MiniMetricsBar({
         className="flex items-center justify-center gap-1 min-w-0 px-1"
         title="Steady-State Error (|e_ss|)"
       >
-        <span className="opacity-45 font-bold shrink-0">Ess:</span>
-        <span className="font-bold text-emerald-400 tabular-nums truncate">{essStr}</span>
+        <span className="text-[var(--text-muted)] font-bold shrink-0">Ess:</span>
+        <span className="font-bold text-[var(--accent-green)] tabular-nums truncate">{essStr}</span>
       </div>
     </div>
   );

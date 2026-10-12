@@ -77,10 +77,10 @@ const normalRes = simulateDrone(1.0, 10);
 const farRes = simulateDrone(50.0, 10);
 
 console.log('\n--- HASIL PENGUJIAN SATURATION FRACTION ---');
-console.log(`1. Step Normal (SP = 1.0 m):`);
-console.log(`   - saturationFraction: ${normalRes.metrics.saturationFraction.toFixed(4)} (Target: ≈ 0)`);
-console.log(`   - Evaluasi: ${normalRes.metrics.saturationFraction < 0.05 ? 'LULUS (≈ 0)' : 'GAGAL'}`);
+console.log(`\n1. Step Normal (SP = 1.0 m):`);
+console.log(`   - saturationFraction: ${(normalRes.metrics.saturationFraction ?? 0).toFixed(4)} (Target: ≈ 0)`);
+console.log(`   - Evaluasi: ${(normalRes.metrics.saturationFraction ?? 0) < 0.05 ? 'LULUS (≈ 0)' : 'GAGAL'}`);
 
 console.log(`\n2. Step Sangat Jauh (SP = 50.0 m):`);
-console.log(`   - saturationFraction: ${farRes.metrics.saturationFraction.toFixed(4)} (Target: > 0.2)`);
-console.log(`   - Evaluasi: ${farRes.metrics.saturationFraction > 0.2 ? 'LULUS (> 0.2)' : 'GAGAL'}`);
+console.log(`   - saturationFraction: ${(farRes.metrics.saturationFraction ?? 0).toFixed(4)} (Target: > 0.2)`);
+console.log(`   - Evaluasi: ${(farRes.metrics.saturationFraction ?? 0) > 0.2 ? 'LULUS (> 0.2)' : 'GAGAL'}`);

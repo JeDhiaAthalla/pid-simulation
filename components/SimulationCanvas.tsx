@@ -160,45 +160,100 @@ const THEME = {
     dividerActive: '#06B6D4',
   },
   light: {
-    bgOsc: '#F8FAFC',
-    bgRob: '#F1F5F9',
-    gridMajor: 'rgba(15, 23, 42, 0.08)',
-    gridMinor: 'rgba(15, 23, 42, 0.03)',
-    axis: 'rgba(15, 23, 42, 0.2)',
-    setpoint: '#D97706',
-    pv: '#0891B2',
-    pvGlow: 'rgba(8, 145, 178, 0.25)',
-    control: '#7C3AED',
-    error: '#DC2626',
-    text: '#64748B',
-    textBright: '#0F172A',
-    textMuted: '#94A3B8',
-    band: 'rgba(16, 185, 129, 0.05)',
-    marker: '#16A34A',
-    hudBg: 'rgba(255, 255, 255, 0.92)',
-    hudBorder: 'rgba(203, 213, 225, 0.85)',
-    cardBg: 'rgba(241, 245, 249, 0.85)',
-    ground: '#E2E8F0',
-    groundLine: '#CBD5E1',
+    bgOsc: '#F6F8FB',
+    bgRob: '#FFFFFF',
+    gridMajor: 'rgba(15, 23, 42, 0.1)',
+    gridMinor: 'rgba(15, 23, 42, 0.04)',
+    axis: 'rgba(15, 23, 42, 0.3)',
+    setpoint: '#92400E',        /* amber-800 (6.5:1) */
+    pv: '#0E7490',              /* cyan-700 (5.6:1) */
+    pvGlow: 'rgba(14, 116, 144, 0.25)',
+    control: '#7E22CE',         /* purple-700 (6.9:1) */
+    error: '#B91C1C',           /* red-700 (6.9:1) */
+    text: '#334155',            /* slate-700 (8.2:1) */
+    textBright: '#0F172A',      /* slate-900 (15:1) */
+    textMuted: '#475569',       /* slate-600 (6.0:1) */
+    band: 'rgba(4, 120, 87, 0.08)',
+    marker: '#047857',
+    hudBg: 'rgba(255, 255, 255, 0.96)',
+    hudBorder: 'rgba(15, 23, 42, 0.12)',
+    cardBg: 'rgba(238, 242, 246, 0.95)',
+    ground: '#EEF2F6',
+    groundLine: '#94A3B8',
     metal: '#475569',
     metalDark: '#1E293B',
-    accent: '#0891B2',
-    accentGlow: 'rgba(8, 145, 178, 0.2)',
-    warning: '#D97706',
-    danger: '#DC2626',
-    success: '#16A34A',
-    water: '#3B82F6',
-    waterLight: '#60A5FA',
-    sky: '#F8FAFC',
-    particle: '#0891B2',
-    shockwave: '#D97706',
-    dividerBg: 'rgba(226, 232, 240, 0.9)',
-    dividerHandle: 'rgba(100, 116, 139, 0.5)',
-    dividerActive: '#0891B2',
+    accent: '#0E7490',
+    accentGlow: 'rgba(14, 116, 144, 0.18)',
+    warning: '#92400E',
+    danger: '#B91C1C',
+    success: '#047857',
+    water: '#0284C7',
+    waterLight: '#38BDF8',
+    sky: '#F6F8FB',
+    particle: '#0E7490',
+    shockwave: '#92400E',
+    dividerBg: 'rgba(226, 232, 240, 0.95)',
+    dividerHandle: 'rgba(71, 85, 105, 0.6)',
+    dividerActive: '#0E7490',
   },
 };
 
-type ThemeColors = typeof THEME.dark;
+export type ThemeColors = typeof THEME.dark;
+
+let cachedCanvasTheme: { dark: ThemeColors; light: ThemeColors } | null = null;
+let themeObserverInitialized = false;
+
+function updateCachedCanvasTheme(): void {
+  if (typeof window === 'undefined') return;
+  const rootStyle = getComputedStyle(document.documentElement);
+
+  const cyanLight = rootStyle.getPropertyValue('--accent-cyan').trim() || '#0E7490';
+  const purpleLight = rootStyle.getPropertyValue('--accent-purple').trim() || '#7E22CE';
+  const greenLight = rootStyle.getPropertyValue('--accent-green').trim() || '#047857';
+  const amberLight = rootStyle.getPropertyValue('--accent-amber').trim() || '#92400E';
+  const redLight = rootStyle.getPropertyValue('--accent-red').trim() || '#B91C1C';
+  const textLight = rootStyle.getPropertyValue('--text').trim() || '#0F172A';
+  const textMutedLight = rootStyle.getPropertyValue('--text-muted').trim() || '#475569';
+
+  cachedCanvasTheme = {
+    dark: { ...THEME.dark },
+    light: {
+      ...THEME.light,
+      pv: cyanLight,
+      control: purpleLight,
+      success: greenLight,
+      marker: greenLight,
+      setpoint: amberLight,
+      warning: amberLight,
+      error: redLight,
+      danger: redLight,
+      text: '#334155',
+      textBright: textLight,
+      textMuted: textMutedLight,
+      accent: cyanLight,
+    },
+  };
+}
+
+export function getCanvasTheme(isDark: boolean): ThemeColors {
+  if (typeof window === 'undefined') {
+    return isDark ? THEME.dark : THEME.light;
+  }
+  if (!cachedCanvasTheme) {
+    updateCachedCanvasTheme();
+    if (!themeObserverInitialized && typeof MutationObserver !== 'undefined') {
+      themeObserverInitialized = true;
+      const observer = new MutationObserver(() => {
+        updateCachedCanvasTheme();
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme'],
+      });
+    }
+  }
+  return isDark ? cachedCanvasTheme!.dark : cachedCanvasTheme!.light;
+}
 
 // ---------------------------------------------------------------------------
 // Particle & Shockwave Models
@@ -852,11 +907,32 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
         const historyData = dataRef.current;
         if (nowMs - lastMetricsCalcTimeRef.current > 120 && historyData.length > 10) {
           lastMetricsCalcTimeRef.current = nowMs;
-          const computed = computeStepResponseMetrics(historyData, setpoint, {
+          const stepAmp = Math.abs(setpoint - stepInitialValueRef.current);
+          const minStepThr = Math.max(0.02 * Math.abs(setpoint), 1e-4);
+          const isValidStep = stepAmp >= minStepThr;
+
+          let computed = computeStepResponseMetrics(historyData, setpoint, {
             stepStartTime: stepStartTimeRef.current,
             initialValue: stepInitialValueRef.current,
             actuatorLimits: plant.actuatorLimits,
           });
+
+          if (!isValidStep) {
+            computed = {
+              ...computed,
+              riseTime: null,
+              peakOvershoot: null,
+              isStepValid: false,
+              stepAmplitude: stepAmp,
+            };
+          } else {
+            computed = {
+              ...computed,
+              isStepValid: true,
+              stepAmplitude: stepAmp,
+            };
+          }
+
           metricsRef.current = computed;
           if (onMetricsUpdate) onMetricsUpdate(computed);
         }
@@ -892,7 +968,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             oscCanvasRef.current,
             oscSizeRef.current.width,
             oscSizeRef.current.height,
-            isDark ? THEME.dark : THEME.light,
+            getCanvasTheme(isDark),
             historyData,
             metricsRef.current,
             setpoint,
@@ -919,7 +995,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             robCanvasRef.current,
             robSizeRef.current.width,
             robSizeRef.current.height,
-            isDark ? THEME.dark : THEME.light,
+            getCanvasTheme(isDark),
             robotDef.id,
             livePV,
             setpoint,
@@ -947,7 +1023,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       };
     }, [engineRef, activeTab, isDark, onMetricsUpdate, onStatusChange]);
 
-    const activeColors = isDark ? THEME.dark : THEME.light;
+    const activeColors = getCanvasTheme(isDark);
 
     return (
       <div
@@ -956,7 +1032,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       >
         {/* ── TOP CONTROL HUD & INTERACTION BAR (Z-35) ── */}
         <div
-          className="flex flex-wrap items-center justify-between gap-1.5 px-3 py-1.5 border-b z-35 text-xs font-mono shrink-0 overflow-x-auto min-w-0"
+          data-canvas-toolbar="true"
+          className="flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 border-b z-35 text-xs font-mono shrink-0 min-w-0"
           style={{
             backgroundColor: activeColors.hudBg,
             borderColor: activeColors.hudBorder,
@@ -964,13 +1041,13 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
           }}
         >
           {/* Left: Viewport Mode Tabs */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <button
               onClick={() => setActiveTab('dual')}
               className={`px-2.5 py-1 rounded transition-colors flex items-center gap-1 text-[11px] font-semibold ${
                 activeTab === 'dual'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm'
-                  : 'hover:bg-white/5 opacity-70 hover:opacity-100'
+                  ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border border-[var(--accent-green)]/40 shadow-sm'
+                  : 'hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)]'
               }`}
               title="Tampilkan Bersebelahan (Bisa Digeser Boundary)"
             >
@@ -981,8 +1058,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
               onClick={() => setActiveTab('oscilloscope')}
               className={`px-2.5 py-1 rounded transition-colors flex items-center gap-1 text-[11px] font-semibold ${
                 activeTab === 'oscilloscope'
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-sm'
-                  : 'hover:bg-white/5 opacity-70 hover:opacity-100'
+                  ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/40 shadow-sm'
+                  : 'hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)]'
               }`}
               title="Fokus Penuh Oscilloscope"
             >
@@ -993,8 +1070,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
               onClick={() => setActiveTab('animation')}
               className={`px-2.5 py-1 rounded transition-colors flex items-center gap-1 text-[11px] font-semibold ${
                 activeTab === 'animation'
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-sm'
-                  : 'hover:bg-white/5 opacity-70 hover:opacity-100'
+                  ? 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)] border border-[var(--accent-amber)]/40 shadow-sm'
+                  : 'hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)]'
               }`}
               title="Fokus Penuh Kinematika 2D"
             >
@@ -1003,15 +1080,15 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             </button>
           </div>
 
-          {/* Center: Camera / Disturbance Mode Toggle for Canvas 2 */}
+          {/* Center: Camera / Disturbance Mode Toggle for Canvas 2 (Track H1: gap-1.5 between buttons) */}
           {(activeTab === 'dual' || activeTab === 'animation') && (
-            <div className="hidden sm:flex items-center bg-black/25 border border-white/10 rounded-md p-0.5 text-[10px]">
+            <div className="hidden sm:flex items-center bg-[var(--surface-2)] border border-[var(--border)] rounded-md p-0.5 gap-1.5 text-[10px]">
               <button
                 onClick={() => setRobotInteractionMode('disturbance')}
                 className={`px-2 py-0.5 rounded transition-all flex items-center gap-1 ${
                   robotInteractionMode === 'disturbance'
-                    ? 'bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)] font-bold border border-[var(--accent-amber)]/30'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
                 }`}
                 title="Klik kiri mendorong robot (injeksi gaya gangguan)"
               >
@@ -1022,8 +1099,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
                 onClick={() => setRobotInteractionMode('camera')}
                 className={`px-2 py-0.5 rounded transition-all flex items-center gap-1 ${
                   robotInteractionMode === 'camera'
-                    ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] font-bold border border-[var(--accent-cyan)]/30'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
                 }`}
                 title="Klik kiri menggeser kamera viewport (Pan)"
               >
@@ -1037,7 +1114,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
           <div className="flex items-center gap-1.5 flex-wrap">
             <button
               onClick={() => injectDisturbanceImpulse(4.5, 0.35)}
-              className="px-2.5 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 border border-amber-500/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
+              className="px-2.5 py-1 rounded bg-[var(--accent-amber-bg)] hover:brightness-110 text-[var(--accent-amber)] border border-[var(--accent-amber)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
               title="Injeksi gangguan gaya +4.5N seketika"
             >
               <Zap size={11} className="animate-pulse" />
@@ -1045,7 +1122,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             </button>
             <button
               onClick={handleCenterRobot}
-              className="px-2 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-400 border border-cyan-500/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
+              className="px-2 py-1 rounded bg-[var(--accent-cyan-bg)] hover:brightness-110 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm font-bold"
               title="Pusatkan kamera pada robot (Shortcut: C)"
             >
               <Crosshair size={11} />
@@ -1053,7 +1130,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             </button>
             <button
               onClick={handleResetViewports}
-              className="px-2 py-1 rounded bg-slate-700/30 hover:bg-slate-700/50 text-slate-300 border border-white/10 text-[10px] flex items-center gap-1 transition-all active:scale-95"
+              className="px-2 py-1 rounded bg-[var(--surface-2)] hover:bg-[var(--hover-bg)] text-[var(--text)] border border-[var(--border)] text-[10px] flex items-center gap-1 transition-all active:scale-95"
               title="Reset zoom/pan kamera dan rasio split 50:50"
             >
               <Compass size={11} />
@@ -1061,7 +1138,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             </button>
             <button
               onClick={handleReset}
-              className="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[10px] flex items-center gap-1 transition-all active:scale-95"
+              className="px-2 py-1 rounded bg-[var(--accent-red-bg)] hover:brightness-110 text-[var(--accent-red)] border border-[var(--accent-red)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95"
               title="Reset state fisis plant ke 0"
             >
               <RotateCcw size={11} />
@@ -1441,15 +1518,13 @@ function renderHUDMetrics(
   ctx.lineWidth = 1;
   ctx.strokeRect(8, 8, w - 16, 48);
 
-  let statusText = 'STABIL (SETTLED)';
-  let badgeColor = c.success;
+  let statusText = 'TRANSIEN (MENDEKATI TARGET)';
+  let badgeColor = c.warning;
 
   const currentErr = lastPoint ? Math.abs(lastPoint.error) : 0;
-  const isUnsettled =
-    metrics.settlingTime === null ||
-    !Number.isFinite(metrics.settlingTime) ||
-    (metrics.steadyStateError !== null && Math.abs(metrics.steadyStateError) > 0.05 * Math.max(Math.abs(setpoint), 1)) ||
-    currentErr > 0.05 * Math.max(Math.abs(setpoint), 1);
+  const errorBand = 0.02 * Math.max(Math.abs(setpoint), 1);
+  const isErrorInBand = currentErr <= errorBand;
+  const isSettled = metrics.settlingStatus === 'settled' && isErrorInBand;
 
   if (status === 'runaway') {
     statusText = 'RUNAWAY (TERHEMPAS)';
@@ -1457,11 +1532,14 @@ function renderHUDMetrics(
   } else if (status === 'idle') {
     statusText = 'STANDBY';
     badgeColor = c.textMuted;
-  } else if (isUnsettled || status === 'running') {
-    statusText = 'TRANSIEN (MENDEKATI TARGET)';
-    badgeColor = c.warning;
+  } else if (isSettled) {
+    statusText = 'STABIL (SETTLED)';
+    badgeColor = c.success;
   } else if (status === 'oscillating' || metrics.dampingAssessment === 'underdamped') {
-    statusText = 'UNDERDAMPED (MEMBAL)';
+    statusText = 'OSILASI (MEMBAL)';
+    badgeColor = c.warning;
+  } else {
+    statusText = 'TRANSIEN (MENDEKATI TARGET)';
     badgeColor = c.warning;
   }
 
@@ -1488,15 +1566,16 @@ function renderHUDMetrics(
   );
 
   if (w > 480) {
-    const trStr = metrics.riseTime !== null ? `${metrics.riseTime.toFixed(2)}s` : '--';
-    const mpStr = metrics.peakOvershoot !== null ? `${metrics.peakOvershoot.toFixed(1)}%` : '--';
+    const isStepValid = metrics.isStepValid !== false;
+    const trStr = isStepValid && metrics.riseTime !== null ? `${metrics.riseTime.toFixed(2)}s` : '—';
+    const mpStr = isStepValid && metrics.peakOvershoot !== null ? `${metrics.peakOvershoot.toFixed(1)}%` : '—';
     const tsStr =
       metrics.settlingTime !== null
         ? Number.isFinite(metrics.settlingTime)
           ? `${metrics.settlingTime.toFixed(2)}s`
           : '∞ / unsettled'
-        : '--';
-    const essStr = metrics.steadyStateError !== null ? metrics.steadyStateError.toFixed(3) : '--';
+        : '—';
+    const essStr = metrics.steadyStateError !== null ? metrics.steadyStateError.toFixed(3) : '—';
 
     ctx.textAlign = 'right';
     ctx.fillStyle = c.textBright;
@@ -1524,17 +1603,33 @@ export interface RobotCameraState {
   smoothedPV: number;
 }
 
+export const ARCHETYPE_ANCHORS: Record<RobotType, { dx: number; dy: number }> = {
+  line_follower: { dx: 0, dy: 0 },
+  ackermann_vehicle: { dx: 0, dy: 0 },
+  mecanum_platform: { dx: 0, dy: 0 },
+  self_balancing: { dx: 0, dy: 65 },
+  gantry_crane: { dx: 0, dy: -50 },
+  quadcopter: { dx: 0, dy: 0 },
+  vtol_birotor: { dx: 0, dy: 0 },
+  single_joint: { dx: 0, dy: 40 },
+  scara_arm: { dx: 25, dy: 0 },
+  underwater_rov: { dx: 0, dy: 0 },
+  custom_plant: { dx: 0, dy: 0 },
+};
+
 export interface ComputedCameraResult {
   robotScreenX: number;
   robotScreenY: number;
   pixelsPerMeter: number;
   clampedOffset: { x: number; y: number };
+  anchorScreenX?: number;
+  anchorScreenY?: number;
 }
 
 /**
- * Pure camera function satisfying Track B2/B3 invariants:
+ * Pure camera function satisfying Track B2/B3 & P0 invariants:
  * - In follow mode with zero offset: robot center is exactly (w/2, h/2) (0px error, within +/-2px)
- * - Under extreme pan in all 4 directions: robot center is clamped >= minMargin (48px) inside canvas
+ * - Under extreme pan in all 4 directions: archetype anchor focus is clamped >= minMargin (48px) inside canvas
  * - Vertical span dynamically encloses 0, setpoint, and PV with 15% margin
  */
 export function computeRobotCamera(
@@ -1543,12 +1638,31 @@ export function computeRobotCamera(
   pv: number,
   sp: number,
   camera: RobotCameraState,
-  minMargin: number = 48
+  minMargin: number = 48,
+  anchorOrType?: RobotType | { dx: number; dy: number }
 ): ComputedCameraResult {
-  const maxOffsetX = Math.max(0, w / 2 - minMargin);
-  const maxOffsetY = Math.max(0, h / 2 - minMargin);
-  const clampedX = Math.max(-maxOffsetX, Math.min(maxOffsetX, camera.offset.x));
-  const clampedY = Math.max(-maxOffsetY, Math.min(maxOffsetY, camera.offset.y));
+  let anchor = { dx: 0, dy: 0 };
+  if (anchorOrType) {
+    if (typeof anchorOrType === 'string') {
+      anchor = ARCHETYPE_ANCHORS[anchorOrType] ?? { dx: 0, dy: 0 };
+    } else {
+      anchor = anchorOrType;
+    }
+  }
+
+  const dx0 = anchor.dx;
+  const dy0 = anchor.dy;
+
+  // Clamping camera translation relative to archetype anchor (P0 fix)
+  // Invariant: anchorScreenX in [minMargin, w - minMargin]
+  // Invariant: anchorScreenY in [minMargin, h - minMargin]
+  const minPanX = -(w / 2 - minMargin) - dx0;
+  const maxPanX = (w / 2 - minMargin) - dx0;
+  const minPanY = -(h / 2 - minMargin) - dy0;
+  const maxPanY = (h / 2 - minMargin) - dy0;
+
+  const clampedX = Math.max(minPanX, Math.min(maxPanX, camera.offset.x));
+  const clampedY = Math.max(minPanY, Math.min(maxPanY, camera.offset.y));
 
   const maxDist = Math.max(
     Math.abs(pv - 0),
@@ -1563,11 +1677,16 @@ export function computeRobotCamera(
   const robotScreenX = w / 2 + clampedX;
   const robotScreenY = h / 2 + clampedY - relativeY;
 
+  const anchorScreenX = w / 2 + dx0 + clampedX;
+  const anchorScreenY = h / 2 + dy0 + clampedY - relativeY;
+
   return {
     robotScreenX,
     robotScreenY,
     pixelsPerMeter,
     clampedOffset: { x: clampedX, y: clampedY },
+    anchorScreenX,
+    anchorScreenY,
   };
 }
 
@@ -1671,8 +1790,8 @@ function renderRobotViewport(
   ctx.fillStyle = c.bgRob;
   ctx.fillRect(0, 0, w, h);
 
-  // Pure camera computation with 48px boundary clamp (Track B2)
-  const camResult = computeRobotCamera(w, h, pv, sp, camera, 48);
+  // Pure camera computation with archetype anchor 48px boundary clamp (P0)
+  const camResult = computeRobotCamera(w, h, pv, sp, camera, 48, robotType);
 
   // Save base transform before camera pan
   ctx.save();
@@ -1761,21 +1880,27 @@ function renderRobotViewport(
     ctx.fillText('⚡ DISTURBANCE ACTIVE', w - 16, 26);
   }
 
-  // Camera Pan Status Badge (Track B2: Follow ON/OFF with coordinates)
-  const isPanned = Math.abs(camera.offset.x) > 1 || Math.abs(camera.offset.y) > 1;
-  if (isPanned || !camera.follow) {
-    ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
-    ctx.strokeStyle = c.accent;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(10, h - 34, 210, 22);
-    ctx.fillRect(10, h - 34, 210, 22);
+  // Camera Pan Status Badge (Track I2: "Follow: ON" strictly when offset ≈ 0; otherwise "Offset: (x, y)")
+  const isOffsetZero = Math.abs(camera.offset.x) <= 1 && Math.abs(camera.offset.y) <= 1;
+  const badgeX = 10;
+  const badgeY = h - 34;
+  const badgeW = 210;
+  const badgeH = 22;
 
-    ctx.fillStyle = c.textBright;
-    ctx.font = '9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'left';
-    const followStr = camera.follow ? 'Follow: ON' : 'Follow: OFF';
-    const coordStr = `(${camera.offset.x > 0 ? '+' : ''}${Math.round(camera.offset.x)}px, ${camera.offset.y > 0 ? '+' : ''}${Math.round(camera.offset.y)}px)`;
-    ctx.fillText(`Kamera: ${followStr} | ${coordStr}`, 16, h - 20);
+  ctx.fillStyle = c.cardBg;
+  ctx.strokeStyle = !isOffsetZero ? c.warning : c.accent;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
+  ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+
+  ctx.fillStyle = c.textBright;
+  ctx.font = 'bold 9px "JetBrains Mono", monospace';
+  ctx.textAlign = 'left';
+  if (isOffsetZero && camera.follow) {
+    ctx.fillText('Kamera: Follow: ON', badgeX + 8, badgeY + 14);
+  } else {
+    const coordStr = `Offset: (${camera.offset.x > 0 ? '+' : ''}${Math.round(camera.offset.x)}px, ${camera.offset.y > 0 ? '+' : ''}${Math.round(camera.offset.y)}px)`;
+    ctx.fillText(`Kamera: ${coordStr}`, badgeX + 8, badgeY + 14);
   }
 
   // Footer Navigation Hint
@@ -1800,25 +1925,28 @@ function drawLineFollower(
   u: number,
   t: number
 ) {
-  const groundY = h * 0.72;
+  const groundY = h / 2 + 22;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldW = worldRight - worldLeft;
 
-  // Textured Track Surface
+  // Infinite Textured Track Surface
   ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, h - groundY);
+  ctx.fillRect(worldLeft, groundY, worldW, h * 3);
   ctx.strokeStyle = c.groundLine;
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(0, groundY);
-  ctx.lineTo(w, groundY);
+  ctx.moveTo(worldLeft, groundY);
+  ctx.lineTo(worldRight, groundY);
   ctx.stroke();
 
-  // Winding Track Ribbon with dashed yellow center
-  ctx.strokeStyle = '#1E293B';
+  // Winding Track Ribbon with dashed center
+  ctx.strokeStyle = c.metalDark;
   ctx.lineWidth = 32;
   ctx.beginPath();
-  for (let x = -50; x < w + 50; x += 10) {
+  for (let x = worldLeft; x <= worldRight; x += 10) {
     const trackY = groundY - 2 + Math.sin((x + t * 40) * 0.018) * 16;
-    if (x === -50) ctx.moveTo(x, trackY);
+    if (x === worldLeft) ctx.moveTo(x, trackY);
     else ctx.lineTo(x, trackY);
   }
   ctx.stroke();
@@ -1827,25 +1955,25 @@ function drawLineFollower(
   ctx.lineWidth = 3;
   ctx.setLineDash([12, 8]);
   ctx.beginPath();
-  for (let x = -50; x < w + 50; x += 10) {
+  for (let x = worldLeft; x <= worldRight; x += 10) {
     const trackY = groundY - 2 + Math.sin((x + t * 40) * 0.018) * 16;
-    if (x === -50) ctx.moveTo(x, trackY);
+    if (x === worldLeft) ctx.moveTo(x, trackY);
     else ctx.lineTo(x, trackY);
   }
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Robot Position (pv = lateral offset mm)
+  // Robot Position (pv = lateral offset mm) — centered at (w/2, h/2) at Reset View (pv=0)
   const robotX = w / 2 + pv * 5.5;
   const robotY = groundY - 22;
   const bodyW = 56;
   const bodyH = 24;
 
   // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
   ctx.fillRect(robotX - bodyW / 2 + 3, robotY + 4, bodyW, bodyH);
 
-  // PCB Chassis (Industrial Green FR4 with Gold Traces)
+  // PCB Chassis (Industrial FR4)
   ctx.fillStyle = '#064E3B';
   ctx.strokeStyle = c.accent;
   ctx.lineWidth = 1.8;
@@ -1908,12 +2036,23 @@ function drawAckermannVehicle(
   u: number,
   t: number
 ) {
-  const groundY = h * 0.74;
-  ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, h - groundY);
-
   const cx = w / 2;
-  const cy = groundY - 38;
+  const cy = h / 2;
+  const groundY = cy + 38;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldW = worldRight - worldLeft;
+
+  // Infinite Ground Plane
+  ctx.fillStyle = c.ground;
+  ctx.fillRect(worldLeft, groundY, worldW, h * 3);
+  ctx.strokeStyle = c.groundLine;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(worldLeft, groundY);
+  ctx.lineTo(worldRight, groundY);
+  ctx.stroke();
+
   const heading = (pv * Math.PI) / 180;
 
   ctx.save();
@@ -1990,19 +2129,27 @@ function drawMecanumPlatform(
   u: number,
   t: number
 ) {
-  const groundY = h * 0.72;
-  ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, h - groundY);
+  const cx = w / 2 + pv * 28;
+  const cy = h / 2;
+  const groundY = cy + 34;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldW = worldRight - worldLeft;
 
-  // Arena Grid Pattern
+  // Infinite Floor Ground
+  ctx.fillStyle = c.ground;
+  ctx.fillRect(worldLeft, groundY, worldW, h * 3);
+
+  // Arena Grid Pattern extending seamlessly
   ctx.strokeStyle = c.groundLine;
   ctx.lineWidth = 0.6;
-  for (let x = 0; x < w; x += 35) {
-    ctx.beginPath(); ctx.moveTo(x, groundY); ctx.lineTo(x, h); ctx.stroke();
+  const gridStart = Math.floor(worldLeft / 35) * 35;
+  for (let x = gridStart; x <= worldRight; x += 35) {
+    ctx.beginPath();
+    ctx.moveTo(x, groundY);
+    ctx.lineTo(x, groundY + h * 3);
+    ctx.stroke();
   }
-
-  const cx = w / 2 + pv * 28;
-  const cy = groundY - 34;
 
   // Platform Chassis
   ctx.fillStyle = c.metalDark;
@@ -2061,20 +2208,25 @@ function drawSelfBalancing(
   u: number,
   t: number
 ) {
-  const groundY = h * 0.8;
+  const cx = w / 2;
+  const bodyLength = Math.min(h * 0.4, 130);
+  const wheelY = h / 2 + bodyLength / 2;
+  const groundY = wheelY + 16;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldW = worldRight - worldLeft;
+
+  // Infinite Ground Plane
   ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, h - groundY);
+  ctx.fillRect(worldLeft, groundY, worldW, h * 3);
   ctx.strokeStyle = c.groundLine;
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(0, groundY);
-  ctx.lineTo(w, groundY);
+  ctx.moveTo(worldLeft, groundY);
+  ctx.lineTo(worldRight, groundY);
   ctx.stroke();
 
-  const cx = w / 2;
-  const wheelY = groundY - 16;
   const tiltAngle = (pv * Math.PI) / 180;
-  const bodyLength = Math.min(h * 0.4, 130);
 
   // Rubber Wheel with Spokes
   ctx.fillStyle = '#0F172A';
@@ -2152,28 +2304,30 @@ function drawGantryCrane(
   u: number,
   t: number
 ) {
-  const railY = h * 0.28;
   const cartW = 64;
   const cartH = 26;
   const cableLen = Math.min(h * 0.38, 125);
+  const railY = h / 2 - (cartH + cableLen) / 2;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
 
-  // Structural Overhead I-Beam Rail
-  ctx.strokeStyle = '#334155';
+  // Infinite Structural Overhead I-Beam Rail
+  ctx.strokeStyle = c.metalDark;
   ctx.lineWidth = 8;
   ctx.beginPath();
-  ctx.moveTo(20, railY);
-  ctx.lineTo(w - 20, railY);
+  ctx.moveTo(worldLeft, railY);
+  ctx.lineTo(worldRight, railY);
   ctx.stroke();
 
   // Rail Top Highlight
   ctx.strokeStyle = c.metal;
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(20, railY - 4);
-  ctx.lineTo(w - 20, railY - 4);
+  ctx.moveTo(worldLeft, railY - 4);
+  ctx.lineTo(worldRight, railY - 4);
   ctx.stroke();
 
-  // Trolley Cart Position
+  // Trolley Cart Position — centered at w/2 at pv=0
   const cartX = w / 2 + pv * 32;
   const cartY = railY;
 
@@ -2232,7 +2386,6 @@ function drawQuadcopter(
   particles: Particle[],
   camera?: RobotCameraState
 ) {
-  // Track B2: Dynamic vertical world range containing 0, SP, and PV with 15% margin
   const maxAlt = Math.max(pv, sp, 1.0);
   const minAlt = Math.min(pv, sp, 0.0);
   const span = Math.max(4.0, maxAlt - minAlt);
@@ -2244,12 +2397,15 @@ function drawQuadcopter(
   const droneY = h / 2 - (pv - smoothedAlt) * pixelsPerMeter;
   const groundY = droneY + pv * pixelsPerMeter;
   const targetY = droneY - (sp - pv) * pixelsPerMeter;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldW = worldRight - worldLeft;
 
-  // Ground Surface
+  // Infinite Ground Surface
   ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, Math.max(h - groundY, 40));
+  ctx.fillRect(worldLeft, groundY, worldW, Math.max(h * 3, 200));
 
-  // Altitude Ruler Grid
+  // Infinite Altitude Ruler Grid
   ctx.strokeStyle = c.groundLine;
   ctx.lineWidth = 0.5;
   ctx.fillStyle = c.textMuted;
@@ -2257,13 +2413,13 @@ function drawQuadcopter(
   ctx.textAlign = 'right';
 
   const rulerStep = span > 25 ? 10 : 5;
-  const maxRulerAlt = Math.ceil((maxAlt * 1.25) / rulerStep) * rulerStep;
+  const maxRulerAlt = Math.ceil((maxAlt * 1.5) / rulerStep) * rulerStep;
   for (let alt = 0; alt <= maxRulerAlt; alt += rulerStep) {
     const y = groundY - alt * pixelsPerMeter;
-    if (y >= -80 && y <= h + 80) {
+    if (y >= -h * 2 && y <= h * 3) {
       ctx.beginPath();
-      ctx.moveTo(25, y);
-      ctx.lineTo(w, y);
+      ctx.moveTo(worldLeft, y);
+      ctx.lineTo(worldRight, y);
       ctx.stroke();
       ctx.fillText(`${alt}m`, 22, y + 3);
     }
@@ -2274,8 +2430,8 @@ function drawQuadcopter(
   ctx.lineWidth = 1.5;
   ctx.setLineDash([6, 4]);
   ctx.beginPath();
-  ctx.moveTo(25, targetY);
-  ctx.lineTo(w - 10, targetY);
+  ctx.moveTo(worldLeft, targetY);
+  ctx.lineTo(worldRight, targetY);
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = c.warning;
@@ -2343,7 +2499,7 @@ function drawQuadcopter(
       life: 1.0,
       maxLife: 0.35,
       size: 1.8 + Math.random() * 1.5,
-      color: '#06B6D4',
+      color: c.accent,
     });
     particles.push({
       x: droneX + 46 + (Math.random() - 0.5) * 8,
@@ -2353,7 +2509,7 @@ function drawQuadcopter(
       life: 1.0,
       maxLife: 0.35,
       size: 1.8 + Math.random() * 1.5,
-      color: '#06B6D4',
+      color: c.accent,
     });
   }
 }
@@ -2370,7 +2526,7 @@ function drawVTOL(
   t: number
 ) {
   const cx = w / 2;
-  const cy = h * 0.48;
+  const cy = h / 2;
   const pitchAngle = (pv * Math.PI) / 180;
 
   ctx.save();
@@ -2423,7 +2579,7 @@ function drawSingleJoint(
   t: number
 ) {
   const cx = w / 2;
-  const cy = h * 0.58;
+  const cy = h / 2;
   const armLen = Math.min(w * 0.28, h * 0.34, 125);
 
   // Cast Metal Pedestal Base
@@ -2476,7 +2632,7 @@ function drawSingleJoint(
   ctx.fill();
 }
 
-// ── 9. SCARA 2-DOF Robotic Arm ──
+// ── 9. SCARA 2-DOF Industrial Arm ──
 function drawSCARA(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -2487,14 +2643,19 @@ function drawSCARA(
   u: number,
   t: number
 ) {
-  const cx = w * 0.36;
-  const cy = h * 0.62;
+  // Center overall kinematic arm visual bounds around (w/2, h/2) at neutral pose
   const L1 = Math.min(w * 0.18, 85);
   const L2 = Math.min(w * 0.15, 70);
+  const cx = w / 2 - 35;
+  const cy = h / 2 + 25;
 
   ctx.fillStyle = c.ground;
+  ctx.strokeStyle = c.groundLine;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
   ctx.roundRect(cx - 24, cy, 48, 16, 4);
   ctx.fill();
+  ctx.stroke();
 
   const theta1 = -Math.PI / 4 + (pv / 500) * Math.PI * 0.6;
   const theta2 = Math.PI / 3 + Math.sin(t * 0.5) * 0.15;
@@ -2540,22 +2701,37 @@ function drawROV(
   t: number,
   particles: Particle[]
 ) {
-  const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, c.water);
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
+  const worldTop = -h * 2;
+  const worldBottom = h * 3;
+  const worldW = worldRight - worldLeft;
+  const worldH = worldBottom - worldTop;
+
+  // Infinite Ocean Gradient in all directions
+  const grad = ctx.createLinearGradient(0, worldTop, 0, worldBottom);
+  grad.addColorStop(0, c.waterLight);
+  grad.addColorStop(0.5, c.water);
   grad.addColorStop(1, '#021526');
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
+  ctx.fillRect(worldLeft, worldTop, worldW, worldH);
 
   // Depth Markers
-  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
   ctx.font = '8px "JetBrains Mono", monospace';
   ctx.textAlign = 'right';
-  for (let d = 0; d <= 50; d += 10) {
-    const y = 30 + (d / 50) * (h - 55);
-    ctx.fillText(`${d}m`, 22, y + 3);
+  for (let d = -40; d <= 80; d += 10) {
+    const y = h / 2 + (d / 50) * (h * 0.45);
+    ctx.beginPath();
+    ctx.moveTo(worldLeft, y);
+    ctx.lineTo(worldRight, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.stroke();
+    ctx.fillText(`${d}m`, 24, y + 3);
   }
 
-  const rovY = 30 + (pv / 50) * (h - 55);
+  // ROV Centered at (w/2, h/2) at pv=0
+  const rovY = h / 2 + (pv / 50) * (h * 0.45);
   const rovX = w / 2 + Math.sin(t * 0.7) * 8;
 
   // Pressure Hull
@@ -2613,14 +2789,27 @@ function drawCustomPlant(
   const cartY = cy;
   const cartW = 64;
   const cartH = 32;
+  const worldLeft = -w * 2;
+  const worldRight = w * 3;
 
-  // Ground Track
+  // Infinite Ground Track
   ctx.strokeStyle = c.groundLine;
   ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.moveTo(cx - 130, cy + cartH / 2);
-  ctx.lineTo(cx + 130, cy + cartH / 2);
+  ctx.moveTo(worldLeft, cy + cartH / 2);
+  ctx.lineTo(worldRight, cy + cartH / 2);
   ctx.stroke();
+
+  // Track Ties / Hatch Marks
+  ctx.strokeStyle = c.groundLine;
+  ctx.lineWidth = 1;
+  const tieStart = Math.floor(worldLeft / 20) * 20;
+  for (let x = tieStart; x <= worldRight; x += 20) {
+    ctx.beginPath();
+    ctx.moveTo(x, cy + cartH / 2);
+    ctx.lineTo(x, cy + cartH / 2 + 6);
+    ctx.stroke();
+  }
 
   // Precision Mass Block
   ctx.fillStyle = '#1E293B';

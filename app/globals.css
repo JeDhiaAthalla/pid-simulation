@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "../components";
+@source "../app";
 
 /* ============================================================================
    PID Control Simulation — Design System
@@ -7,29 +9,52 @@
 
 /* ── CSS Custom Properties — Dark Mode (Default) ── */
 :root {
-  --bg-primary: #090D16;
-  --bg-secondary: #0E1320;
-  --bg-tertiary: #141B2A;
-  --panel-bg: #0C1121;
-  --input-bg: #111827;
-  --hover-bg: rgba(34, 211, 238, 0.05);
+  --bg: #090D16;
+  --surface: #0C1121;
+  --surface-2: #141B2A;
+  --border: rgba(148, 163, 184, 0.12);
+  --border-subtle: rgba(148, 163, 184, 0.06);
+  --border-active: rgba(34, 211, 238, 0.35);
 
-  --text-primary: #E2E8F0;
-  --text-secondary: #94A3B8;
-  --text-muted: #475569;
+  --text: #F1F5F9;
+  --text-muted: #94A3B8;
+  --text-faint: #94A3B8;
 
-  --accent: #22D3EE;
-  --accent-glow: rgba(34, 211, 238, 0.15);
-  --accent-emerald: #22C55E;
+  --accent-cyan: #22D3EE;
+  --accent-purple: #C084FC;
+  --accent-green: #34D399;
   --accent-amber: #FBBF24;
-  --accent-violet: #A78BFA;
-  --accent-rose: #F87171;
+  --accent-red: #F87171;
 
-  --border: rgba(148, 163, 184, 0.08);
-  --border-active: rgba(34, 211, 238, 0.25);
+  --accent-cyan-bg: rgba(34, 211, 238, 0.12);
+  --accent-purple-bg: rgba(192, 132, 252, 0.12);
+  --accent-green-bg: rgba(52, 211, 153, 0.12);
+  --accent-amber-bg: rgba(251, 191, 36, 0.12);
+  --accent-red-bg: rgba(248, 113, 113, 0.12);
 
-  --slider-track: rgba(148, 163, 184, 0.1);
-  --slider-thumb: #22D3EE;
+  --accent-amber-text: #020617;
+
+  --focus-ring: rgba(34, 211, 238, 0.6);
+
+  /* Legacy aliases for backward compatibility */
+  --bg-primary: var(--bg);
+  --bg-secondary: #0E1320;
+  --bg-tertiary: var(--surface-2);
+  --panel-bg: var(--surface);
+  --input-bg: #111827;
+  --hover-bg: rgba(34, 211, 238, 0.06);
+
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
+
+  --accent: var(--accent-cyan);
+  --accent-glow: rgba(34, 211, 238, 0.15);
+  --accent-emerald: var(--accent-green);
+  --accent-violet: var(--accent-purple);
+  --accent-rose: var(--accent-red);
+
+  --slider-track: rgba(148, 163, 184, 0.15);
+  --slider-thumb: var(--accent-cyan);
 
   --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.08);
   --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.3);
@@ -37,44 +62,71 @@
   color-scheme: dark;
 }
 
-/* ── Light Mode ── */
-.light {
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #F1F5F9;
-  --bg-tertiary: #E2E8F0;
-  --panel-bg: #FFFFFF;
+/* ── Light Mode (High Contrast & Pleasant Aesthetics) ── */
+.light,
+[data-theme="light"] {
+  --bg: #F6F8FB;
+  --surface: #FFFFFF;
+  --surface-2: #EEF2F6;
+  --border: rgba(15, 23, 42, 0.12);
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  --border-active: rgba(14, 116, 144, 0.45);
+
+  --text: #0F172A;
+  --text-muted: #334155;
+  --text-faint: #475569;
+
+  /* Saturated, high-contrast accents (WCAG AA/AAA >= 4.5:1 on #FFFFFF, #F6F8FB, and tinted surfaces) */
+  --accent-cyan: #0E7490;    /* cyan-700 (5.6:1) */
+  --accent-purple: #7E22CE;  /* purple-700 (6.9:1) */
+  --accent-green: #047857;   /* emerald-700 (5.3:1) */
+  --accent-amber: #92400E;   /* amber-800 (6.5:1 on white, 5.8:1 on tint) */
+  --accent-red: #B91C1C;     /* red-700 (6.9:1 on white, 6.1:1 on tint) */
+
+  --accent-cyan-bg: rgba(14, 116, 144, 0.1);
+  --accent-purple-bg: rgba(126, 34, 206, 0.1);
+  --accent-green-bg: rgba(4, 120, 87, 0.1);
+  --accent-amber-bg: rgba(146, 64, 14, 0.1);
+  --accent-red-bg: rgba(185, 28, 28, 0.1);
+
+  --accent-amber-text: #FFFFFF;
+
+  --focus-ring: rgba(14, 116, 144, 0.6);
+
+  /* Legacy aliases */
+  --bg-primary: var(--bg);
+  --bg-secondary: #EDF2F7;
+  --bg-tertiary: var(--surface-2);
+  --panel-bg: var(--surface);
   --input-bg: #F1F5F9;
-  --hover-bg: rgba(8, 145, 178, 0.05);
+  --hover-bg: rgba(14, 116, 144, 0.07);
 
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
 
-  --accent: #0891B2;
-  --accent-glow: rgba(8, 145, 178, 0.1);
-  --accent-emerald: #16A34A;
-  --accent-amber: #D97706;
-  --accent-violet: #7C3AED;
-  --accent-rose: #DC2626;
+  --accent: var(--accent-cyan);
+  --accent-glow: rgba(14, 116, 144, 0.15);
+  --accent-emerald: var(--accent-green);
+  --accent-violet: var(--accent-purple);
+  --accent-rose: var(--accent-red);
 
-  --border: rgba(15, 23, 42, 0.08);
-  --border-active: rgba(8, 145, 178, 0.3);
+  --slider-track: rgba(15, 23, 42, 0.12);
+  --slider-thumb: var(--accent-cyan);
 
-  --slider-track: rgba(15, 23, 42, 0.08);
-  --slider-thumb: #0891B2;
-
-  --shadow-glow: 0 0 20px rgba(8, 145, 178, 0.05);
-  --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 0 20px rgba(14, 116, 144, 0.06);
+  --shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.05);
 
   color-scheme: light;
 }
 
-/* ── Base Reset ── */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ── Base Reset (in @layer base so utility classes in @layer utilities can override) ── */
+@layer base {
+  *, ::after, ::before {
+    box-sizing: border-box;
+  }
 }
+
+
 
 html,
 body {

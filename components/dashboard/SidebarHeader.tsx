@@ -45,10 +45,10 @@ export const SidebarHeader = React.memo(function SidebarHeader({
   return (
     <div className="border-b border-[var(--border)] bg-[var(--panel-bg)]/95 backdrop-blur-md sticky top-0 z-30 flex flex-col">
       {/* ── Row 1: Title + Tools (Export, Theme, Collapse) ── */}
-      <div className="px-3 py-2 flex items-center justify-between border-b border-white/5 gap-1.5">
+      <div className="px-3 py-2 flex items-center justify-between border-b border-[var(--border-subtle)] gap-1.5">
         <div className="flex items-center gap-1.5 min-w-0">
-          <Cpu size={15} className="text-cyan-400 shrink-0" />
-          <span className="text-xs font-mono font-bold tracking-wider text-[var(--text-primary)] truncate">
+          <Cpu size={15} className="text-[var(--accent-cyan)] shrink-0" />
+          <span className="text-xs font-mono font-bold tracking-wider text-[var(--text)] truncate">
             PID CONTROL SIM
           </span>
         </div>
@@ -62,8 +62,8 @@ export const SidebarHeader = React.memo(function SidebarHeader({
             onClick={onToggleExport}
             className={`p-1.5 rounded-md transition-colors ${
               showExport
-                ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/40'
-                : 'hover:bg-[var(--hover-bg)] text-slate-400 hover:text-slate-200 opacity-80'
+                ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] border border-[var(--border-active)]'
+                : 'hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)]'
             }`}
             title="Export Source Code (C++, Python, JSON)"
           >
@@ -75,13 +75,13 @@ export const SidebarHeader = React.memo(function SidebarHeader({
             type="button"
             aria-label={isDark ? 'Ganti ke Tema Terang' : 'Ganti ke Tema Gelap'}
             onClick={onToggleTheme}
-            className="p-1.5 rounded-md hover:bg-[var(--hover-bg)] text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-1.5 rounded-md hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
             title={isDark ? 'Light Mode' : 'Dark Mode'}
           >
             {isDark ? (
-              <Sun size={14} className="text-amber-400" />
+              <Sun size={14} className="text-[var(--accent-amber)]" />
             ) : (
-              <Moon size={14} className="text-indigo-400" />
+              <Moon size={14} className="text-[var(--accent-purple)]" />
             )}
           </button>
 
@@ -90,7 +90,7 @@ export const SidebarHeader = React.memo(function SidebarHeader({
             type="button"
             aria-label="Ciutkan Sidebar"
             onClick={onCollapse}
-            className="p-1.5 rounded-md hover:bg-[var(--hover-bg)] text-slate-400 hover:text-slate-200 transition-colors opacity-70 hover:opacity-100"
+            className="p-1.5 rounded-md hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors opacity-75 hover:opacity-100"
             title="Sembunyikan / Ciutkan Sidebar"
           >
             <Minimize2 size={13} />
@@ -104,16 +104,16 @@ export const SidebarHeader = React.memo(function SidebarHeader({
           type="button"
           aria-label={`Pilih Robot (Saat ini: ${selectedRobot.name})`}
           onClick={() => setShowRobotPicker((p) => !p)}
-          className="w-full p-2 rounded-lg flex items-center justify-between gap-2 border border-[var(--border)] bg-[var(--input-bg)]/40 hover:border-cyan-400/50 hover:bg-[var(--hover-bg)] transition-all text-left group"
+          className="w-full p-2 rounded-lg flex items-center justify-between gap-2 border border-[var(--border)] bg-[var(--input-bg)]/40 hover:border-[var(--border-active)] hover:bg-[var(--hover-bg)] transition-all text-left group"
         >
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-lg flex-shrink-0">{selectedRobot.icon}</span>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-mono font-bold truncate text-[var(--text-primary)] group-hover:text-cyan-400 transition-colors">
+              <p className="text-xs font-mono font-bold truncate text-[var(--text)] group-hover:text-[var(--accent-cyan)] transition-colors">
                 {selectedRobot.name}
               </p>
               <p
-                className="text-[10px] font-mono opacity-50 truncate"
+                className="text-[10px] font-mono text-[var(--text-muted)] truncate"
                 title={selectedRobot.description}
               >
                 {selectedRobot.description}
@@ -122,7 +122,7 @@ export const SidebarHeader = React.memo(function SidebarHeader({
           </div>
           <ChevronDown
             size={13}
-            className={`transition-transform flex-shrink-0 opacity-50 text-slate-400 ${
+            className={`transition-transform flex-shrink-0 text-[var(--text-muted)] ${
               showRobotPicker ? 'rotate-180' : ''
             }`}
           />
@@ -130,23 +130,23 @@ export const SidebarHeader = React.memo(function SidebarHeader({
 
         {/* Dropdown Menu Categories & Items */}
         {showRobotPicker && (
-          <div className="absolute left-3 right-3 top-full mt-1 max-h-72 overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--panel-bg)] shadow-2xl z-40 font-mono">
+          <div className="absolute left-3 right-3 top-full mt-1 max-h-72 overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-2xl z-40 font-mono">
             {(Object.keys(ROBOT_CATEGORIES) as RobotCategory[]).map((cat) => (
-              <div key={cat} className="border-b border-white/5 last:border-b-0">
+              <div key={cat} className="border-b border-[var(--border-subtle)] last:border-b-0">
                 <button
                   type="button"
                   onClick={() =>
                     setExpandedCategory((prev) => (prev === cat ? null : cat))
                   }
-                  className="w-full p-2 flex items-center gap-2 text-xs hover:bg-[var(--hover-bg)] transition-colors text-left"
+                  className="w-full p-2 flex items-center gap-2 text-xs hover:bg-[var(--hover-bg)] transition-colors text-left text-[var(--text)]"
                 >
                   <span className="text-sm">{ROBOT_CATEGORIES[cat].icon}</span>
-                  <span className="font-bold opacity-80 text-[11px]">
+                  <span className="font-bold text-[11px] text-[var(--text)]">
                     {ROBOT_CATEGORIES[cat].name}
                   </span>
                   <ChevronRight
                     size={11}
-                    className={`ml-auto transition-transform opacity-50 ${
+                    className={`ml-auto transition-transform text-[var(--text-muted)] ${
                       expandedCategory === cat ? 'rotate-90' : ''
                     }`}
                   />
@@ -163,8 +163,8 @@ export const SidebarHeader = React.memo(function SidebarHeader({
                       }}
                       className={`w-full p-2 pl-7 flex items-center gap-2 text-xs transition-colors text-left ${
                         selectedRobot.id === robot.id
-                          ? 'bg-cyan-500/15 text-cyan-400 font-bold'
-                          : 'hover:bg-[var(--hover-bg)] text-slate-300'
+                          ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] font-bold'
+                          : 'hover:bg-[var(--hover-bg)] text-[var(--text-muted)] hover:text-[var(--text)]'
                       }`}
                     >
                       <span className="text-sm">{robot.icon}</span>

@@ -63,6 +63,18 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (!isDark) {
+        document.documentElement.classList.add('light');
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.removeAttribute('data-theme');
+      }
+    }
+  }, [isDark]);
+
   const toggleTheme = useCallback(() => {
     setIsDark((prev) => !prev);
   }, []);

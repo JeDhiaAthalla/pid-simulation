@@ -39,8 +39,8 @@ export const RunBar = React.memo(function RunBar({
           onClick={onToggleRunning}
           className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-bold transition-all shadow-sm active:scale-[0.98] ${
             isRunning
-              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30'
-              : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30'
+              ? 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)] border border-[var(--accent-amber)]/40 hover:brightness-110'
+              : 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border border-[var(--accent-green)]/40 hover:brightness-110'
           }`}
         >
           {isRunning ? <Pause size={14} /> : <Play size={14} />}
@@ -52,7 +52,7 @@ export const RunBar = React.memo(function RunBar({
           type="button"
           aria-label="Langkah Maju 1 Tick (Step +1dt)"
           onClick={onStepForward}
-          className="p-2 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:bg-[var(--hover-bg)] transition-colors text-slate-300 hover:text-white"
+          className="p-2 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:bg-[var(--hover-bg)] transition-colors text-[var(--text-muted)] hover:text-[var(--text)]"
           title="Langkah Maju 1 Tick (Δt)"
         >
           <StepForward size={14} />
@@ -63,7 +63,7 @@ export const RunBar = React.memo(function RunBar({
           type="button"
           aria-label="Reset Plant State ke Nol"
           onClick={onReset}
-          className="p-2 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:bg-rose-500/15 hover:border-rose-500/30 text-rose-400 hover:text-rose-300 transition-colors"
+          className="p-2 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:bg-[var(--accent-red-bg)] hover:border-[var(--accent-red)]/40 text-[var(--accent-red)] transition-colors"
           title="Panic Reset Plant State ke Nol"
         >
           <RotateCcw size={14} />
@@ -74,7 +74,7 @@ export const RunBar = React.memo(function RunBar({
           type="button"
           aria-label="Injeksi Gangguan Gaya Transien"
           onClick={onDisturbance}
-          className="p-2 rounded-lg border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 hover:text-amber-300 transition-colors active:scale-95"
+          className="p-2 rounded-lg border border-[var(--accent-amber)]/40 bg-[var(--accent-amber-bg)] hover:brightness-110 text-[var(--accent-amber)] transition-colors active:scale-95"
           title="Injeksi Gangguan Gaya Transien (Petir)"
         >
           <Zap size={14} />
@@ -85,21 +85,21 @@ export const RunBar = React.memo(function RunBar({
       <div className="flex items-center justify-between text-[10px]">
         {/* Speed Segmented Control */}
         <div className="flex items-center gap-1.5">
-          <span className="opacity-50 flex items-center gap-0.5">
+          <span className="text-[var(--text-muted)] flex items-center gap-0.5">
             <Timer size={10} />
             Laju:
           </span>
-          <div className="flex gap-0.5 bg-black/30 p-0.5 rounded border border-white/10">
+          <div className="flex gap-0.5 bg-[var(--surface-2)] p-0.5 rounded border border-[var(--border)]">
             {[0.25, 0.5, 1.0, 2.0].map((s) => (
               <button
                 key={s}
                 type="button"
                 aria-label={`Kecepatan ${s}x`}
                 onClick={() => onSetSpeed(s)}
-                className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold transition-all ${
                   speedMultiplier === s
-                    ? 'bg-amber-400 text-slate-900 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[var(--accent-amber)] text-[var(--accent-amber-text)] shadow-sm'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
                 }`}
               >
                 {s}×
@@ -110,14 +110,14 @@ export const RunBar = React.memo(function RunBar({
 
         {/* Time + Status Pill */}
         <div className="flex items-center gap-2">
-          <span className="opacity-60 text-[10px] font-mono">
+          <span className="text-[var(--text-muted)] text-[10px] font-mono">
             {time.toFixed(2)}s
           </span>
           <span
             className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${
               isRunning
-                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                : 'bg-slate-700/30 text-slate-400 border-white/5'
+                ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border-[var(--accent-green)]/30'
+                : 'bg-[var(--surface-2)] text-[var(--text-muted)] border-[var(--border)]'
             }`}
           >
             {isRunning ? '● RUNNING' : '○ DIAM'}

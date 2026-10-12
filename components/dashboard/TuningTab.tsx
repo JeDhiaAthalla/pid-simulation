@@ -54,11 +54,11 @@ const TuningResultCard = React.memo(function TuningResultCard({
   return (
     <div className="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:border-cyan-400/40 transition-colors text-xs space-y-2">
       <div className="flex items-center justify-between">
-        <span className="font-bold text-[11px] text-slate-200">
+        <span className="font-bold text-[11px] text-[var(--text)]">
           {methodNames[result.method] || result.method}
         </span>
         <div className="flex items-center gap-1.5">
-          <span className="text-[9px] opacity-60">Confidence:</span>
+          <span className="text-[9px] text-[var(--text-muted)]">Confidence:</span>
           <span
             className="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded"
             style={{
@@ -74,17 +74,17 @@ const TuningResultCard = React.memo(function TuningResultCard({
 
       {/* Gain values chips */}
       <div className="grid grid-cols-3 gap-1 text-[10px] font-mono text-center">
-        <div className="p-1 rounded bg-black/30 border border-cyan-500/20">
-          <span className="opacity-50 text-[9px] block">Kp</span>
-          <span className="font-bold text-cyan-400">{result.gains.Kp.toFixed(3)}</span>
+        <div className="p-1 rounded bg-[var(--surface-2)] border border-[var(--accent-cyan)]/30">
+          <span className="text-[var(--text-muted)] text-[9px] block">Kp</span>
+          <span className="font-bold text-[var(--accent-cyan)]">{result.gains.Kp.toFixed(3)}</span>
         </div>
-        <div className="p-1 rounded bg-black/30 border border-purple-500/20">
-          <span className="opacity-50 text-[9px] block">Ki</span>
-          <span className="font-bold text-purple-400">{result.gains.Ki.toFixed(3)}</span>
+        <div className="p-1 rounded bg-[var(--surface-2)] border border-[var(--accent-purple)]/30">
+          <span className="text-[var(--text-muted)] text-[9px] block">Ki</span>
+          <span className="font-bold text-[var(--accent-purple)]">{result.gains.Ki.toFixed(3)}</span>
         </div>
-        <div className="p-1 rounded bg-black/30 border border-emerald-500/20">
-          <span className="opacity-50 text-[9px] block">Kd</span>
-          <span className="font-bold text-emerald-400">{result.gains.Kd.toFixed(3)}</span>
+        <div className="p-1 rounded bg-[var(--surface-2)] border border-[var(--accent-green)]/30">
+          <span className="text-[var(--text-muted)] text-[9px] block">Kd</span>
+          <span className="font-bold text-[var(--accent-green)]">{result.gains.Kd.toFixed(3)}</span>
         </div>
       </div>
 
@@ -95,8 +95,8 @@ const TuningResultCard = React.memo(function TuningResultCard({
         disabled={isCurrent}
         className={`w-full py-1.5 px-2 rounded text-[10px] font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm ${
           isCurrent
-            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 cursor-default'
-            : 'bg-cyan-500/15 text-cyan-400 hover:bg-cyan-500/25 border border-cyan-500/30 active:scale-98'
+            ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border border-[var(--accent-green)]/30 cursor-default'
+            : 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] hover:brightness-110 border border-[var(--accent-cyan)]/30 active:scale-98'
         }`}
       >
         {isCurrent ? (
@@ -127,14 +127,15 @@ export const TuningTab = React.memo(function TuningTab({
     <div
       role="tabpanel"
       id="tabpanel-tuning"
+      data-tab-content="tuning"
       aria-labelledby="tab-tuning"
       className="p-3 space-y-3 font-mono"
     >
       {/* ── Auto-Tune Primary Action CTA ── */}
       <div>
         <div className="flex items-center gap-1.5 mb-2">
-          <Wand2 size={13} className="text-cyan-400" />
-          <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">
+          <Wand2 size={13} className="text-[var(--accent-cyan)]" />
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
             Auto-Tuning Engine
           </span>
         </div>
@@ -143,16 +144,16 @@ export const TuningTab = React.memo(function TuningTab({
           type="button"
           onClick={onRunAutoTune}
           disabled={isAutoTuning}
-          className="w-full p-3 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-xs font-bold hover:bg-cyan-500/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm group active:scale-98"
+          className="w-full p-3 rounded-lg bg-[var(--accent-cyan-bg)] border border-[var(--accent-cyan)]/40 text-[var(--accent-cyan)] text-xs font-bold hover:brightness-110 transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm group active:scale-98"
         >
           {isAutoTuning ? (
             <>
-              <div className="w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+              <div className="w-3.5 h-3.5 border-2 border-[var(--accent-cyan)] border-t-transparent rounded-full animate-spin" />
               <span>Mengoptimasi 4 Metode Matematis...</span>
             </>
           ) : (
             <>
-              <Sparkles size={14} className="text-cyan-300 group-hover:rotate-12 transition-transform" />
+              <Sparkles size={14} className="text-[var(--accent-cyan)] group-hover:rotate-12 transition-transform" />
               <span>Jalankan Auto-Tune (4 Metode)</span>
             </>
           )}
@@ -161,11 +162,11 @@ export const TuningTab = React.memo(function TuningTab({
 
       {/* Empty State Help text */}
       {!hasResults && !isAutoTuning && (
-        <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-[10px] text-cyan-300 flex items-start gap-2.5">
-          <Info size={14} className="flex-shrink-0 text-cyan-400 mt-0.5" />
+        <div className="p-3 rounded-lg bg-[var(--accent-cyan-bg)] border border-[var(--accent-cyan)]/20 text-[10px] text-[var(--accent-cyan)] flex items-start gap-2.5">
+          <Info size={14} className="flex-shrink-0 text-[var(--accent-cyan)] mt-0.5" />
           <div>
-            <p className="font-bold text-[11px] mb-0.5">Belum Ada Hasil Tuning</p>
-            <p className="opacity-80 leading-relaxed">
+            <p className="font-bold text-[11px] mb-0.5 text-[var(--accent-cyan)]">Belum Ada Hasil Tuning</p>
+            <p className="text-[var(--text-muted)] leading-relaxed">
               Tekan tombol di atas untuk mensintesis gain pengendali optimal secara otomatis menggunakan
               metode Pole Placement, Ziegler-Nichols, Cohen-Coon, dan Optimasi Nelder-Mead.
             </p>

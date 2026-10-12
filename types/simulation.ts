@@ -215,6 +215,10 @@ export interface StepResponseMetrics {
   settlingStatus?: 'settled' | 'unsettled' | 'insufficient_data';
   /** Fraction of samples where control effort was saturated (0..1) */
   saturationFraction?: number;
+  /** Whether the setpoint transition has a valid non-zero step amplitude (|SP - initial| >= threshold) */
+  isStepValid?: boolean;
+  /** Step amplitude magnitude |SP - initialValue| */
+  stepAmplitude?: number;
 }
 
 // ---------------------------------------------------------------------------
