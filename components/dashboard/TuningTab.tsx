@@ -7,14 +7,14 @@
 import React from 'react';
 import {
   Wand2,
+  Sparkles,
+  Check,
+  Info,
   ArrowRight,
   AlertTriangle,
-  CheckCircle2,
-  Sparkles,
-  Info,
-  Check,
 } from 'lucide-react';
 import { TuningResult, TuningRecommendation, PIDGains } from '@/types/simulation';
+import { DiagnosticCard } from './DiagnosticCard';
 
 interface TuningTabProps {
   isAutoTuning: boolean;
@@ -22,7 +22,8 @@ interface TuningTabProps {
   tuningResults: TuningResult[];
   recommendations: TuningRecommendation[];
   currentGains: PIDGains;
-  onApplyGains: (gains: PIDGains) => void;
+  appliedMethodId?: string | null;
+  onApplyGains: (gains: PIDGains, methodId?: string | null) => void;
 }
 
 const methodNames: Record<string, string> = {
@@ -37,19 +38,23 @@ const methodNames: Record<string, string> = {
 const TuningResultCard = React.memo(function TuningResultCard({
   result,
   currentGains,
+  appliedMethodId,
   onApply,
 }: {
   result: TuningResult;
   currentGains: PIDGains;
+  appliedMethodId?: string | null;
   onApply: () => void;
 }) {
   const confidenceColor =
     result.confidence > 0.7 ? '#10B981' : result.confidence > 0.4 ? '#F59E0B' : '#EF4444';
 
-  const isCurrent =
-    Math.abs(result.gains.Kp - currentGains.Kp) < 0.005 &&
-    Math.abs(result.gains.Ki - currentGains.Ki) < 0.005 &&
-    Math.abs(result.gains.Kd - currentGains.Kd) < 0.005;
+  const recId = result.id || result.method;
+  const isApplied =
+    (appliedMethodId === recId || appliedMethodId === result.method) &&
+    Math.abs(currentGains.Kp - result.gains.Kp) < 0.001 &&
+    Math.abs(currentGains.Ki - result.gains.Ki) < 0.001 &&
+    Math.abs(currentGains.Kd - result.gains.Kd) < 0.001;
 
   return (
     <div className="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--input-bg)]/40 hover:border-cyan-400/40 transition-colors text-xs space-y-2">
@@ -92,14 +97,14 @@ const TuningResultCard = React.memo(function TuningResultCard({
       <button
         type="button"
         onClick={onApply}
-        disabled={isCurrent}
+        disabled={isApplied}
         className={`w-full py-1.5 px-2 rounded text-[10px] font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm ${
-          isCurrent
+          isApplied
             ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)] border border-[var(--accent-green)]/30 cursor-default'
             : 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] hover:brightness-110 border border-[var(--accent-cyan)]/30 active:scale-98'
         }`}
       >
-        {isCurrent ? (
+        {isApplied ? (
           <>
             <Check size={11} /> Sedang Digunakan
           </>
@@ -119,6 +124,7 @@ export const TuningTab = React.memo(function TuningTab({
   tuningResults,
   recommendations,
   currentGains,
+  appliedMethodId,
   onApplyGains,
 }: TuningTabProps) {
   const hasResults = tuningResults.length > 0;
@@ -185,52 +191,20 @@ export const TuningTab = React.memo(function TuningTab({
           </div>
 
           <div className="space-y-1.5">
-            {recommendations.map((rec, i) => {
-              const isCrit = rec.severity === 'critical';
-              const isWarn = rec.severity === 'warning';
-              const Icon = isCrit ? AlertTriangle : isWarn ? AlertTriangle : CheckCircle2;
-              const color = isCrit ? '#EF4444' : isWarn ? '#F59E0B' : '#10B981';
-
-              return (
-                <div
-                  key={i}
-                  className="p-2.5 rounded-lg border text-xs"
-                  style={{ borderColor: `${color}35`, backgroundColor: `${color}0C` }}
-                >
-                  <div className="flex items-start gap-2">
-                    <Icon size={14} style={{ color, flexShrink: 0, marginTop: 1 }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[11px]" style={{ color }}>
-                        {rec.title}
-                      </p>
-                      <p className="text-[10px] opacity-70 mt-0.5 leading-relaxed">{rec.message}</p>
-                      {rec.suggestedGains && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (rec.suggestedGains) {
-                              onApplyGains({
-                                Kp: rec.suggestedGains.Kp ?? currentGains.Kp,
-                                Ki: rec.suggestedGains.Ki ?? currentGains.Ki,
-                                Kd: rec.suggestedGains.Kd ?? currentGains.Kd,
-                              });
-                            }
-                          }}
-                          className="mt-1.5 px-2 py-0.5 rounded text-[10px] font-bold transition-all flex items-center gap-1 active:scale-95"
-                          style={{
-                            backgroundColor: `${color}20`,
-                            color,
-                            border: `1px solid ${color}40`,
-                          }}
-                        >
-                          Terapkan Koreksi <ArrowRight size={10} />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {recommendations.map((rec, i) => (
+              <DiagnosticCard
+                key={i}
+                recommendation={rec}
+                onApplyGains={(g) =>
+                  onApplyGains({
+                    Kp: g.Kp ?? currentGains.Kp,
+                    Ki: g.Ki ?? currentGains.Ki,
+                    Kd: g.Kd ?? currentGains.Kd,
+                  })
+                }
+                currentGains={currentGains}
+              />
+            ))}
           </div>
         </div>
       )}
@@ -246,14 +220,18 @@ export const TuningTab = React.memo(function TuningTab({
           </div>
 
           <div className="space-y-2">
-            {tuningResults.map((result, i) => (
-              <TuningResultCard
-                key={i}
-                result={result}
-                currentGains={currentGains}
-                onApply={() => onApplyGains(result.gains)}
-              />
-            ))}
+            {tuningResults.map((result, i) => {
+              const recId = result.id || result.method;
+              return (
+                <TuningResultCard
+                  key={recId || i}
+                  result={result}
+                  currentGains={currentGains}
+                  appliedMethodId={appliedMethodId}
+                  onApply={() => onApplyGains(result.gains, recId)}
+                />
+              );
+            })}
           </div>
         </div>
       )}

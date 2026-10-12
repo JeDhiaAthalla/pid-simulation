@@ -53,6 +53,8 @@ import {
   PHYSICS_DT,
   AccumulatorState,
   clamp,
+  TelemetryRingBuffer,
+  getHoverFeedforward,
 } from '@/lib/physicsEngine';
 
 // ---------------------------------------------------------------------------
@@ -63,6 +65,7 @@ export interface SimulationEngineRef {
   controllerStateRef: React.MutableRefObject<ControllerState>;
   timeRef: React.MutableRefObject<number>;
   dataRef: React.MutableRefObject<DataPoint[]>;
+  ringBufferRef?: React.MutableRefObject<TelemetryRingBuffer>;
   disturbanceRef: React.MutableRefObject<{ magnitude: number; endTime: number }>;
   accumulatorRef?: React.MutableRefObject<AccumulatorState>;
   metricsRef?: React.MutableRefObject<StepResponseMetrics>;
@@ -78,6 +81,7 @@ export interface SimulationEngineRef {
 export interface SimulationCanvasHandle {
   injectDisturbance: (magnitude: number, duration?: number) => void;
   reset: () => void;
+  resetPlant: () => void;
   resetViewports: () => void;
   centerRobot: () => void;
   getLiveSnapshot: () => {
@@ -112,6 +116,8 @@ export interface SimulationCanvasProps {
   onDisturbance?: (magnitude: number, duration: number) => void;
   onMetricsUpdate?: (metrics: StepResponseMetrics) => void;
   onStatusChange?: (status: SimulationStatus) => void;
+  onReset?: () => void;
+  onResetPlant?: () => void;
 
   /** Display layout mode */
   mode?: 'dual' | 'oscilloscope' | 'animation' | 'tabbed';
@@ -310,6 +316,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       onDisturbance,
       onMetricsUpdate,
       onStatusChange,
+      onReset,
+      onResetPlant,
       mode = 'dual',
       className = '',
     },
@@ -335,6 +343,11 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
     // ── Interaction Modes for Canvas 2 (2D Physics) ──
     // 'disturbance': Left click pushes robot; 'camera': Left click pans viewport
     const [robotInteractionMode, setRobotInteractionMode] = useState<'disturbance' | 'camera'>('disturbance');
+    const [isCameraFollow, setIsCameraFollow] = useState<boolean>(true);
+
+    // ── Customizable Disturbance State ──
+    const [disturbanceValue, setDisturbanceValue] = useState<number>(4.5);
+    const [disturbanceSign, setDisturbanceSign] = useState<'+' | '-'>('+');
 
     // ── Navigation Tabs ──
     const [activeTab, setActiveTab] = useState<'dual' | 'oscilloscope' | 'animation'>(
@@ -349,14 +362,12 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
     const oscPanStartRef = useRef<{ clientX: number; initialOffset: number }>({ clientX: 0, initialOffset: 0 });
 
     // 2D Physics Viewport Camera: follow, relative offset in screen pixels, smoothed altitude (Track B2)
-    const cameraRef = useRef<{
-      follow: boolean;
-      offset: { x: number; y: number };
-      smoothedPV: number;
-    }>({
+    const cameraRef = useRef<RobotCameraState>({
       follow: true,
       offset: { x: 0, y: 0 },
       smoothedPV: 0,
+      smoothedX: 0,
+      smoothedY: 0,
     });
     const isCameraPanningRef = useRef<boolean>(false);
     const cameraPanStartRef = useRef<{ clientX: number; clientY: number; initOffsetX: number; initOffsetY: number }>({
@@ -452,10 +463,68 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       }
     }, [propPlant]);
     useEffect(() => { internalNoiseRef.current = propNoiseConfig; }, [propNoiseConfig]);
+    // ── Archetype Change Watcher (BUG Purge Oscilloscope Fix) ──
+    const prevArchetypeIdRef = useRef<string>(initialRobot.id);
     useEffect(() => {
       const selected = robot || ROBOTS.find((r) => r.id === propRobotType) || internalRobotDefRef.current;
-      internalRobotDefRef.current = selected;
-    }, [robot, propRobotType]);
+      const currentId = selected.id;
+
+      if (prevArchetypeIdRef.current !== currentId) {
+        prevArchetypeIdRef.current = currentId;
+        internalRobotDefRef.current = selected;
+
+        // 1. Purge oscilloscope data trace points
+        if (engineRef?.dataRef) {
+          engineRef.dataRef.current = [];
+        }
+        internalDataRef.current = [];
+
+        // 2. Reset time accumulator to t = 0.0s
+        if (engineRef?.timeRef) {
+          engineRef.timeRef.current = 0;
+        }
+        internalTimeRef.current = 0;
+
+        if (engineRef?.accumulatorRef) {
+          engineRef.accumulatorRef.current = createAccumulator();
+        }
+        internalAccumulatorRef.current = createAccumulator();
+
+        // 3. Reset plant state and controller state
+        const targetPlant = engineRef?.plantRef?.current || internalPlantRef.current || selected.defaultPlant;
+        if (engineRef?.plantStateRef) {
+          engineRef.plantStateRef.current = createPlantState(targetPlant);
+        }
+        internalPlantStateRef.current = createPlantState(targetPlant);
+
+        if (engineRef?.controllerStateRef) {
+          engineRef.controllerStateRef.current = createControllerState();
+        }
+        internalControllerStateRef.current = createControllerState();
+
+        if (engineRef?.disturbanceRef) {
+          engineRef.disturbanceRef.current = { magnitude: 0, endTime: 0 };
+        }
+        internalDisturbanceRef.current = { magnitude: 0, endTime: 0 };
+
+        if (engineRef?.statusRef) {
+          engineRef.statusRef.current = 'idle';
+        }
+        internalStatusRef.current = 'idle';
+
+        // 4. Reset FX and viewport cameras
+        particlesRef.current = [];
+        ripplesRef.current = [];
+        oscPanOffsetRef.current = 0;
+        cameraRef.current = { follow: true, offset: { x: 0, y: 0 }, smoothedPV: 0, smoothedX: 0, smoothedY: 0 };
+        smoothYRangeRef.current = { min: -0.2, max: 2.0 };
+        stepStartTimeRef.current = 0;
+        stepInitialValueRef.current = 0;
+        setIsRunaway(false);
+      } else {
+        internalRobotDefRef.current = selected;
+      }
+    }, [robot, propRobotType, engineRef]);
 
     // Keyboard shortcut 'C' for robot centering & Prefers reduced motion detection
     useEffect(() => {
@@ -476,6 +545,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
           }
           cameraRef.current.follow = true;
           cameraRef.current.offset = { x: 0, y: 0 };
+          setIsCameraFollow(true);
         }
       };
       window.addEventListener('keydown', handleKeyDown);
@@ -541,8 +611,16 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       [engineRef, onDisturbance]
     );
 
-    // ── Emergency Reset ──
+    // ── Emergency / Plant Reset (Time-Window Collapse Fix) ──
     const handleReset = useCallback(() => {
+      // 1. External state reset if wired
+      if (onResetPlant) {
+        onResetPlant();
+      } else if (onReset) {
+        onReset();
+      }
+
+      // 2. Direct engine refs reset (Zero latency)
       const plantToReset = engineRef?.plantRef?.current || internalPlantRef.current;
       const targetPlantStateRef = engineRef?.plantStateRef || internalPlantStateRef;
       const targetControllerRef = engineRef?.controllerStateRef || internalControllerStateRef;
@@ -551,36 +629,77 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       const targetDisturbanceRef = engineRef?.disturbanceRef || internalDisturbanceRef;
       const targetAccumulatorRef = engineRef?.accumulatorRef || internalAccumulatorRef;
       const targetStatusRef = engineRef?.statusRef || internalStatusRef;
+      const targetRingBufferRef = engineRef?.ringBufferRef;
 
+      // Reset posisi, kecepatan, dan percepatan plant robot ke kondisi awal ekuilibrium
       targetPlantStateRef.current = createPlantState(plantToReset);
-      targetControllerRef.current = createControllerState();
-      targetTimeRef.current = 0;
+
+      // Nol-kan akumulator kontroler (I = 0, D = 0, e = 0, u = u_ff)
+      const uFf = getHoverFeedforward(plantToReset);
+      targetControllerRef.current = {
+        ...createControllerState(),
+        controlOutput: uFf,
+        controlOutputUnsat: uFf,
+      };
+
+      // Reset waktu simulasi timeRef = 0.0 dan kosongkan buffer telemetri
+      targetTimeRef.current = 0.0;
       targetDataRef.current = [];
+      if (targetRingBufferRef?.current) {
+        targetRingBufferRef.current.clear();
+      }
+      internalTimeRef.current = 0.0;
+      internalDataRef.current = [];
+
       targetDisturbanceRef.current = { magnitude: 0, endTime: 0 };
       if (targetAccumulatorRef) targetAccumulatorRef.current = createAccumulator();
       if (targetStatusRef) targetStatusRef.current = 'idle';
 
-      smoothYRangeRef.current = { min: -0.2, max: 2.0 };
+      // Setel ulang jendela geser waktu osiloskop agar skala X kembali ke rentang default [0.0s, T_window]
+      oscPanOffsetRef.current = 0;
+      smoothYRangeRef.current = { min: -0.2, max: Math.max(propSetpoint * 1.2, 2.0) };
       particlesRef.current = [];
       ripplesRef.current = [];
-      oscPanOffsetRef.current = 0;
-      cameraRef.current = { follow: true, offset: { x: 0, y: 0 }, smoothedPV: 0 };
+      cameraRef.current = { follow: isCameraFollow, offset: { x: 0, y: 0 }, smoothedPV: 0, smoothedX: 0, smoothedY: 0 };
       stepStartTimeRef.current = 0;
       stepInitialValueRef.current = 0;
       setIsRunaway(false);
-    }, [engineRef]);
+    }, [engineRef, onReset, onResetPlant, propSetpoint, isCameraFollow]);
 
-    // ── Reset Viewports Panning & Camera (Track B2) ──
+    // ── Global Viewport Reset (Reset View: Decoupled Dual Canvas Reset) ──
     const handleResetViewports = useCallback(() => {
+      // 1. Kanvas Osiloskop: Mengembalikan time-pan scroll ke live tracking dan auto-fit sumbu Y
       oscPanOffsetRef.current = 0;
-      cameraRef.current = { follow: true, offset: { x: 0, y: 0 }, smoothedPV: cameraRef.current.smoothedPV };
+      smoothYRangeRef.current = { min: -0.2, max: Math.max(propSetpoint * 1.2, 2.0) };
+
+      // 2. Kanvas Robot 2D: Mereset offset kamera ke (0, 0) TANPA MENGUBAH STATUS FOLLOW
+      cameraRef.current.offset = { x: 0, y: 0 };
+
+      // 3. Divider Split-Pane: Mereset rasio split kembali ke proporsi 50:50
       setSplitRatio(0.5);
+    }, [propSetpoint]);
+
+    // ── Toggle Camera Follow (Follow ON / OFF Mandiri) ──
+    const handleToggleFollow = useCallback(() => {
+      setIsCameraFollow((prev) => {
+        const next = !prev;
+        cameraRef.current.follow = next;
+        return next;
+      });
     }, []);
 
-    // ── Center Robot Viewport Camera (Track B2: Shortcut C / Crosshair button) ──
+    // ── Center Robot Viewport Camera (Pusatkan / Kunci Bidikan) ──
     const handleCenterRobot = useCallback(() => {
-      cameraRef.current = { follow: true, offset: { x: 0, y: 0 }, smoothedPV: cameraRef.current.smoothedPV };
+      cameraRef.current.follow = true;
+      cameraRef.current.offset = { x: 0, y: 0 };
+      setIsCameraFollow(true);
     }, []);
+
+    // ── Customizable Disturbance Execution ──
+    const handleInjectCustomDisturbance = useCallback(() => {
+      const signedMag = (disturbanceSign === '-' ? -1 : 1) * Math.abs(disturbanceValue);
+      injectDisturbanceImpulse(signedMag, 0.35);
+    }, [disturbanceSign, disturbanceValue, injectDisturbanceImpulse]);
 
     // ── Imperative Handle ──
     useImperativeHandle(
@@ -588,6 +707,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       () => ({
         injectDisturbance: injectDisturbanceImpulse,
         reset: handleReset,
+        resetPlant: handleReset,
         resetViewports: handleResetViewports,
         centerRobot: handleCenterRobot,
         getLiveSnapshot: () => {
@@ -767,6 +887,14 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       const dx = e.clientX - cameraPanStartRef.current.clientX;
       const dy = e.clientY - cameraPanStartRef.current.clientY;
 
+      // Jika pengguna menggeser kanvas secara manual: ubah status follow menjadi nonaktif
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+        if (cameraRef.current.follow) {
+          cameraRef.current.follow = false;
+          setIsCameraFollow(false);
+        }
+      }
+
       const w = robSizeRef.current.width;
       const h = robSizeRef.current.height;
 
@@ -794,6 +922,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       // Double click resets camera back to robot center (Track B2)
       cameraRef.current.follow = true;
       cameraRef.current.offset = { x: 0, y: 0 };
+      setIsCameraFollow(true);
     };
 
     // ── Resize Observer for High-DPI Canvas Resizing ──
@@ -985,9 +1114,40 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
           const livePV = lastPoint?.processVariable ?? plantStateRef.current.measuredOutput ?? 0;
           const liveU = lastPoint?.controlEffort ?? controllerStateRef.current.controlOutput ?? 0;
 
-          // Camera follow smoothing (lerp 0.15, respects prefers-reduced-motion)
-          const lerpFactor = prefersReducedMotionRef.current ? 1.0 : 0.15;
+          // Hitung target posisi visual robot untuk camera tracking halus (Requirement 2)
+          let robotVisualX = 0;
+          let robotVisualY = 0;
+
+          if (robotDef.id === 'quadcopter') {
+            const maxAlt = Math.max(livePV, setpoint, 1.0);
+            const minAlt = Math.min(livePV, setpoint, 0.0);
+            const span = Math.max(4.0, maxAlt - minAlt);
+            const pixelsPerMeter = (robSizeRef.current.height * 0.35) / span;
+            robotVisualX = 0;
+            robotVisualY = livePV * pixelsPerMeter;
+          } else if (robotDef.id === 'underwater_rov') {
+            robotVisualX = 0;
+            robotVisualY = (livePV / 50) * (robSizeRef.current.height * 0.45);
+          } else if (
+            robotDef.id === 'line_follower' ||
+            robotDef.id === 'ackermann_vehicle' ||
+            robotDef.id === 'mecanum_platform' ||
+            robotDef.id === 'gantry_crane' ||
+            robotDef.id === 'custom_plant'
+          ) {
+            robotVisualX = livePV * 32;
+            robotVisualY = 0;
+          } else if (robotDef.id === 'self_balancing') {
+            robotVisualX = Math.sin((livePV * Math.PI) / 180) * 40;
+            robotVisualY = 0;
+          }
+
           if (cameraRef.current.follow) {
+            const targetY = robotVisualY;
+            const targetX = robotVisualX;
+            const lerpFactor = prefersReducedMotionRef.current ? 1.0 : 0.08;
+            cameraRef.current.smoothedY = (cameraRef.current.smoothedY ?? 0) + (targetY - (cameraRef.current.smoothedY ?? 0)) * lerpFactor;
+            cameraRef.current.smoothedX = (cameraRef.current.smoothedX ?? 0) + (targetX - (cameraRef.current.smoothedX ?? 0)) * lerpFactor;
             cameraRef.current.smoothedPV += (livePV - cameraRef.current.smoothedPV) * lerpFactor;
           }
 
@@ -1110,36 +1270,83 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
             </div>
           )}
 
-          {/* Right: Quick Disturbance, Camera Centering/Reset & Engine Panic Buttons */}
+          {/* Right: Customizable Disturbance, Independent Follow Toggle, Decoupled Reset View & Reset Plant */}
           <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Customizable Disturbance Input Component (Requirement 3) */}
+            <div className="flex items-center bg-[var(--surface-2)] border border-[var(--border)] rounded-md px-1.5 py-0.5 gap-1 text-[10px]">
+              <button
+                type="button"
+                onClick={() => setDisturbanceSign((s) => (s === '+' ? '-' : '+'))}
+                className="w-5 h-5 flex items-center justify-center rounded font-mono font-bold bg-[var(--surface-3)] hover:bg-[var(--hover-bg)] text-[var(--text-bright)] border border-[var(--border)] transition-colors active:scale-95"
+                title={`Arah gaya gangguan: ${disturbanceSign}. Klik untuk membalik (${disturbanceSign === '+' ? '-' : '+'})`}
+              >
+                {disturbanceSign}
+              </button>
+              <input
+                type="number"
+                min={0.1}
+                max={20.0}
+                step={0.5}
+                value={disturbanceValue}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value);
+                  if (!isNaN(v)) {
+                    setDisturbanceValue(Math.max(0.1, Math.min(20.0, v)));
+                  }
+                }}
+                className="w-12 px-1 py-0.5 text-center font-mono text-[10px] bg-[var(--surface-1)] border border-[var(--border)] rounded text-[var(--text)] focus:outline-none focus:border-[var(--accent-amber)]"
+                title="Besaran gaya dorongan gangguan (0.1 - 20.0)"
+              />
+              <span className="text-[10px] text-[var(--text-muted)] font-mono select-none">
+                {internalRobotDefRef.current?.controlUnit || 'N'}
+              </span>
+              <button
+                type="button"
+                onClick={handleInjectCustomDisturbance}
+                className="px-2 py-0.5 rounded bg-[var(--accent-amber-bg)] hover:brightness-110 text-[var(--accent-amber)] border border-[var(--accent-amber)]/40 font-bold flex items-center gap-1 transition-all active:scale-95 shadow-sm"
+                title={`Injeksi gangguan ${disturbanceSign}${disturbanceValue} ${internalRobotDefRef.current?.controlUnit || 'N'} seketika`}
+              >
+                <Zap size={10} className="animate-pulse" />
+                <span>Dorong</span>
+              </button>
+            </div>
+
+            {/* 1. Tombol Toggle "Follow ON / OFF" Mandiri (Requirement 4.1) */}
             <button
-              onClick={() => injectDisturbanceImpulse(4.5, 0.35)}
-              className="px-2.5 py-1 rounded bg-[var(--accent-amber-bg)] hover:brightness-110 text-[var(--accent-amber)] border border-[var(--accent-amber)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
-              title="Injeksi gangguan gaya +4.5N seketika"
+              type="button"
+              onClick={handleToggleFollow}
+              className={`px-2 py-1 rounded border text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm font-bold ${
+                isCameraFollow
+                  ? 'bg-[var(--accent-cyan-bg)] text-[var(--accent-cyan)] border-[var(--accent-cyan)]/40 hover:brightness-110'
+                  : 'bg-[var(--surface-2)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]'
+              }`}
+              title={
+                isCameraFollow
+                  ? 'Mode pelacakan aktif (Follow: AKTIF). Klik untuk beralih ke mode bebas (Follow: NONAKTIF).'
+                  : 'Mode kamera bebas (Follow: NONAKTIF). Klik untuk mengunci dan melacak robot (Follow: AKTIF).'
+              }
             >
-              <Zap size={11} className="animate-pulse" />
-              <span>+4.5N Push</span>
+              <Crosshair size={11} className={isCameraFollow ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)]'} />
+              <span>{isCameraFollow ? 'Follow: AKTIF' : 'Follow: NONAKTIF'}</span>
             </button>
+
+            {/* 2. Tombol "Reset View" Murni (Decoupled - Requirement 4.2) */}
             <button
-              onClick={handleCenterRobot}
-              className="px-2 py-1 rounded bg-[var(--accent-cyan-bg)] hover:brightness-110 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm font-bold"
-              title="Pusatkan kamera pada robot (Shortcut: C)"
-            >
-              <Crosshair size={11} />
-              <span>Pusatkan</span>
-            </button>
-            <button
+              type="button"
               onClick={handleResetViewports}
-              className="px-2 py-1 rounded bg-[var(--surface-2)] hover:bg-[var(--hover-bg)] text-[var(--text)] border border-[var(--border)] text-[10px] flex items-center gap-1 transition-all active:scale-95"
-              title="Reset zoom/pan kamera dan rasio split 50:50"
+              className="px-2 py-1 rounded bg-[var(--surface-2)] hover:bg-[var(--hover-bg)] text-[var(--text)] border border-[var(--border)] text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
+              title="Reset Tampilan Global (Dual Canvas): Kembalikan time-pan osiloskop ke live, auto-fit sumbu Y, offset kamera robot ke (0, 0), dan rasio split 50:50 (tidak mengubah status Follow)"
             >
               <Compass size={11} />
               <span className="hidden md:inline">Reset View</span>
             </button>
+
+            {/* 3. Tombol "Reset Plant" */}
             <button
+              type="button"
               onClick={handleReset}
-              className="px-2 py-1 rounded bg-[var(--accent-red-bg)] hover:brightness-110 text-[var(--accent-red)] border border-[var(--accent-red)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95"
-              title="Reset state fisis plant ke 0"
+              className="px-2 py-1 rounded bg-[var(--accent-red-bg)] hover:brightness-110 text-[var(--accent-red)] border border-[var(--accent-red)]/30 text-[10px] flex items-center gap-1 transition-all active:scale-95 shadow-sm"
+              title="Reset Plant & Osiloskop: Mengembalikan plant robot ke kondisi ekuilibrium dan membersihkan osiloskop dari t = 0.0s"
             >
               <RotateCcw size={11} />
               <span>Reset Plant</span>
@@ -1319,13 +1526,23 @@ function renderOscilloscope(
     return;
   }
 
-  // Calculate Time Window with Pan Offset
+  // Calculate Time Window with Pan Offset & Minimum Span Guard
+  const DEFAULT_WINDOW_SPAN = 6.0; // Standard 6.0s oscilloscope time window
   const rawTMax = data[data.length - 1].time;
-  const tMax = rawTMax + panOffsetSec;
-  const rawTimeSpan = Math.max(rawTMax - data[0].time, 0.1);
-  const timeWindowSpan = Math.min(rawTimeSpan, 15); // Show latest 15s window by default
-  const tMin = Math.max(tMax - timeWindowSpan, 0);
-  const timeSpan = Math.max(tMax - tMin, 0.1);
+  const effectiveSimTime = Math.max(rawTMax, simTime);
+
+  // Initial window: if simTime is small, show [0.0s, DEFAULT_WINDOW_SPAN].
+  // As simulation proceeds past 6.0s, window slides with live time: [live - 6.0s, live]
+  const baseTMax = Math.max(effectiveSimTime, DEFAULT_WINDOW_SPAN);
+  const baseTMin = Math.max(0, baseTMax - DEFAULT_WINDOW_SPAN);
+
+  const tMax = baseTMax + panOffsetSec;
+  const rawTMinPanned = Math.max(0, baseTMin + panOffsetSec);
+
+  // Pasang batas minimal span jendela waktu: const dtSpan = Math.max(tMax - tMin, 2.0)
+  const dtSpan = Math.max(tMax - rawTMinPanned, 2.0);
+  const tMin = Math.max(0, tMax - dtSpan);
+  const timeSpan = dtSpan;
 
   // Auto-Scale Y Axis
   let targetYMin = Math.min(setpoint, 0);
@@ -1375,9 +1592,11 @@ function renderOscilloscope(
     yVal += dyGrid;
   }
 
-  const dxGrid = niceRound(timeSpan / 6);
+  // Cegah rendering label waktu dengan interval < 0.1s jika data sampel masih sedikit setelah reset
+  const rawDx = niceRound(timeSpan / 6);
+  const dxGrid = Math.max(rawDx, 0.2); // Jaminan interval >= 0.2s (selalu di atas batas minimum 0.1s)
   let tVal = Math.ceil(tMin / dxGrid) * dxGrid;
-  while (tVal <= tMax) {
+  while (tVal <= tMax + 1e-4) {
     const xPos = mapX(tVal);
     ctx.beginPath();
     ctx.moveTo(xPos, padding.top);
@@ -1423,25 +1642,130 @@ function renderOscilloscope(
   ctx.stroke();
   ctx.setLineDash([]);
 
+  // ── Edge Interpolation & Clamped Sample Subset (Requirement 1) ──
+  // 1. Saat mengambil subset data untuk dirender pada rentang [t_min, t_max], selalu sertakan
+  //    1 titik sampel persis sebelum t_min dan 1 titik persis setelah t_max.
+  // 2. Lakukan interpolasi linier ke titik batas: hitung nilai PV, SP, dan u tepat pada t = t_min
+  //    (koordinat x = paddingKiri) agar tarikan garis kurva menempel sempurna dari tepi kiri hingga tepi kanan.
+  const renderData: {
+    time: number;
+    processVariable: number;
+    setpoint: number;
+    controlEffort: number;
+    error: number;
+  }[] = [];
+
+  if (dataLen > 0) {
+    let firstIdx = -1;
+    for (let i = 0; i < dataLen; i++) {
+      if (data[i].time >= tMin) {
+        firstIdx = i;
+        break;
+      }
+    }
+
+    if (firstIdx === -1) {
+      // Semua data sebelum tMin; sertakan data terakhir
+      const last = data[dataLen - 1];
+      renderData.push({
+        time: last.time,
+        setpoint: last.setpoint,
+        processVariable: last.processVariable,
+        controlEffort: last.controlEffort,
+        error: last.error,
+      });
+    } else {
+      // Sertakan 1 titik sampel persis sebelum tMin dan interpolasi ke batas t = tMin
+      if (firstIdx > 0) {
+        const pPrev = data[firstIdx - 1];
+        const pNext = data[firstIdx];
+        renderData.push({
+          time: pPrev.time,
+          setpoint: pPrev.setpoint,
+          processVariable: pPrev.processVariable,
+          controlEffort: pPrev.controlEffort,
+          error: pPrev.error,
+        });
+
+        if (pNext.time > pPrev.time) {
+          const alpha = (tMin - pPrev.time) / (pNext.time - pPrev.time);
+          renderData.push({
+            time: tMin,
+            setpoint: pPrev.setpoint + alpha * (pNext.setpoint - pPrev.setpoint),
+            processVariable: pPrev.processVariable + alpha * (pNext.processVariable - pPrev.processVariable),
+            controlEffort: pPrev.controlEffort + alpha * (pNext.controlEffort - pPrev.controlEffort),
+            error: pPrev.error + alpha * (pNext.error - pPrev.error),
+          });
+        }
+      }
+
+      // Sertakan semua titik dalam rentang [tMin, tMax]
+      let lastInsideIdx = firstIdx;
+      for (let i = firstIdx; i < dataLen; i++) {
+        const pt = data[i];
+        if (pt.time <= tMax) {
+          renderData.push({
+            time: pt.time,
+            setpoint: pt.setpoint,
+            processVariable: pt.processVariable,
+            controlEffort: pt.controlEffort,
+            error: pt.error,
+          });
+          lastInsideIdx = i;
+        } else {
+          break;
+        }
+      }
+
+      // Interpolasi ke batas t = tMax dan sertakan 1 titik sampel persis setelah tMax
+      if (lastInsideIdx + 1 < dataLen) {
+        const pCur = data[lastInsideIdx];
+        const pAfter = data[lastInsideIdx + 1];
+        if (pAfter.time > pCur.time) {
+          const beta = (tMax - pCur.time) / (pAfter.time - pCur.time);
+          renderData.push({
+            time: tMax,
+            setpoint: pCur.setpoint + beta * (pAfter.setpoint - pCur.setpoint),
+            processVariable: pCur.processVariable + beta * (pAfter.processVariable - pCur.processVariable),
+            controlEffort: pCur.controlEffort + beta * (pAfter.controlEffort - pCur.controlEffort),
+            error: pCur.error + beta * (pAfter.error - pCur.error),
+          });
+        }
+        renderData.push({
+          time: pAfter.time,
+          setpoint: pAfter.setpoint,
+          processVariable: pAfter.processVariable,
+          controlEffort: pAfter.controlEffort,
+          error: pAfter.error,
+        });
+      }
+    }
+  }
+
+  // ── Clipping Region: Kurva terpotong rapi di dalam batas grid tanpa bocor ke teks sumbu Y (Requirement 1.3) ──
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(padding.left, padding.top, plotW, plotH);
+  ctx.clip();
+
   // ── Signal Trace Curves ──
   const renderCurve = (
-    key: keyof DataPoint,
+    key: 'processVariable' | 'controlEffort' | 'error',
     strokeColor: string,
     width: number,
     alpha: number = 1.0,
     scale: number = 1.0
   ) => {
+    if (renderData.length === 0) return;
     ctx.strokeStyle = strokeColor;
     ctx.lineWidth = width;
     ctx.globalAlpha = alpha;
     ctx.beginPath();
 
     let started = false;
-    for (let i = 0; i < dataLen; i++) {
-      const pt = data[i];
-      if (pt.time < tMin - 0.2 || pt.time > tMax + 0.2) continue;
-
-      const val = (pt[key] as number) * scale;
+    for (let i = 0; i < renderData.length; i++) {
+      const pt = renderData[i];
+      const val = pt[key] * scale;
       const px = mapX(pt.time);
       const py = mapY(val);
 
@@ -1484,6 +1808,8 @@ function renderOscilloscope(
       ctx.fillText(`Peak: ${metrics.peakValue.toFixed(2)} (${metrics.peakTime.toFixed(2)}s)`, px + 6, py - 4);
     }
   }
+
+  ctx.restore();
 
   // ── Historical Time-Panning Tag ──
   if (panOffsetSec < -0.05) {
@@ -1601,6 +1927,8 @@ export interface RobotCameraState {
   follow: boolean;
   offset: { x: number; y: number };
   smoothedPV: number;
+  smoothedX?: number;
+  smoothedY?: number;
 }
 
 export const ARCHETYPE_ANCHORS: Record<RobotType, { dx: number; dy: number }> = {
@@ -1793,6 +2121,26 @@ function renderRobotViewport(
   // Pure camera computation with archetype anchor 48px boundary clamp (P0)
   const camResult = computeRobotCamera(w, h, pv, sp, camera, 48, robotType);
 
+  // ── 2D Coordinate Background Grid (Relative to Camera Movement - Requirement 2) ──
+  const gridSize = 40;
+  const smoothX = camera.smoothedX ?? 0;
+  const smoothY = camera.smoothedY ?? 0;
+  const gridOffsetX = (camResult.clampedOffset.x - smoothX) % gridSize;
+  const gridOffsetY = (camResult.clampedOffset.y + smoothY) % gridSize;
+
+  ctx.strokeStyle = c.gridMinor;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let gx = gridOffsetX - gridSize; gx <= w + gridSize; gx += gridSize) {
+    ctx.moveTo(gx, 0);
+    ctx.lineTo(gx, h);
+  }
+  for (let gy = gridOffsetY - gridSize; gy <= h + gridSize; gy += gridSize) {
+    ctx.moveTo(0, gy);
+    ctx.lineTo(w, gy);
+  }
+  ctx.stroke();
+
   // Save base transform before camera pan
   ctx.save();
   ctx.translate(camResult.clampedOffset.x, camResult.clampedOffset.y);
@@ -1812,7 +2160,7 @@ function renderRobotViewport(
       drawSelfBalancing(ctx, w, h, c, pv, sp, u, time);
       break;
     case 'gantry_crane':
-      drawGantryCrane(ctx, w, h, c, pv, sp, u, time);
+      drawGantryCrane(ctx, w, h, c, pv, sp, u, time, camera);
       break;
     case 'quadcopter':
       drawQuadcopter(ctx, w, h, c, pv, sp, u, time, particles, camera);
@@ -1827,7 +2175,7 @@ function renderRobotViewport(
       drawSCARA(ctx, w, h, c, pv, sp, u, time);
       break;
     case 'underwater_rov':
-      drawROV(ctx, w, h, c, pv, sp, u, time, particles);
+      drawROV(ctx, w, h, c, pv, sp, u, time, particles, camera);
       break;
     default:
       drawCustomPlant(ctx, w, h, c, pv, sp, u, time);
@@ -1880,15 +2228,14 @@ function renderRobotViewport(
     ctx.fillText('⚡ DISTURBANCE ACTIVE', w - 16, 26);
   }
 
-  // Camera Pan Status Badge (Track I2: "Follow: ON" strictly when offset ≈ 0; otherwise "Offset: (x, y)")
-  const isOffsetZero = Math.abs(camera.offset.x) <= 1 && Math.abs(camera.offset.y) <= 1;
+  // Camera Pan Status Badge (Requirement 4 & 5.3)
   const badgeX = 10;
   const badgeY = h - 34;
   const badgeW = 210;
   const badgeH = 22;
 
   ctx.fillStyle = c.cardBg;
-  ctx.strokeStyle = !isOffsetZero ? c.warning : c.accent;
+  ctx.strokeStyle = camera.follow ? c.accent : c.warning;
   ctx.lineWidth = 1;
   ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
   ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
@@ -1896,10 +2243,14 @@ function renderRobotViewport(
   ctx.fillStyle = c.textBright;
   ctx.font = 'bold 9px "JetBrains Mono", monospace';
   ctx.textAlign = 'left';
-  if (isOffsetZero && camera.follow) {
-    ctx.fillText('Kamera: Follow: ON', badgeX + 8, badgeY + 14);
+  if (camera.follow) {
+    ctx.fillStyle = c.accent;
+    ctx.fillText('Kamera: Follow ON', badgeX + 8, badgeY + 14);
   } else {
-    const coordStr = `Offset: (${camera.offset.x > 0 ? '+' : ''}${Math.round(camera.offset.x)}px, ${camera.offset.y > 0 ? '+' : ''}${Math.round(camera.offset.y)}px)`;
+    ctx.fillStyle = c.warning;
+    const xOff = Math.round(camera.offset.x);
+    const yOff = Math.round(camera.offset.y);
+    const coordStr = `Manual Pan (${xOff > 0 ? '+' : ''}${xOff}px, ${yOff > 0 ? '+' : ''}${yOff}px)`;
     ctx.fillText(`Kamera: ${coordStr}`, badgeX + 8, badgeY + 14);
   }
 
@@ -2302,7 +2653,8 @@ function drawGantryCrane(
   pv: number,
   sp: number,
   u: number,
-  t: number
+  t: number,
+  camera?: RobotCameraState
 ) {
   const cartW = 64;
   const cartH = 26;
@@ -2327,8 +2679,10 @@ function drawGantryCrane(
   ctx.lineTo(worldRight, railY - 4);
   ctx.stroke();
 
-  // Trolley Cart Position — centered at w/2 at pv=0
-  const cartX = w / 2 + pv * 32;
+  // Trolley Cart Position — relative to camera smoothedX
+  const visualCartX = pv * 32;
+  const smoothedX = camera?.smoothedX ?? visualCartX;
+  const cartX = w / 2 + (visualCartX - smoothedX);
   const cartY = railY;
 
   // Steel Trolley Chassis
@@ -2362,7 +2716,7 @@ function drawGantryCrane(
   ctx.stroke();
 
   // Target Ghost Guide
-  const targetX = w / 2 + sp * 32;
+  const targetX = w / 2 + (sp * 32 - smoothedX);
   ctx.strokeStyle = c.success;
   ctx.lineWidth = 1.2;
   ctx.setLineDash([4, 4]);
@@ -2391,12 +2745,13 @@ function drawQuadcopter(
   const span = Math.max(4.0, maxAlt - minAlt);
   const pixelsPerMeter = (h * 0.35) / span;
 
-  // Drone vertically centered at h / 2, with smooth follow
-  const smoothedAlt = camera?.smoothedPV ?? pv;
+  // Drone vertically centered at h / 2, with smooth dynamic camera follow
+  const droneVisualY = pv * pixelsPerMeter;
+  const smoothedY = camera?.smoothedY ?? droneVisualY;
   const droneX = w / 2;
-  const droneY = h / 2 - (pv - smoothedAlt) * pixelsPerMeter;
-  const groundY = droneY + pv * pixelsPerMeter;
-  const targetY = droneY - (sp - pv) * pixelsPerMeter;
+  const droneY = h / 2 - (droneVisualY - smoothedY);
+  const groundY = droneY + droneVisualY;
+  const targetY = groundY - sp * pixelsPerMeter;
   const worldLeft = -w * 2;
   const worldRight = w * 3;
   const worldW = worldRight - worldLeft;
@@ -2699,7 +3054,8 @@ function drawROV(
   sp: number,
   u: number,
   t: number,
-  particles: Particle[]
+  particles: Particle[],
+  camera?: RobotCameraState
 ) {
   const worldLeft = -w * 2;
   const worldRight = w * 3;
@@ -2717,21 +3073,26 @@ function drawROV(
   ctx.fillRect(worldLeft, worldTop, worldW, worldH);
 
   // Depth Markers
+  const rovVisualY = (pv / 50) * (h * 0.45);
+  const smoothedY = camera?.smoothedY ?? rovVisualY;
+
   ctx.fillStyle = 'rgba(255,255,255,0.45)';
   ctx.font = '8px "JetBrains Mono", monospace';
   ctx.textAlign = 'right';
   for (let d = -40; d <= 80; d += 10) {
-    const y = h / 2 + (d / 50) * (h * 0.45);
-    ctx.beginPath();
-    ctx.moveTo(worldLeft, y);
-    ctx.lineTo(worldRight, y);
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.stroke();
-    ctx.fillText(`${d}m`, 24, y + 3);
+    const y = h / 2 + (d / 50) * (h * 0.45) - smoothedY;
+    if (y >= -h * 2 && y <= h * 3) {
+      ctx.beginPath();
+      ctx.moveTo(worldLeft, y);
+      ctx.lineTo(worldRight, y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.stroke();
+      ctx.fillText(`${d}m`, 24, y + 3);
+    }
   }
 
-  // ROV Centered at (w/2, h/2) at pv=0
-  const rovY = h / 2 + (pv / 50) * (h * 0.45);
+  // ROV Centered at (w/2, h/2) with smooth follow
+  const rovY = h / 2 + (rovVisualY - smoothedY);
   const rovX = w / 2 + Math.sin(t * 0.7) * 8;
 
   // Pressure Hull

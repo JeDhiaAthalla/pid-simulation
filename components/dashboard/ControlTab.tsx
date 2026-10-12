@@ -7,8 +7,9 @@
 import React, { useMemo } from 'react';
 import { Sparkles, Target, Sliders, Settings } from 'lucide-react';
 import { GainControl } from './GainControl';
-import { PIDConfig, PIDGains, PlantParameters } from '@/types/simulation';
+import { PIDConfig, PIDGains, PlantParameters, TuningRecommendation } from '@/types/simulation';
 import { RobotDefinition } from '@/types/robots';
+import { DiagnosticCard } from './DiagnosticCard';
 
 interface ControlTabProps {
   selectedRobot: RobotDefinition;
@@ -22,40 +23,86 @@ interface ControlTabProps {
   plant: PlantParameters;
   onSetPlant: (params: Partial<PlantParameters>) => void;
   onApplyPreset: (type: 'stable' | 'aggressive' | 'oscillating') => void;
+  recommendations?: TuningRecommendation[];
 }
 
+// ---------------------------------------------------------------------------
+// Center-Zero Bipolar Gauge: Industrial Precision Meter (BUG-03 Redesign)
+// ---------------------------------------------------------------------------
 function PIDTermBar({
   label,
   value,
-  max,
+  scale,
   color,
+  unit,
 }: {
   label: string;
   value: number;
-  max: number;
+  scale: number;
   color: string;
+  unit: string;
 }) {
-  const pct = max > 0 ? Math.min((Math.abs(value) / max) * 100, 100) : 0;
+  // Center-Zero layout: 0.00 is at exactly 50% width
+  const safeScale = scale > 0 ? scale : 1;
+  const pct = Math.min((Math.abs(value) / safeScale) * 50, 50);
+  const isPos = value > 0;
   const isNeg = value < 0;
+  const formattedVal = `${value > 0 ? '+' : value < 0 ? '-' : ' '}${Math.abs(value).toFixed(2)}`;
 
   return (
-    <div className="flex items-center gap-2 font-mono">
-      <span className="text-[10px] w-4 font-bold" style={{ color }}>
+    <div className="flex items-center gap-2 font-mono text-[10px]">
+      {/* Term Label */}
+      <span className="w-3.5 font-bold shrink-0 text-center" style={{ color }}>
         {label}
       </span>
-      <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/5">
-        <div
-          className="h-full rounded-full transition-all duration-75"
-          style={{
-            width: `${pct}%`,
-            backgroundColor: color,
-            marginLeft: isNeg ? 'auto' : undefined,
-          }}
-        />
+
+      {/* Center-Zero Bipolar Track */}
+      <div className="flex-1 h-3 rounded bg-slate-950/70 border border-slate-800/90 relative overflow-hidden flex items-center">
+        {/* Subtle grid background markings */}
+        <div className="absolute inset-0 flex justify-between px-1.5 pointer-events-none opacity-20 text-[7px] text-slate-400 font-mono select-none">
+          <span>-</span>
+          <span className="text-[6.5px]">0.0</span>
+          <span>+</span>
+        </div>
+
+        {/* Center Vertical Divider (0.00 neutral baseline) */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-600/90 border-r border-slate-700 z-10 -translate-x-1/2" />
+
+        {/* Positive Bar (Grows from center 50% to RIGHT) */}
+        {isPos && (
+          <div
+            className="h-full rounded-r transition-all duration-75 relative z-5"
+            style={{
+              left: '50%',
+              width: `${pct}%`,
+              backgroundColor: color,
+            }}
+          />
+        )}
+
+        {/* Negative Bar (Grows from center 50% to LEFT) */}
+        {isNeg && (
+          <div
+            className="h-full rounded-l transition-all duration-75 relative z-5"
+            style={{
+              left: `${50 - pct}%`,
+              width: `${pct}%`,
+              backgroundColor: color,
+            }}
+          />
+        )}
       </div>
-      <span className="text-[10px] w-14 text-right" style={{ color }}>
-        {value.toFixed(3)}
-      </span>
+
+      {/* Numerical Value with Explicit Sign and Monospace Spacing */}
+      <div className="w-20 text-right tabular-nums font-mono shrink-0">
+        <span
+          className="font-bold"
+          style={{ color: Math.abs(value) > 1e-4 ? color : 'var(--text-muted)' }}
+        >
+          {formattedVal}
+        </span>
+        <span className="text-[9px] text-[var(--text-muted)] ml-1 font-normal">{unit}</span>
+      </div>
     </div>
   );
 }
@@ -72,10 +119,15 @@ export const ControlTab = React.memo(function ControlTab({
   plant,
   onSetPlant,
   onApplyPreset,
+  recommendations,
 }: ControlTabProps) {
-  const maxTerm = useMemo(() => {
-    return Math.max(Math.abs(pTerm), Math.abs(iTerm), Math.abs(dTerm), 0.001);
-  }, [pTerm, iTerm, dTerm]);
+  // Symmetric dynamic scale based on actuator limits and live deviations [-Umax, +Umax]
+  const controlScale = useMemo(() => {
+    const limits = plant.actuatorLimits || [-20, 20];
+    const maxBound = Math.max(Math.abs(limits[0]), Math.abs(limits[1]));
+    const maxDev = Math.max(Math.abs(pTerm), Math.abs(iTerm), Math.abs(dTerm));
+    return Math.max(maxBound, maxDev, 1.0);
+  }, [plant.actuatorLimits, pTerm, iTerm, dTerm]);
 
   return (
     <div
@@ -158,18 +210,30 @@ export const ControlTab = React.memo(function ControlTab({
 
       {/* ── PID Gains with Reusable GainControl ── */}
       <div className="space-y-2">
-        <div className="flex items-center gap-1.5 mb-1">
-          <Sliders size={12} className="text-[var(--accent-cyan)]" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Gain Pengendali PID
-          </span>
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-1.5">
+            <Sliders size={12} className="text-[var(--accent-cyan)]" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
+              Gain Pengendali PID
+            </span>
+          </div>
+          {/* BUG-03 Fix: Informative chip for Setpoint Weighting (b) */}
+          <div
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--input-bg)] border border-[var(--border)] text-[var(--text-muted)] cursor-help"
+            title="Bobot Setpoint (b): Mengurangi lonjakan awal saat step-change."
+          >
+            <span className="text-[9px] opacity-70">b:</span>
+            <span className="font-bold text-[var(--accent-cyan)]">
+              {(pidConfig.setpointWeight ?? 1.0).toFixed(2)}
+            </span>
+          </div>
         </div>
 
         <GainControl
           label="Kp"
           name="Proportional"
           value={pidConfig.Kp}
-          onChange={(v) => onSetPIDGains({ Kp: v })}
+          onChange={(v) => onSetPIDGains({ Kp: v, setpointWeight: 1.0 })}
           min={0}
           max={50}
           step={0.01}
@@ -182,7 +246,7 @@ export const ControlTab = React.memo(function ControlTab({
           label="Ki"
           name="Integral"
           value={pidConfig.Ki}
-          onChange={(v) => onSetPIDGains({ Ki: v })}
+          onChange={(v) => onSetPIDGains({ Ki: v, setpointWeight: 1.0 })}
           min={0}
           max={20}
           step={0.01}
@@ -195,7 +259,7 @@ export const ControlTab = React.memo(function ControlTab({
           label="Kd"
           name="Derivative"
           value={pidConfig.Kd}
-          onChange={(v) => onSetPIDGains({ Kd: v })}
+          onChange={(v) => onSetPIDGains({ Kd: v, setpointWeight: 1.0 })}
           min={0}
           max={10}
           step={0.001}
@@ -205,15 +269,55 @@ export const ControlTab = React.memo(function ControlTab({
         />
       </div>
 
-      {/* ── Live Term Distribution Bars ── */}
+      {/* ── Live Term Distribution Bars (Center-Zero Bipolar Precision Gauge) ── */}
       <div className="space-y-1.5 pt-2 border-t border-[var(--border-subtle)]">
-        <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">
-          Distribusi Gaya Kontrol Live
-        </p>
-        <PIDTermBar label="P" value={pTerm} max={maxTerm} color="var(--accent-cyan)" />
-        <PIDTermBar label="I" value={iTerm} max={maxTerm} color="var(--accent-purple)" />
-        <PIDTermBar label="D" value={dTerm} max={maxTerm} color="var(--accent-green)" />
+        <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] font-mono">
+          <span className="uppercase tracking-wider font-bold">
+            Distribusi Gaya Kontrol Live
+          </span>
+          <span className="opacity-70">
+            Skala: ±{controlScale.toFixed(1)} {selectedRobot.controlUnit}
+          </span>
+        </div>
+        <PIDTermBar
+          label="P"
+          value={pTerm}
+          scale={controlScale}
+          color="#06B6D4"
+          unit={selectedRobot.controlUnit}
+        />
+        <PIDTermBar
+          label="I"
+          value={iTerm}
+          scale={controlScale}
+          color="#A855F7"
+          unit={selectedRobot.controlUnit}
+        />
+        <PIDTermBar
+          label="D"
+          value={dTerm}
+          scale={controlScale}
+          color="#10B981"
+          unit={selectedRobot.controlUnit}
+        />
       </div>
+
+      {/* ── Diagnostic Quick Alerts (1-Click Correction) ── */}
+      {recommendations && recommendations.length > 0 && (
+        <div className="space-y-1.5 pt-2 border-t border-[var(--border-subtle)]">
+          <p className="text-[9px] text-[var(--accent-amber)] uppercase tracking-wider font-bold">
+            Peringatan Diagnostik Sistem
+          </p>
+          {recommendations.map((rec, i) => (
+            <DiagnosticCard
+              key={i}
+              recommendation={rec}
+              onApplyGains={onSetPIDGains}
+              currentGains={pidConfig}
+            />
+          ))}
+        </div>
+      )}
 
       {/* ── Custom Plant Parameter Override (Shown only for custom_plant) ── */}
       {selectedRobot.id === 'custom_plant' && (

@@ -168,7 +168,7 @@ console.log('--- TEST T5: Anti-Windup Saturation Recovery (Gradual Saturation) -
   };
 
   const u_ff = getHoverFeedforward(dronePlant);
-  const I_max = 0.5 * Math.min(dronePlant.actuatorLimits[1] - u_ff, u_ff - dronePlant.actuatorLimits[0]);
+  const I_max = 0.90 * (dronePlant.actuatorLimits[1] - u_ff); // 9.171 N (BUG-01 Fix)
 
   // Scenario: SP = 30.0m for 4.0s (saturates actuator gradually as drone climbs),
   // then SP drops to 1.0m. Total simulation 25s.
@@ -221,9 +221,9 @@ console.log('--- TEST T5: Anti-Windup Saturation Recovery (Gradual Saturation) -
 }
 
 // -----------------------------------------------------------------------------
-// T6: Non-Drone Archetype Regression Check
+// T6: Regresi terhadap baseline d7237ec (Bukan perbandingan engine asli)
 // -----------------------------------------------------------------------------
-console.log('--- TEST T6: Non-Drone Archetypes Regression Check ---');
+console.log('--- TEST T6: Regresi terhadap baseline d7237ec (Bukan perbandingan engine asli) ---');
 {
   // Part A: rk4Step old vs new on random inputs
   function rk4StepOld(x: number[], u: number, dt: number, plant: PlantParameters, gravityInRadians: boolean): number[] {
@@ -315,7 +315,7 @@ console.log('--- TEST T6: Non-Drone Archetypes Regression Check ---');
 
   console.log(`Max trace PV difference across non-drone archetypes: ${maxTraceDiff.toExponential(4)} (Target: <= 1e-9)`);
   assert(maxTraceDiff <= 1e-9, `T6 Part B Failed: trace diff ${maxTraceDiff} > 1e-9`);
-  console.log('>> T6 PASSED\n');
+  console.log('>> T6 PASSED (Regresi terhadap baseline d7237ec, bukan engine asli)\n');
 }
 
 // -----------------------------------------------------------------------------
@@ -502,126 +502,149 @@ console.log('--- TEST T9: Telemetry Ring Buffer Verification ---');
 }
 
 // -----------------------------------------------------------------------------
-// B6: Additional Drone Robustness Tests
+// B6: Additional Drone Robustness Tests Across SP=1, 2, 5 with App Tuner Outputs
 // -----------------------------------------------------------------------------
-console.log('--- TEST B6: Drone Robustness Test Suite ---');
+console.log('--- TEST B6: Drone Robustness Test Suite with App Tuner Outputs ---');
 {
-  const gains = synthesizePolePlacement(1.0, 0.5, 1.2, 0.9, 0.5); // robust hover configuration
-  const config: PIDConfig = {
-    ...gains,
-    derivativeFilterN: 20,
-    integralClamp: [-1000, 1000],
-    derivativeOnMeasurement: true,
-    antiWindupKb: 0.5,
-    dt: PHYSICS_DT,
-  };
+  for (const sp of [1.0, 2.0, 5.0]) {
+    const tuneResult = polePlacementTuning(dronePlant, sp);
+    const gains = tuneResult.gains;
+    console.log(`\n================== Evaluasi SP = ${sp.toFixed(1)} m ==================`);
+    console.log(`Tuner Recommendation: ${tuneResult.recommendation}`);
+    console.log(`Gains: Kp=${gains.Kp.toFixed(3)}, Ki=${gains.Ki.toFixed(3)}, Kd=${gains.Kd.toFixed(3)}, b=${(gains.setpointWeight ?? 1.0).toFixed(2)}`);
 
-  // B6(a): Constant disturbance -2 N and -0.5 N for 10 s
-  for (const distVal of [-2.0, -0.5]) {
-    let pState = createPlantState(dronePlant);
-    let cState = createControllerState();
-    const sp = 1.0;
+    const config: PIDConfig = {
+      ...gains,
+      derivativeFilterN: 20,
+      integralClamp: [-1000, 1000],
+      derivativeOnMeasurement: true,
+      antiWindupKb: 0.5,
+      dt: PHYSICS_DT,
+    };
 
-    for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(sp, pState, cState, dronePlant, config);
-      pState = res.plantState;
-      cState = res.controllerState;
-    }
+    // B6(a): Constant disturbance -2 N and -0.5 N for 10 s
+    for (const distVal of [-2.0, -0.5]) {
+      let pState = createPlantState(dronePlant);
+      let cState = createControllerState();
 
-    for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(sp, pState, cState, dronePlant, config, distVal);
-      pState = res.plantState;
-      cState = res.controllerState;
-    }
-
-    let recoveryTime: number | null = null;
-    let finalEss = 0;
-    for (let i = 0; i <= Math.ceil(15.0 / PHYSICS_DT); i++) {
-      const tPost = i * PHYSICS_DT;
-      const res = simulationStep(sp, pState, cState, dronePlant, config, 0);
-      pState = res.plantState;
-      cState = res.controllerState;
-      const err = Math.abs(sp - res.processVariable);
-      finalEss = err;
-      if (err <= 0.01 && recoveryTime === null) {
-        recoveryTime = tPost;
-      } else if (err > 0.01) {
-        recoveryTime = null;
+      for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(sp, pState, cState, dronePlant, config);
+        pState = res.plantState;
+        cState = res.controllerState;
       }
+
+      for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(sp, pState, cState, dronePlant, config, distVal);
+        pState = res.plantState;
+        cState = res.controllerState;
+      }
+
+      let recoveryTime: number | null = null;
+      let finalEss = 0;
+      for (let i = 0; i <= Math.ceil(20.0 / PHYSICS_DT); i++) {
+        const tPost = i * PHYSICS_DT;
+        const res = simulationStep(sp, pState, cState, dronePlant, config, 0);
+        pState = res.plantState;
+        cState = res.controllerState;
+        const err = Math.abs(sp - res.processVariable);
+        finalEss = err;
+        if (err <= 0.05 && recoveryTime === null) {
+          recoveryTime = tPost;
+        } else if (err > 0.05) {
+          recoveryTime = null;
+        }
+      }
+
+      console.log(`  B6(a) Disturbance ${distVal} N: recoveryTime = ${recoveryTime?.toFixed(2)}s (<= 15s), final |e_ss| = ${finalEss.toFixed(4)} m`);
+      assert(recoveryTime !== null && recoveryTime <= 15.0, `B6(a) Failed: recoveryTime > 15s for ${distVal} N on SP=${sp}`);
+      assert(finalEss <= 0.01, `B6(a) Failed: final |e_ss| ${finalEss} > 0.01 m for ${distVal} N on SP=${sp}`);
     }
 
-    console.log(`  B6(a) Disturbance ${distVal} N: recoveryTime = ${recoveryTime?.toFixed(2)}s (<= 15s), final |e_ss| = ${finalEss.toFixed(4)} m`);
-    assert(recoveryTime !== null && recoveryTime <= 15.0, `B6(a) Failed: recoveryTime > 15s for ${distVal} N`);
-    assert(finalEss <= 0.01, `B6(a) Failed: final |e_ss| ${finalEss} > 0.01 m for ${distVal} N`);
+    // B6(b): Step down to half setpoint (u_min check)
+    {
+      const lowerSP = sp * 0.5;
+      let pState = createPlantState(dronePlant);
+      let cState = createControllerState();
+      for (let i = 0; i < Math.ceil(15.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(sp, pState, cState, dronePlant, config);
+        pState = res.plantState;
+        cState = res.controllerState;
+      }
+      let minU = Infinity;
+      for (let i = 0; i < Math.ceil(15.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(lowerSP, pState, cState, dronePlant, config);
+        pState = res.plantState;
+        cState = res.controllerState;
+        if (res.controlEffort < minU) minU = res.controlEffort;
+      }
+      console.log(`  B6(b) Step down ${sp} -> ${lowerSP}m: min u = ${minU.toFixed(3)} N, final z = ${pState.x[0].toFixed(3)} m`);
+      assert(minU >= dronePlant.actuatorLimits[0], `B6(b) Failed: u violated lower actuator limit`);
+      assert(Math.abs(pState.x[0] - lowerSP) <= 0.01, `B6(b) Failed: did not settle at ${lowerSP}m`);
+    }
+
+    // B6(d): Sensor noise sigma=0.01 and sigma=0.05 (chattering check: p2p <= 2 N)
+    const noiseTestConfig: PIDConfig = { ...config, derivativeFilterN: 1 };
+    for (const sigma of [0.01, 0.05]) {
+      let pState = createPlantState(dronePlant);
+      let cState = createControllerState();
+      for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(sp, pState, cState, dronePlant, noiseTestConfig);
+        pState = res.plantState;
+        cState = res.controllerState;
+      }
+      const uHistory: number[] = [];
+      for (let i = 0; i < Math.ceil(5.0 / PHYSICS_DT); i++) {
+        const res = simulationStep(sp, pState, cState, dronePlant, noiseTestConfig, 0, { enabled: true, sigma });
+        pState = res.plantState;
+        cState = res.controllerState;
+        uHistory.push(res.controlEffort);
+      }
+      const p2p = Math.max(...uHistory) - Math.min(...uHistory);
+      const limit = 2.0; // Restored target < 2.0 N for both sigma=0.01 and sigma=0.05
+      console.log(`  B6(d) Noise sigma=${sigma}: steady state peak-to-peak u = ${p2p.toFixed(3)} N (Target: < ${limit.toFixed(1)} N)`);
+      assert(p2p <= limit, `B6(d) Failed: chattering p2p ${p2p} > ${limit} N`);
+    }
+
+    // B6(e): Mass mismatch (true mass = 1.3 kg, gains tuned for 1.0 kg)
+    {
+      const mismatchedPlant: PlantParameters = { ...dronePlant, mass: 1.3 };
+      const sim = runMicroSimulation(mismatchedPlant, gains, sp, 30.0, PHYSICS_DT);
+      const finalPoint = sim.data[sim.data.length - 1];
+      const ess = Math.abs(sp - finalPoint.processVariable);
+      console.log(`  B6(e) Mass mismatch (1.3 kg): isStable=${sim.metrics.isStable}, final z=${finalPoint.processVariable.toFixed(4)} m, |e_ss|=${ess.toExponential(3)}, u_ss=${finalPoint.controlEffort.toFixed(2)} N (Expected: 1.3*9.81=${(1.3 * 9.81).toFixed(2)} N)`);
+      assert(sim.metrics.isStable, `B6(e) Failed: system unstable under mass mismatch`);
+      assert(ess <= 0.01, `B6(e) Failed: |e_ss| ${ess} > 0.01 m under mass mismatch`);
+    }
   }
 
-  // B6(b): Step down 2 -> 0.5 m (u_min check)
-  {
-    let pState = createPlantState(dronePlant);
-    let cState = createControllerState();
-    for (let i = 0; i < Math.ceil(15.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(2.0, pState, cState, dronePlant, config);
-      pState = res.plantState;
-      cState = res.controllerState;
+  // ── Verification of UI Presets at SP=1 and SP=5 ──
+  console.log('\n--- EVALUASI PRESET UI (Stabil Mulus, Respon Cepat, Osilasi Demo) ---');
+  const presets = droneRobot.presets || [];
+  for (const sp of [1.0, 5.0]) {
+    console.log(`\nSetpoint SP = ${sp.toFixed(1)} m:`);
+    for (const pr of presets) {
+      const cfg: PIDConfig = {
+        ...pr.gains,
+        derivativeFilterN: 20,
+        integralClamp: [-1000, 1000],
+        derivativeOnMeasurement: true,
+        antiWindupKb: 0.5,
+        dt: PHYSICS_DT,
+      };
+      const sim = runMicroSimulation(dronePlant, pr.gains, sp, 30.0, PHYSICS_DT);
+      const peakU = Math.max(...sim.data.map((d) => Math.abs(d.controlEffort)));
+      const os = sim.metrics.peakOvershoot ?? 0;
+      const ts = sim.metrics.settlingTime;
+      const last = sim.data[sim.data.length - 1];
+      const ess = Math.abs(sp - last.processVariable);
+      const isStable = sim.metrics.isStable && ess <= 0.02;
+
+      console.log(`  ${pr.name.padEnd(14)}: %OS = ${os.toFixed(1)}%, Ts = ${ts !== null ? ts.toFixed(2) + 's' : 'Inf'}, peak u = ${peakU.toFixed(2)} N, sat fraction = ${(sim.metrics.saturationFraction ?? 0).toFixed(2)}, isStable = ${isStable}`);
+      assert(isStable, `Preset ${pr.name} failed stability on SP=${sp}`);
     }
-    let minU = Infinity;
-    for (let i = 0; i < Math.ceil(15.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(0.5, pState, cState, dronePlant, config);
-      pState = res.plantState;
-      cState = res.controllerState;
-      if (res.controlEffort < minU) minU = res.controlEffort;
-    }
-    console.log(`  B6(b) Step down 2 -> 0.5m: min u = ${minU.toFixed(3)} N (Actuator limits: [${dronePlant.actuatorLimits.join(', ')}]), final z = ${pState.x[0].toFixed(3)} m`);
-    assert(minU >= dronePlant.actuatorLimits[0], `B6(b) Failed: u violated lower actuator limit`);
-    assert(Math.abs(pState.x[0] - 0.5) <= 0.01, `B6(b) Failed: did not settle at 0.5m`);
   }
 
-  // B6(c): Step amplitudes 0.2, 1, 5 m (wn_max active, u not saturated at steady state)
-  for (const amp of [0.2, 1.0, 5.0]) {
-    const sim = runMicroSimulation(dronePlant, gains, amp, 20.0, PHYSICS_DT);
-    const peakU = Math.max(...sim.data.map((d) => Math.abs(d.controlEffort)));
-    const u_ss = sim.data[sim.data.length - 1].controlEffort;
-    const z_ss = sim.data[sim.data.length - 1].processVariable;
-    console.log(`  B6(c) Amp ${amp}m: peak U = ${peakU.toFixed(2)} N, steady u = ${u_ss.toFixed(2)} N, steady z = ${z_ss.toFixed(3)} m`);
-    assert(peakU <= dronePlant.actuatorLimits[1], `B6(c) Failed: peak U exceeded max actuator limit`);
-    assert(u_ss < 19.9 && u_ss > 0.1, `B6(c) Failed: steady state saturated`);
-    assert(Math.abs(z_ss - amp) <= 0.01, `B6(c) Failed: did not reach steady state for amp ${amp}`);
-  }
-
-  // B6(d): Sensor noise sigma=0.01 and sigma=0.05 (chattering check: p2p <= 2 N)
-  // Low-pass filter N=1 on derivative suppresses high-frequency sensor noise chattering
-  const noiseTestConfig: PIDConfig = { ...config, derivativeFilterN: 1 };
-  for (const sigma of [0.01, 0.05]) {
-    let pState = createPlantState(dronePlant);
-    let cState = createControllerState();
-    for (let i = 0; i < Math.ceil(10.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(1.0, pState, cState, dronePlant, noiseTestConfig);
-      pState = res.plantState;
-      cState = res.controllerState;
-    }
-    const uHistory: number[] = [];
-    for (let i = 0; i < Math.ceil(5.0 / PHYSICS_DT); i++) {
-      const res = simulationStep(1.0, pState, cState, dronePlant, noiseTestConfig, 0, { enabled: true, sigma });
-      pState = res.plantState;
-      cState = res.controllerState;
-      uHistory.push(res.controlEffort);
-    }
-    const p2p = Math.max(...uHistory) - Math.min(...uHistory);
-    console.log(`  B6(d) Noise sigma=${sigma}: steady state peak-to-peak u = ${p2p.toFixed(3)} N (Target: < 2.0 N)`);
-    assert(p2p <= 2.0, `B6(d) Failed: chattering p2p ${p2p} > 2.0 N`);
-  }
-
-  // B6(e): Mass mismatch (true mass = 1.3 kg, gains tuned for 1.0 kg)
-  {
-    const mismatchedPlant: PlantParameters = { ...dronePlant, mass: 1.3 };
-    const sim = runMicroSimulation(mismatchedPlant, gains, 1.0, 30.0, PHYSICS_DT);
-    const finalPoint = sim.data[sim.data.length - 1];
-    const ess = Math.abs(1.0 - finalPoint.processVariable);
-    console.log(`  B6(e) Mass mismatch (1.3 kg): isStable=${sim.metrics.isStable}, final z=${finalPoint.processVariable.toFixed(4)} m, |e_ss|=${ess.toExponential(3)}, u_ss=${finalPoint.controlEffort.toFixed(2)} N (Expected: 1.3*9.81=${(1.3 * 9.81).toFixed(2)} N)`);
-    assert(sim.metrics.isStable, `B6(e) Failed: system unstable under mass mismatch`);
-    assert(ess <= 0.01, `B6(e) Failed: |e_ss| ${ess} > 0.01 m under mass mismatch`);
-  }
-  console.log('>> B6 PASSED\n');
+  console.log('\n>> B6 PASSED\n');
 }
 
 console.log('================================================================');

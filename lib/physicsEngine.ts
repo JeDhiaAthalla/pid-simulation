@@ -14,6 +14,7 @@ import {
   SimulationStatus,
   NoiseConfig,
 } from '@/types/simulation';
+export type { DataPoint };
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -247,8 +248,15 @@ export function pidStep(
 
   const error = setpoint - measurement;
 
-  // ── P-term ──
-  const pTerm = config.Kp * error;
+  // ── P-term with optional setpoint weighting b (BUG-01 Fix: Adaptive b bound) ──
+  let b = config.setpointWeight ?? 1.0;
+  if (feedforward > 0 && Math.abs(setpoint) > 0.01 && config.Kp > 0) {
+    const headroomHigh = Math.max(0, actuatorLimits[1] - feedforward);
+    const iMax = 0.90 * headroomHigh; // 9.171 N for drone
+    const bMin = Math.max(0.50, 1.0 - iMax / (config.Kp * Math.abs(setpoint) + 1e-6));
+    b = Math.max(bMin, Math.min(1.0, b));
+  }
+  const pTerm = config.Kp * (b * setpoint - measurement);
 
   // ── D-term ──
   let rawDerivative: number;
@@ -282,16 +290,22 @@ export function pidStep(
     integral += error * dt;
   }
 
-  // Mandatory output-unit clamping: |Ki * integral| <= I_max
-  // I_max = 0.5 * min(u_max - u_ff, u_ff - u_min)
+  // Mandatory output-unit clamping: |Ki * integral| <= I_max (BUG-01 Fix: 90% headroom)
+  // I_max = 0.90 * (u_max - u_ff) = 9.171 N for drone
   if (config.Ki > 0) {
     const headroomHigh = Math.max(0, actuatorLimits[1] - feedforward);
     const headroomLow = Math.max(0, feedforward - actuatorLimits[0]);
-    const maxHeadroom = Math.min(headroomHigh, headroomLow);
-    if (maxHeadroom > 0) {
-      const iMax = 0.5 * maxHeadroom;
-      const iClampLimit = iMax / config.Ki;
-      integral = clamp(integral, -iClampLimit, iClampLimit);
+    if (feedforward > 0) {
+      const iMaxHigh = 0.90 * headroomHigh; // 9.171 N for drone
+      const iMaxLow = 0.90 * headroomLow;   // 8.829 N for drone
+      integral = clamp(integral, -iMaxLow / config.Ki, iMaxHigh / config.Ki);
+    } else {
+      const maxHeadroom = Math.min(headroomHigh, headroomLow);
+      if (maxHeadroom > 0) {
+        const iMax = 0.90 * maxHeadroom;
+        const iClampLimit = iMax / config.Ki;
+        integral = clamp(integral, -iClampLimit, iClampLimit);
+      }
     }
   }
 
@@ -805,6 +819,10 @@ export class TelemetryRingBuffer {
   private _iTerm: Float64Array;
   private _dTerm: Float64Array;
 
+  private _version: number = 0;
+  private _cachedVersion: number = -1;
+  private _cachedArray: DataPoint[];
+
   constructor(capacity: number = 600) {
     this.capacity = capacity;
     this._time = new Float64Array(capacity);
@@ -815,15 +833,35 @@ export class TelemetryRingBuffer {
     this._pTerm = new Float64Array(capacity);
     this._iTerm = new Float64Array(capacity);
     this._dTerm = new Float64Array(capacity);
+
+    // Pre-allocate cached array objects once (0 allocations per frame in toArray)
+    this._cachedArray = new Array<DataPoint>(capacity);
+    for (let i = 0; i < capacity; i++) {
+      this._cachedArray[i] = {
+        time: 0,
+        setpoint: 0,
+        processVariable: 0,
+        controlEffort: 0,
+        error: 0,
+        pTerm: 0,
+        iTerm: 0,
+        dTerm: 0,
+      };
+    }
   }
 
   get length(): number {
     return this._length;
   }
 
+  get version(): number {
+    return this._version;
+  }
+
   clear(): void {
     this._head = 0;
     this._length = 0;
+    this._version++;
   }
 
   push(point: DataPoint): void {
@@ -843,6 +881,7 @@ export class TelemetryRingBuffer {
       // Overwrite oldest sample: advance head
       this._head = (this._head + 1) % this.capacity;
     }
+    this._version++;
   }
 
   forEach(fn: (dp: DataPoint, index: number) => void): void {
@@ -864,21 +903,27 @@ export class TelemetryRingBuffer {
     }
   }
 
+  /**
+   * Returns chronological snapshot with zero heap object allocations.
+   * Internal pre-allocated DataPoint objects are updated in-place when version changes.
+   */
   toArray(): DataPoint[] {
-    const arr = new Array<DataPoint>(this._length);
-    for (let i = 0; i < this._length; i++) {
-      const idx = (this._head + i) % this.capacity;
-      arr[i] = {
-        time: this._time[idx],
-        setpoint: this._setpoint[idx],
-        processVariable: this._processVariable[idx],
-        controlEffort: this._controlEffort[idx],
-        error: this._error[idx],
-        pTerm: this._pTerm[idx],
-        iTerm: this._iTerm[idx],
-        dTerm: this._dTerm[idx],
-      };
+    if (this._cachedVersion !== this._version) {
+      for (let i = 0; i < this._length; i++) {
+        const idx = (this._head + i) % this.capacity;
+        const item = this._cachedArray[i];
+        item.time = this._time[idx];
+        item.setpoint = this._setpoint[idx];
+        item.processVariable = this._processVariable[idx];
+        item.controlEffort = this._controlEffort[idx];
+        item.error = this._error[idx];
+        item.pTerm = this._pTerm[idx];
+        item.iTerm = this._iTerm[idx];
+        item.dTerm = this._dTerm[idx];
+      }
+      this._cachedVersion = this._version;
     }
-    return arr;
+    // BUG-07 Fix: Return shallow copy array to prevent in-place mutation of the array reference
+    return this._cachedArray.slice(0, this._length);
   }
 }

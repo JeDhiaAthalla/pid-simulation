@@ -22,13 +22,14 @@ import {
   simulationStep,
   computeStepResponseMetrics,
   TelemetryRingBuffer,
+  getHoverFeedforward,
 } from '@/lib/physicsEngine';
 import {
   TuningResult,
   TuningRecommendation,
-  getAllTuningResults,
   generateRecommendations,
 } from '@/lib/tuner';
+import { runTunerInWorker } from '@/lib/tunerService';
 
 const DEFAULT_DT = 0.005; // 5ms simulation timestep (200 Hz)
 const MAX_DATA_POINTS = 2000;
@@ -57,6 +58,7 @@ export interface SimulationHookState {
   tuningResults: TuningResult[];
   recommendations: TuningRecommendation[];
   isAutoTuning: boolean;
+  appliedMethodId: string | null;
 
   // Disturbance
   activeDisturbance: number;
@@ -73,6 +75,7 @@ export interface SimulationHookState {
     controllerStateRef: React.MutableRefObject<ControllerState>;
     timeRef: React.MutableRefObject<number>;
     dataRef: React.MutableRefObject<DataPoint[]>;
+    ringBufferRef?: React.MutableRefObject<TelemetryRingBuffer>;
     disturbanceRef: React.MutableRefObject<{ magnitude: number; endTime: number }>;
   };
 }
@@ -81,6 +84,7 @@ export interface SimulationHookActions {
   start: () => void;
   stop: () => void;
   reset: () => void;
+  resetPlant: () => void;
   toggleRunning: () => void;
 
   setSetpoint: (sp: number) => void;
@@ -89,7 +93,7 @@ export interface SimulationHookActions {
   setPlant: (params: Partial<PlantParameters>) => void;
 
   selectRobot: (robot: RobotDefinition) => void;
-  applyGains: (gains: PIDGains) => void;
+  applyGains: (gains: PIDGains, methodId?: string | null) => void;
   injectDisturbance: (magnitude: number, duration: number) => void;
   runAutoTune: () => void;
   setSpeedMultiplier: (m: number) => void;
@@ -120,9 +124,10 @@ export function useSimulation(
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
 
   const [pidConfig, setPIDConfigState] = useState<PIDConfig>({
-    Kp: 2.0,
-    Ki: 0.5,
-    Kd: 0.3,
+    Kp: initialRobot.defaultPID?.Kp ?? 2.0,
+    Ki: initialRobot.defaultPID?.Ki ?? 0.5,
+    Kd: initialRobot.defaultPID?.Kd ?? 0.3,
+    setpointWeight: initialRobot.defaultPID?.setpointWeight ?? 1.0,
     derivativeFilterN: 20,
     integralClamp: [-100, 100],
     derivativeOnMeasurement: true,
@@ -158,6 +163,7 @@ export function useSimulation(
   const [tuningResults, setTuningResults] = useState<TuningResult[]>([]);
   const [recommendations, setRecommendations] = useState<TuningRecommendation[]>([]);
   const [isAutoTuning, setIsAutoTuning] = useState(false);
+  const [appliedMethodId, setAppliedMethodId] = useState<string | null>(null);
 
   // Animation loop
   const tick = useCallback(function tickFn() {
@@ -253,7 +259,7 @@ export function useSimulation(
       controlEffort: currentU,
       error: currentError,
       controllerState: { ...controllerStateRef.current },
-      dataHistory: [...dataRef.current],
+      dataHistory: dataRef.current,
       metrics,
       activeDisturbance: timeRef.current < disturbanceRef.current.endTime ? disturbanceRef.current.magnitude : 0,
     });
@@ -287,17 +293,22 @@ export function useSimulation(
     stepStartTimeRef.current = 0;
     stepInitialValueRef.current = 0;
     plantStateRef.current = createPlantState(plant);
-    controllerStateRef.current = createControllerState();
+    const uFf = getHoverFeedforward(plant);
+    controllerStateRef.current = {
+      ...createControllerState(),
+      controlOutput: uFf,
+      controlOutputUnsat: uFf,
+    };
     timeRef.current = 0;
     ringBufferRef.current.clear();
     dataRef.current = [];
     disturbanceRef.current = { magnitude: 0, endTime: 0 };
     setDisplayState({
       time: 0,
-      processVariable: 0,
-      controlEffort: 0,
-      error: 0,
-      controllerState: createControllerState(),
+      processVariable: plantStateRef.current.measuredOutput ?? 0,
+      controlEffort: uFf,
+      error: setpoint - (plantStateRef.current.measuredOutput ?? 0),
+      controllerState: controllerStateRef.current,
       dataHistory: [],
       metrics: {
         riseTime: null,
@@ -315,7 +326,7 @@ export function useSimulation(
       },
       activeDisturbance: 0,
     });
-  }, [stop, plant]);
+  }, [stop, plant, setpoint]);
 
   // Step Forward (1 physics tick Δt)
   const stepForward = useCallback(() => {
@@ -415,8 +426,9 @@ export function useSimulation(
     }));
   }, []);
 
-  // PID Gains
+  // PID Gains (Auto-reset appliedMethodId on manual adjustment)
   const setPIDGains = useCallback((gains: Partial<PIDGains>) => {
+    setAppliedMethodId(null);
     setPIDConfigState((prev) => ({ ...prev, ...gains }));
   }, []);
 
@@ -424,7 +436,8 @@ export function useSimulation(
     setPIDConfigState((prev) => ({ ...prev, ...config }));
   }, []);
 
-  const applyGains = useCallback((gains: PIDGains) => {
+  const applyGains = useCallback((gains: PIDGains, methodId?: string | null) => {
+    setAppliedMethodId(methodId ?? null);
     setPIDConfigState((prev) => ({ ...prev, ...gains }));
   }, []);
 
@@ -437,18 +450,35 @@ export function useSimulation(
     });
   }, []);
 
-  // Robot selection
+  // Robot selection (Purge history on archetype switch)
   const selectRobot = useCallback((robot: RobotDefinition) => {
     stop();
+    setAppliedMethodId(null);
     stepStartTimeRef.current = 0;
     stepInitialValueRef.current = 0;
+    ringBufferRef.current.clear();
+    dataRef.current = [];
+    timeRef.current = 0;
+    disturbanceRef.current = { magnitude: 0, endTime: 0 };
+    plantStateRef.current = createPlantState(robot.defaultPlant);
+    controllerStateRef.current = createControllerState();
     setSelectedRobot(robot);
     setPlant({ ...robot.defaultPlant });
     setSetpointState(robot.defaultSetpoint);
-    plantStateRef.current = createPlantState(robot.defaultPlant);
-    controllerStateRef.current = createControllerState();
-    timeRef.current = 0;
-    dataRef.current = [];
+    if (robot.defaultPID) {
+      setPIDConfigState((prev) => ({
+        ...prev,
+        Kp: robot.defaultPID!.Kp ?? prev.Kp,
+        Ki: robot.defaultPID!.Ki ?? prev.Ki,
+        Kd: robot.defaultPID!.Kd ?? prev.Kd,
+        setpointWeight: robot.defaultPID!.setpointWeight ?? 1.0,
+      }));
+    } else {
+      setPIDConfigState((prev) => ({
+        ...prev,
+        setpointWeight: 1.0,
+      }));
+    }
     setDisplayState({
       time: 0,
       processVariable: 0,
@@ -466,10 +496,54 @@ export function useSimulation(
         oscillationFrequency: null,
         isStable: false,
         dampingAssessment: 'unknown',
+        sustainedOscillation: false,
+        settlingStatus: 'insufficient_data',
+        saturationFraction: 0,
       },
       activeDisturbance: 0,
     });
   }, [stop]);
+
+  // Effect Watcher: Purge history & state if robot changes
+  const prevRobotIdRef = useRef<string>(initialRobot.id);
+  useEffect(() => {
+    if (prevRobotIdRef.current !== selectedRobot.id) {
+      prevRobotIdRef.current = selectedRobot.id;
+      stop();
+      timeRef.current = 0;
+      stepStartTimeRef.current = 0;
+      stepInitialValueRef.current = 0;
+      ringBufferRef.current.clear();
+      dataRef.current = [];
+      disturbanceRef.current = { magnitude: 0, endTime: 0 };
+      plantStateRef.current = createPlantState(selectedRobot.defaultPlant);
+      controllerStateRef.current = createControllerState();
+      setDisplayState((prev) => ({
+        ...prev,
+        time: 0,
+        processVariable: 0,
+        controlEffort: 0,
+        error: 0,
+        controllerState: createControllerState(),
+        dataHistory: [],
+        metrics: {
+          riseTime: null,
+          peakOvershoot: null,
+          settlingTime: null,
+          steadyStateError: null,
+          peakTime: null,
+          peakValue: null,
+          oscillationFrequency: null,
+          isStable: false,
+          dampingAssessment: 'unknown',
+          sustainedOscillation: false,
+          settlingStatus: 'insufficient_data',
+          saturationFraction: 0,
+        },
+        activeDisturbance: 0,
+      }));
+    }
+  }, [selectedRobot.id, selectedRobot.defaultPlant, stop]);
 
   // Disturbance
   const injectDisturbance = useCallback((magnitude: number, duration: number) => {
@@ -479,23 +553,27 @@ export function useSimulation(
     };
   }, []);
 
-  // Auto-tune
+  // Auto-tune (BUG-02 Fix: Offloaded to dedicated background Web Worker)
   const runAutoTune = useCallback(() => {
     setIsAutoTuning(true);
 
-    // Run in a microtask to not block the UI
-    setTimeout(() => {
-      const results = getAllTuningResults(plant, setpoint, pidConfig);
-      setTuningResults(results);
+    runTunerInWorker(plant, setpoint, pidConfig)
+      .then((results) => {
+        setTuningResults(results);
 
-      const recs = generateRecommendations(
-        displayState.metrics,
-        pidConfig,
-        plant
-      );
-      setRecommendations(recs);
-      setIsAutoTuning(false);
-    }, 50);
+        const recs = generateRecommendations(
+          displayState.metrics,
+          pidConfig,
+          plant
+        );
+        setRecommendations(recs);
+      })
+      .catch((err) => {
+        console.error('Auto-tune worker error:', err);
+      })
+      .finally(() => {
+        setIsAutoTuning(false);
+      });
   }, [plant, setpoint, pidConfig, displayState.metrics]);
 
   // Cleanup
@@ -539,6 +617,7 @@ export function useSimulation(
     tuningResults,
     recommendations,
     isAutoTuning,
+    appliedMethodId,
     activeDisturbance: displayState.activeDisturbance,
     selectedRobot,
     speedMultiplier,
@@ -547,6 +626,7 @@ export function useSimulation(
       controllerStateRef,
       timeRef,
       dataRef,
+      ringBufferRef,
       disturbanceRef,
     },
   };
@@ -555,6 +635,7 @@ export function useSimulation(
     start,
     stop,
     reset,
+    resetPlant: reset,
     toggleRunning,
     setSetpoint,
     setPIDGains,

@@ -11,18 +11,17 @@ import {
   Timer,
   Crosshair,
   Waves,
-  AlertTriangle,
-  CheckCircle2,
   Info,
-  ArrowRight,
   BarChart3,
 } from 'lucide-react';
 import { StepResponseMetrics, TuningRecommendation, PIDGains } from '@/types/simulation';
+import { DiagnosticCard } from './DiagnosticCard';
 
 interface MetricsTabProps {
   metrics: StepResponseMetrics;
   recommendations: TuningRecommendation[];
   onApplyGains: (gains: Partial<PIDGains>) => void;
+  currentGains?: Partial<PIDGains>;
   simTime: number;
   isRunning: boolean;
 }
@@ -73,6 +72,7 @@ export const MetricsTab = React.memo(function MetricsTab({
   metrics,
   recommendations,
   onApplyGains,
+  currentGains,
   simTime,
   isRunning,
 }: MetricsTabProps) {
@@ -229,50 +229,14 @@ export const MetricsTab = React.memo(function MetricsTab({
 
         {filteredRecommendations.length > 0 ? (
           <div className="space-y-1.5">
-            {filteredRecommendations.map((rec, i) => {
-              const isCrit = rec.severity === 'critical';
-              const isWarn = rec.severity === 'warning';
-              const Icon = isCrit ? AlertTriangle : isWarn ? AlertTriangle : CheckCircle2;
-              const color = isCrit ? '#EF4444' : isWarn ? '#F59E0B' : '#10B981';
-
-              return (
-                <div
-                  key={i}
-                  className="p-2.5 rounded-lg border text-xs transition-colors"
-                  style={{ borderColor: `${color}35`, backgroundColor: `${color}0C` }}
-                >
-                  <div className="flex items-start gap-2">
-                    <Icon size={14} style={{ color, flexShrink: 0, marginTop: 1 }} />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[11px]" style={{ color }}>
-                        {rec.title}
-                      </p>
-                      <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
-                        {rec.message}
-                      </p>
-                      {rec.suggestedGains && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (rec.suggestedGains) {
-                              onApplyGains(rec.suggestedGains);
-                            }
-                          }}
-                          className="mt-1.5 px-2 py-0.5 rounded text-[10px] font-bold transition-all flex items-center gap-1 active:scale-95"
-                          style={{
-                            backgroundColor: `${color}20`,
-                            color,
-                            border: `1px solid ${color}40`,
-                          }}
-                        >
-                          Terapkan Koreksi <ArrowRight size={10} />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {filteredRecommendations.map((rec, i) => (
+              <DiagnosticCard
+                key={i}
+                recommendation={rec}
+                onApplyGains={onApplyGains}
+                currentGains={currentGains}
+              />
+            ))}
           </div>
         ) : (
           <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-[10px] opacity-60 text-center">

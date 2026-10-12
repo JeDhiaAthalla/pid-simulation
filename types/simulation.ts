@@ -44,6 +44,8 @@ export interface RobotDefinition {
   animationHint: string;
   /** Preset tuning profiles for layman users */
   presets?: PresetProfile[];
+  /** Default PID configuration for archetype */
+  defaultPID?: Partial<PIDConfig>;
   /** Per-archetype output divergence ceiling (auto-catch runaway) */
   divergenceLimit?: number;
   /** Whether gravity term uses radians internally (true) or degrees (false) */
@@ -89,6 +91,8 @@ export interface PIDGains {
   Kp: number;
   Ki: number;
   Kd: number;
+  /** Optional setpoint weighting factor b on P-term (default 1.0) */
+  setpointWeight?: number;
 }
 
 export interface PIDConfig extends PIDGains {
@@ -235,6 +239,7 @@ export type TuningMethod =
 export type CostProfile = 'aggressive' | 'balanced' | 'conservative';
 
 export interface TuningResult {
+  id?: string;
   method: TuningMethod;
   gains: PIDGains;
   predictedMetrics?: Partial<StepResponseMetrics>;

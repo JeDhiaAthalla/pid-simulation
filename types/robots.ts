@@ -172,6 +172,32 @@ export const ROBOTS: RobotDefinition[] = [
     setpointRange: [0, 20],
     defaultSetpoint: 5.0,
     animationHint: 'quadcopter',
+    defaultPID: {
+      Kp: 0.972,
+      Ki: 0.073,
+      Kd: 1.390,
+      setpointWeight: 0.85,
+    },
+    presets: [
+      {
+        name: 'Stabil Mulus',
+        icon: '🟢',
+        gains: { Kp: 0.972, Ki: 0.073, Kd: 1.390, setpointWeight: 0.85 },
+        description: 'Tuning redaman kritis untuk respon mulus tanpa goyang (%OS < 5%)',
+      },
+      {
+        name: 'Respon Cepat',
+        icon: '⚡',
+        gains: { Kp: 2.131, Ki: 0.518, Kd: 1.780, setpointWeight: 0.75 },
+        description: 'Tuning respons cepat dengan waktu settling minimum tanpa jenuh steady state',
+      },
+      {
+        name: 'Osilasi Demo',
+        icon: '🟡',
+        gains: { Kp: 1.842, Ki: 0.330, Kd: 0.475, setpointWeight: 1.0 },
+        description: 'Tuning kurang teredam untuk demo fenomena osilasi stabil (%OS 30-60%)',
+      },
+    ],
   },
   {
     id: 'vtol_birotor',

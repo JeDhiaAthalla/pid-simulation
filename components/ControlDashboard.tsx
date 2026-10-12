@@ -200,9 +200,39 @@ export default function ControlDashboard({
     }
   };
 
-  // ── 4. Layman 1-Click Presets Calculation (Unmodified Math) ──
+  // ── 4. Layman 1-Click Presets Calculation (Unmodified Math for Non-Drone, Verified Analytical for Drone) ──
   const handleApplyPreset = useCallback(
     (type: 'stable' | 'aggressive' | 'oscillating') => {
+      // Archetype Drone: Use verified analytical pole-placement presets (Decision 4)
+      if (state.selectedRobot.id === 'quadcopter') {
+        if (type === 'stable') {
+          // Stabil Mulus: ζ=1.0, ωn=0.9, a=0.1, b=0.85
+          actions.applyGains({
+            Kp: 0.972,
+            Ki: 0.073,
+            Kd: 1.390,
+            setpointWeight: 0.85,
+          });
+        } else if (type === 'aggressive') {
+          // Respon Cepat: ζ=0.8, ωn=1.2, a=0.3, b=0.75
+          actions.applyGains({
+            Kp: 2.131,
+            Ki: 0.518,
+            Kd: 1.780,
+            setpointWeight: 0.75,
+          });
+        } else if (type === 'oscillating') {
+          // Osilasi Demo: ζ=0.3, ωn=1.3, a=0.15, b=1.0
+          actions.applyGains({
+            Kp: 1.842,
+            Ki: 0.330,
+            Kd: 0.475,
+            setpointWeight: 1.0,
+          });
+        }
+        return;
+      }
+
       const basePlant = state.selectedRobot.defaultPlant;
       const tau = Math.max(basePlant.timeConstant, 0.05);
       const K = Math.max(basePlant.gain, 0.1);
@@ -216,6 +246,7 @@ export default function ControlDashboard({
           Kp: parseFloat(Kp.toFixed(3)),
           Ki: parseFloat(Ki.toFixed(3)),
           Kd: parseFloat(Kd.toFixed(3)),
+          setpointWeight: 1.0,
         });
       } else if (type === 'aggressive') {
         const Kp = (1.4 * tau) / (K * L);
@@ -225,6 +256,7 @@ export default function ControlDashboard({
           Kp: parseFloat(Kp.toFixed(3)),
           Ki: parseFloat(Ki.toFixed(3)),
           Kd: parseFloat(Kd.toFixed(3)),
+          setpointWeight: 1.0,
         });
       } else if (type === 'oscillating') {
         const Kp = (2.2 * tau) / (K * L);
@@ -234,6 +266,7 @@ export default function ControlDashboard({
           Kp: parseFloat(Kp.toFixed(3)),
           Ki: parseFloat(Ki.toFixed(3)),
           Kd: parseFloat(Kd.toFixed(3)),
+          setpointWeight: 1.0,
         });
       }
     },
@@ -241,8 +274,8 @@ export default function ControlDashboard({
   );
 
   const handleApplyGains = useCallback(
-    (gains: PIDGains) => {
-      actions.applyGains(gains);
+    (gains: PIDGains, methodId?: string | null) => {
+      actions.applyGains(gains, methodId);
     },
     [actions]
   );
@@ -447,6 +480,7 @@ export default function ControlDashboard({
               plant={state.plant}
               onSetPlant={actions.setPlant}
               onApplyPreset={handleApplyPreset}
+              recommendations={state.recommendations}
             />
           )}
 
@@ -457,6 +491,7 @@ export default function ControlDashboard({
               onApplyGains={(gains) => {
                 actions.setPIDGains(gains);
               }}
+              currentGains={state.pidConfig}
               simTime={state.time}
               isRunning={state.isRunning}
             />
@@ -469,6 +504,7 @@ export default function ControlDashboard({
               tuningResults={state.tuningResults}
               recommendations={state.recommendations}
               currentGains={state.pidConfig}
+              appliedMethodId={state.appliedMethodId}
               onApplyGains={handleApplyGains}
             />
           )}

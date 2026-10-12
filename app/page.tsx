@@ -142,6 +142,8 @@ export default function Home() {
               speedMultiplier={state.speedMultiplier}
               isDark={isDark}
               onDisturbance={handleDisturbance}
+              onReset={actions.reset}
+              onResetPlant={actions.reset}
               mode="dual"
               className="h-full rounded-xl border border-[var(--border)] overflow-hidden shadow-2xl"
             />
@@ -162,6 +164,8 @@ export default function Home() {
               speedMultiplier={state.speedMultiplier}
               isDark={isDark}
               onDisturbance={handleDisturbance}
+              onReset={actions.reset}
+              onResetPlant={actions.reset}
               mode="tabbed"
               className="h-full border-b border-[var(--border)]"
             />
