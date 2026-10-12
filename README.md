@@ -9,7 +9,7 @@
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![Web Workers](https://img.shields.io/badge/Web_Workers-Parallel_Tuning-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Turbopack](https://img.shields.io/badge/Turbopack-Blazing_Fast-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
   <b>Simulator kendali PID industri berbasis web dengan integrasi numerik Runge-Kutta ke-4 (RK4), visualisasi kinematika 2D multi-archetype, auto-tuning non-blocking via Web Worker, dan telemetri instrumen zero-allocation.</b>
@@ -37,15 +37,15 @@ Sebagian besar simulator kendali web mengandalkan pendekatan Euler orde-1 yang r
 
 <div align="center">
 
-| **Dual Split View (Oscilloscope + Kinematics)** | **Quadcopter Altitude with Hover Feedforward** |
-|:---:|:---:|
-| ![Dual Split View](https://placehold.co/600x340/090D16/06B6D4?text=Dual+Split+View+%7C+Oscilloscope+%2B+2D+Canvas) | ![Quadcopter Drone](https://placehold.co/600x340/0A0F1A/10B981?text=Quadcopter+Drone+%7C+Hover+Feedforward+mg) |
-| *Osiloskop multi-trace live time-pan berpadu dengan viewport kinematika 2D berpemisah geser interaktif.* | *Simulasi elevasi thrust-to-weight ratio, redaman drag aerodinamika, dan feedforward gravitasi.* |
+| Dual Split View | Quadcopter Drone Dynamics |
+| :---: | :---: |
+| ![Dual Split View](docs/assets/demo-dual-split.png) | ![Quadcopter Drone](docs/assets/demo-drone-hover.png) |
+| *Osiloskop multi-trace live time-pan berpadu dengan viewport kinematika 2D.* | *Simulasi elevasi thrust-to-weight ratio dan feedforward gravitasi mg.* |
 
-| **Center-Zero Bipolar Effort Meter** | **Web Worker Background Auto-Tuning** |
-|:---:|:---:|
-| ![Bipolar Effort Meter](https://placehold.co/600x340/1E293B/A78BFA?text=Bipolar+Effort+Meter+%7C+Center-Zero+P+I+D) | ![Auto-Tuning Engine](https://placehold.co/600x340/0F172A/F59E0B?text=Web+Worker+Auto-Tuning+%7C+Nelder-Mead+%2B+ITAE) |
-| *Dekomposisi kontribusi P, I, D bipolar real-time dengan status saturasi aktuator instan.* | *Optimasi multi-tujuan non-blocking (Overshoot $\le 10\%$, settling time minimal).* |
+| Center-Zero Bipolar Effort Meter | Web Worker Background Auto-Tuning |
+| :---: | :---: |
+| ![Bipolar Effort Meter](docs/assets/demo-bipolar-meter.png) | ![Web Worker Auto-Tuning](docs/assets/demo-autotune.png) |
+| *Dekomposisi kontribusi P, I, D bipolar real-time dengan titik tengah 0.00.* | *Optimasi multi-tujuan non-blocking di thread terisolasi.* |
 
 </div>
 
@@ -167,28 +167,17 @@ Di mana:
 
 ```mermaid
 graph TD
-    subgraph UI_Thread [Main UI & Canvas Thread (60/120 FPS)]
-        A[Next.js 16 App Router] --> B[SimulationCanvas Component]
-        B --> C[Canvas 1: Live Oscilloscope]
-        B --> D[Canvas 2: Kinematics 2D Viewport]
-        E[useSimulation Hook] -->|Engine Mutable Refs| B
-        E --> F[Control Dashboard & Bipolar Meter]
+    subgraph "Frontend Layer"
+        UI["UI & Canvas Thread (60/120 FPS)"]
+        BUFFER["Telemetry Ring Buffer (Float64Array - O(1))"]
     end
-
-    subgraph Physics_Loop [Fixed Timestep Semi-Accumulator]
-        G[requestAnimationFrame Loop] -->|dt Accumulation| H[RK4 Physics Integrator]
-        H -->|Zero State-Thrashing| I[TelemetryRingBuffer]
-        I -->|Direct Ref Access| C
-        I -->|Camera Lerp 0.08| D
+    subgraph "Background Computation"
+        WORKER["Dedicated Web Worker (tuner.worker.ts)"]
+        ENGINE["Physics Core (RK4 @ 200 Hz)"]
     end
-
-    subgraph Worker_Thread [Dedicated Web Worker]
-        J[tuner.worker.ts] --> K[ITAE / Cohen-Coon Grid Sweep]
-        J --> L[Nelder-Mead Downhill Simplex]
-    end
-
-    F -->|runAutoTune PostMessage| J
-    J -->|Async Results onMessage| F
+    UI --> BUFFER
+    WORKER --> UI
+    ENGINE --> BUFFER
 ```
 
 - **Zero Re-Render Overhead**: Tick simulasi murni memutasi `plantStateRef`, `controllerStateRef`, dan `ringBufferRef` tanpa memicu reconciler React.
@@ -277,9 +266,9 @@ npm run build
 
 ## 📜 Lisensi & Kontribusi
 
-Didistribusikan di bawah lisensi **MIT**. Silakan gunakan, pelajari, dan kembangkan untuk keperluan riset akademis, pengajaran sistem kendali, maupun integrasi sistem robotika industri.
+Proyek ini didistribusikan di bawah **MIT License**. Silakan gunakan, pelajari, dan kembangkan secara bebas untuk keperluan riset akademis, pengajaran sistem kendali, maupun integrasi sistem robotika industri.
 
-Kontribusi, pelaporan bug, dan permintaan fitur baru sangat terbuka melalui [GitHub Issues](https://github.com/JeDhiaAthalla/pid-simulation.git/issues) atau *Pull Request*.
+Kontribusi, pelaporan bug, dan permintaan fitur baru sangat terbuka melalui [GitHub Issues](https://github.com/JeDhiaAthalla/pid-simulation/issues) atau *Pull Request*.
 
 <div align="center">
   <sub>Dibangun dengan dedikasi rekayasa kendali oleh <b>JeDhiaAthalla</b>.</sub>
