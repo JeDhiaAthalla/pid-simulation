@@ -9,13 +9,14 @@
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![Web Workers](https://img.shields.io/badge/Web_Workers-Parallel_Tuning-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Turbopack](https://img.shields.io/badge/Turbopack-Blazing_Fast-000000?style=for-the-badge&logo=vercel&logoColor=white)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://pid-simulation.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
   <b>Simulator kendali PID industri berbasis web dengan integrasi numerik Runge-Kutta ke-4 (RK4), visualisasi kinematika 2D multi-archetype, auto-tuning non-blocking via Web Worker, dan telemetri instrumen zero-allocation.</b>
 </p>
 
-[Fitur Utama](#-fitur-unggulan-core-highlights) • [Formulasi Matematika](#-formulasi-matematis-mathematical-foundations) • [Robotic Archetypes](#-robotic-archetypes) • [Arsitektur Sistem](#-arsitektur-sistem--performa) • [Instalasi](#-instalasi--panduan-cepat)
+[🌐 Live Demo](https://pid-simulation.vercel.app) • [Fitur Utama](#-fitur-unggulan-core-highlights) • [Formulasi Matematika](#-formulasi-matematis-mathematical-foundations) • [Robotic Archetypes](#-robotic-archetypes) • [Arsitektur Sistem](#-arsitektur-sistem--performa) • [Instalasi](#-instalasi--panduan-cepat)
 
 </div>
 
@@ -248,6 +249,14 @@ Buka browser dan arahkan ke [http://localhost:3000](http://localhost:3000).
 npm run build
 npm run start
 ```
+
+### 5. Deployment ke Vercel
+Aplikasi ini dioptimalkan untuk deployment instan satu-klik di Vercel:
+```bash
+# Deploy langsung via Vercel CLI (Akun: jeath)
+npx vercel --prod
+```
+Atau hubungkan repositori GitHub `JeDhiaAthalla/pid-simulation` ke dashboard Vercel untuk automated CI/CD pipeline pada setiap push ke branch `main`.
 
 ---
 
