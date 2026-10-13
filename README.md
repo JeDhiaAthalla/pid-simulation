@@ -1,6 +1,6 @@
 # ⚡ PID Control Sim — Real-Time Multi-Plant Robotics Simulator
 
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=flat&logo=vercel)](https://pid-simulation.vercel.app)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live_Demo-black?style=flat&logo=vercel)](https://robot-pid-simulation-iuou1fzmk-jeath.vercel.app)
 [![Next.js](https://img.shields.io/badge/Next.js-16.4-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -12,7 +12,7 @@
 
 > Simulator kendali PID industri berbasis web dengan integrasi numerik Runge-Kutta ke-4 (RK4), visualisasi kinematika 2D multi-archetype, auto-tuning non-blocking via Web Worker, dan telemetri instrumen zero-allocation.
 
-[🌐 Live Demo](https://pid-simulation.vercel.app) • [Fitur Utama](#-fitur-unggulan-core-highlights) • [Formulasi Matematika](#-formulasi-matematis-mathematical-foundations) • [Robotic Archetypes](#-robotic-archetypes) • [Arsitektur Sistem](#-arsitektur-sistem--performa) • [Instalasi](#-instalasi--panduan-cepat)
+[🌐 Live Demo](https://robot-pid-simulation-iuou1fzmk-jeath.vercel.app) • [Fitur Utama](#-fitur-unggulan-core-highlights) • [Formulasi Matematika](#-formulasi-matematis-mathematical-foundations) • [Robotic Archetypes](#-robotic-archetypes) • [Arsitektur Sistem](#-arsitektur-sistem--performa) • [Instalasi](#-instalasi--panduan-cepat)
 
 ---
 
