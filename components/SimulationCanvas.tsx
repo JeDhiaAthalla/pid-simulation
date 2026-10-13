@@ -515,6 +515,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
         // 4. Reset FX and viewport cameras
         particlesRef.current = [];
         ripplesRef.current = [];
+        resetAckermannSkidmarks();
         oscPanOffsetRef.current = 0;
         cameraRef.current = { follow: true, offset: { x: 0, y: 0 }, smoothedPV: 0, smoothedX: 0, smoothedY: 0 };
         smoothYRangeRef.current = { min: -0.2, max: 2.0 };
@@ -660,6 +661,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasHandle, SimulationCan
       smoothYRangeRef.current = { min: -0.2, max: Math.max(propSetpoint * 1.2, 2.0) };
       particlesRef.current = [];
       ripplesRef.current = [];
+      resetAckermannSkidmarks();
       cameraRef.current = { follow: isCameraFollow, offset: { x: 0, y: 0 }, smoothedPV: 0, smoothedX: 0, smoothedY: 0 };
       stepStartTimeRef.current = 0;
       stepInitialValueRef.current = 0;
@@ -2032,8 +2034,8 @@ function getArchetypeHUD(
       };
     case 'ackermann_vehicle':
       return {
-        title: 'ACKERMANN STEERING VEHICLE',
-        telemetry: `Pos: ${pv.toFixed(2)}m | Target: ${sp.toFixed(2)}m`,
+        title: 'ACKERMANN STEERING VEHICLE — HIGHWAY PURSUIT',
+        telemetry: `Pos: ${pv.toFixed(2)}° | Target: ${sp.toFixed(2)}° | Cross-Track Error: ${(pv - sp).toFixed(2)}°`,
       };
     case 'mecanum_platform':
       return {
@@ -2151,7 +2153,7 @@ function renderRobotViewport(
       drawLineFollower(ctx, w, h, c, pv, sp, u, time);
       break;
     case 'ackermann_vehicle':
-      drawAckermannVehicle(ctx, w, h, c, pv, sp, u, time);
+      drawAckermannVehicle(ctx, w, h, c, pv, sp, u, time, particles, camera);
       break;
     case 'mecanum_platform':
       drawMecanumPlatform(ctx, w, h, c, pv, sp, u, time);
@@ -2376,7 +2378,22 @@ function drawLineFollower(
   }
 }
 
-// ── 2. Ackermann Steering Vehicle ──
+// ── 2. Ackermann Steering Vehicle (Cinematic Night Highway Simulation) ──
+interface AckermannSkidmark {
+  x: number;
+  y: number;
+  alpha: number;
+  intensity: number;
+}
+
+let ackermannSkidmarks: AckermannSkidmark[] = [];
+let lastAckermannTime = 0;
+
+export function resetAckermannSkidmarks(): void {
+  ackermannSkidmarks = [];
+  lastAckermannTime = 0;
+}
+
 function drawAckermannVehicle(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -2385,58 +2402,311 @@ function drawAckermannVehicle(
   pv: number,
   sp: number,
   u: number,
-  t: number
+  t: number,
+  particles?: Particle[],
+  camera?: RobotCameraState
 ) {
   const cx = w / 2;
   const cy = h / 2;
-  const groundY = cy + 38;
+
+  // 1. Highway Dimensions & Coordinate System
+  const roadH = Math.min(230, Math.max(165, h * 0.46));
+  const roadTop = cy - roadH / 2;
+  const roadBottom = cy + roadH / 2;
   const worldLeft = -w * 2;
   const worldRight = w * 3;
   const worldW = worldRight - worldLeft;
 
-  // Infinite Ground Plane
-  ctx.fillStyle = c.ground;
-  ctx.fillRect(worldLeft, groundY, worldW, h * 3);
-  ctx.strokeStyle = c.groundLine;
+  // High-speed night forward travel speed (px/s)
+  const forwardSpeed = 340;
+  const dt = Math.min(0.05, Math.max(0.001, lastAckermannTime > 0 ? t - lastAckermannTime : 0.016));
+  lastAckermannTime = t;
+
+  // ── Parallax Scenery (Berm / Night Terrain) ──
+  // Top Outer Terrain
+  const topGrad = ctx.createLinearGradient(0, -h * 2, 0, roadTop);
+  topGrad.addColorStop(0, '#020617');
+  topGrad.addColorStop(1, '#0B0F19');
+  ctx.fillStyle = topGrad;
+  ctx.fillRect(worldLeft, -h * 2, worldW, roadTop - (-h * 2));
+
+  // Bottom Outer Terrain
+  const btmGrad = ctx.createLinearGradient(0, roadBottom, 0, h * 3);
+  btmGrad.addColorStop(0, '#0B0F19');
+  btmGrad.addColorStop(1, '#020617');
+  ctx.fillStyle = btmGrad;
+  ctx.fillRect(worldLeft, roadBottom, worldW, h * 3 - roadBottom);
+
+  // Speed Lines & Ambient Motion Blur in Background
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.09)';
+  ctx.lineWidth = 1.2;
+  for (let i = 0; i < 12; i++) {
+    const sMult = 1.1 + (i % 4) * 0.35;
+    const sX = (((worldRight - (t * forwardSpeed * sMult + i * 193) % worldW) + worldW) % worldW) + worldLeft;
+    const sY = i < 6 ? roadTop - 10 - i * 14 : roadBottom + 10 + (i - 6) * 14;
+    const sLen = 35 + (i % 3) * 28;
+    ctx.beginPath();
+    ctx.moveTo(sX, sY);
+    ctx.lineTo(sX - sLen, sY);
+    ctx.stroke();
+  }
+
+  // ── Steel Guardrails with Retroreflective Posts ──
+  for (const railY of [roadTop - 7, roadBottom + 7]) {
+    // Dual steel rail profile
+    ctx.strokeStyle = '#1E293B';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(worldLeft, railY);
+    ctx.lineTo(worldRight, railY);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#64748B';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(worldLeft, railY - 1);
+    ctx.lineTo(worldRight, railY - 1);
+    ctx.stroke();
+
+    // Retroreflective Posts (spaced 64px, moving backward)
+    const postPeriod = 64;
+    const postShift = ((t * forwardSpeed) % postPeriod);
+    const startPost = Math.floor(worldLeft / postPeriod) * postPeriod - postShift;
+    const isTop = railY < cy;
+
+    for (let px = startPost; px <= worldRight; px += postPeriod) {
+      // Post bracket
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(px - 1.5, railY - (isTop ? 6 : 0), 3, 6);
+
+      // Glowing reflector cap
+      ctx.fillStyle = isTop ? '#F59E0B' : '#EF4444';
+      ctx.beginPath();
+      ctx.arc(px, isTop ? railY - 5 : railY + 5, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ── Asphalt Highway Surface ──
+  const asphaltGrad = ctx.createLinearGradient(0, roadTop, 0, roadBottom);
+  asphaltGrad.addColorStop(0, '#0D1117');
+  asphaltGrad.addColorStop(0.18, '#131A26');
+  asphaltGrad.addColorStop(0.5, '#161F2E');
+  asphaltGrad.addColorStop(0.82, '#131A26');
+  asphaltGrad.addColorStop(1, '#0D1117');
+  ctx.fillStyle = asphaltGrad;
+  ctx.fillRect(worldLeft, roadTop, worldW, roadH);
+
+  // Rumble Strips / Curbs on Shoulder
+  const curbStep = 26;
+  const curbShift = (t * forwardSpeed) % curbStep;
+  const startCurb = Math.floor(worldLeft / curbStep) * curbStep - curbShift;
+
+  for (let cxp = startCurb; cxp <= worldRight; cxp += curbStep) {
+    const isLight = Math.floor((cxp + curbShift) / curbStep) % 2 === 0;
+    ctx.fillStyle = isLight ? '#475569' : '#0F172A';
+    ctx.fillRect(cxp, roadTop, curbStep * 0.5, 3.5);
+    ctx.fillRect(cxp, roadBottom - 3.5, curbStep * 0.5, 3.5);
+  }
+
+  // Solid White Outer Shoulder Lines
+  ctx.strokeStyle = 'rgba(248, 250, 252, 0.85)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(worldLeft, roadTop + 12);
+  ctx.lineTo(worldRight, roadTop + 12);
+  ctx.moveTo(worldLeft, roadBottom - 12);
+  ctx.lineTo(worldRight, roadBottom - 12);
+  ctx.stroke();
+
+  // Secondary Lane Dividers (White dashed)
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
+  ctx.lineWidth = 1.4;
+  ctx.setLineDash([26, 32]);
+  ctx.lineDashOffset = t * forwardSpeed;
+  ctx.beginPath();
+  ctx.moveTo(worldLeft, cy - roadH * 0.25);
+  ctx.lineTo(worldRight, cy - roadH * 0.25);
+  ctx.moveTo(worldLeft, cy + roadH * 0.25);
+  ctx.lineTo(worldRight, cy + roadH * 0.25);
+  ctx.stroke();
+
+  // Central Double/Amber Highway Divider (Vibrant dashed)
+  ctx.strokeStyle = '#FBBF24';
+  ctx.lineWidth = 2.8;
+  ctx.setLineDash([48, 36]);
+  ctx.lineDashOffset = t * forwardSpeed;
+  ctx.beginPath();
+  ctx.moveTo(worldLeft, cy);
+  ctx.lineTo(worldRight, cy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ── Vehicle Kinematics & Positions ──
+  const carBaseX = cx - 30;
+  // Lateral offset responding to process variable (cross-track displacement)
+  const lateralLimit = roadH * 0.35;
+  const lateralY = clamp(pv * 1.35, -lateralLimit, lateralLimit);
+  const targetLateralY = clamp(sp * 1.35, -lateralLimit, lateralLimit);
+
+  const carX = carBaseX;
+  const carY = cy + lateralY;
+  const targetY = cy + targetLateralY;
+
+  // Yaw/heading angle in radians
+  const headingRad = clamp((pv * Math.PI) / 180, -0.42, 0.42);
+  // Physical front steering angle delta from PID effort u
+  const steerAngle = clamp(u, -0.58, 0.58);
+
+  // Wheel contact coordinates for skidmarks and particles
+  const cosH = Math.cos(headingRad);
+  const sinH = Math.sin(headingRad);
+  const rwLX = carX + (-26) * cosH - (-19) * sinH;
+  const rwLY = carY + (-26) * sinH + (-19) * cosH;
+  const rwRX = carX + (-26) * cosH - (19) * sinH;
+  const rwRY = carY + (-26) * sinH + (19) * cosH;
+
+  // ── Skidmark Buffer Update & Rendering ──
+  for (let i = ackermannSkidmarks.length - 1; i >= 0; i--) {
+    const sm = ackermannSkidmarks[i];
+    sm.x -= forwardSpeed * dt;
+    sm.alpha -= dt * 0.75;
+    if (sm.alpha <= 0 || sm.x < worldLeft) {
+      ackermannSkidmarks.splice(i, 1);
+    }
+  }
+
+  const skidIntensity = clamp(0.25 + Math.abs(u) * 1.6, 0.2, 1.0);
+  if (ackermannSkidmarks.length < 240) {
+    ackermannSkidmarks.push(
+      { x: rwLX, y: rwLY, alpha: 0.85, intensity: skidIntensity },
+      { x: rwRX, y: rwRY, alpha: 0.85, intensity: skidIntensity }
+    );
+  }
+
+  // Draw skidmarks on asphalt
+  for (const sm of ackermannSkidmarks) {
+    ctx.fillStyle = `rgba(10, 15, 25, ${sm.alpha * sm.intensity * 0.7})`;
+    ctx.beginPath();
+    ctx.arc(sm.x, sm.y, 2.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // ── Road Dust & Tire Smoke Particles ──
+  if (particles && (Math.abs(u) > 0.08 || Math.random() < 0.28)) {
+    const isSharp = Math.abs(u) > 0.22;
+    const pCount = isSharp ? 2 : 1;
+    for (let pi = 0; pi < pCount; pi++) {
+      const emitLeft = Math.random() > 0.5;
+      const ex = emitLeft ? rwLX : rwRX;
+      const ey = emitLeft ? rwLY : rwRY;
+      particles.push({
+        x: ex,
+        y: ey,
+        vx: -forwardSpeed * 0.75 + (Math.random() - 0.5) * 40,
+        vy: (Math.random() - 0.5) * 22,
+        life: 1.0,
+        maxLife: isSharp ? 0.42 : 0.26,
+        size: isSharp ? 3.2 : 1.8,
+        color: isSharp ? 'rgba(226, 232, 240, 0.42)' : 'rgba(148, 163, 184, 0.2)',
+      });
+    }
+  }
+
+  // ── Target Trajectory ($SP$) Guidance Curve ──
+  ctx.strokeStyle = '#F59E0B';
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash([7, 5]);
+  ctx.beginPath();
+  // Target pursuit bezier curve leading from car nose to target lane
+  ctx.moveTo(carX + 38, carY);
+  ctx.bezierCurveTo(carX + 100, carY, carX + 80, targetY, carX + 170, targetY);
+  ctx.lineTo(w + 60, targetY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Target waypoint beacon & reticle
+  const beaconX = carX + 170;
+  ctx.save();
+  ctx.shadowColor = '#F59E0B';
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = '#F59E0B';
+  ctx.beginPath();
+  ctx.arc(beaconX, targetY, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(worldLeft, groundY);
-  ctx.lineTo(worldRight, groundY);
+  ctx.arc(beaconX, targetY, 8 + Math.sin(t * 8) * 2, 0, Math.PI * 2);
   ctx.stroke();
+  ctx.restore();
 
-  const heading = (pv * Math.PI) / 180;
-
+  // ── Render Ackermann Vehicle Body & Lighting ──
   ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(heading);
+  ctx.translate(carX, carY);
+  ctx.rotate(headingRad);
 
-  // Aerodynamic Car Chassis
-  ctx.fillStyle = '#1E293B';
-  ctx.strokeStyle = c.accent;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.roundRect(-36, -18, 72, 36, 7);
-  ctx.fill();
-  ctx.stroke();
+  // 1. Dual Volumetric Headlights
+  const coneLen = 190;
+  const coneHalfW = 46;
+  for (const ly of [-13, 13]) {
+    const headGrad = ctx.createRadialGradient(36, ly, 3, 36 + coneLen * 0.45, ly, coneLen);
+    headGrad.addColorStop(0.0, 'rgba(255, 255, 240, 0.85)');
+    headGrad.addColorStop(0.12, 'rgba(251, 191, 36, 0.38)');
+    headGrad.addColorStop(0.45, 'rgba(251, 191, 36, 0.12)');
+    headGrad.addColorStop(0.85, 'rgba(251, 191, 36, 0.03)');
+    headGrad.addColorStop(1.0, 'rgba(251, 191, 36, 0.0)');
 
-  // Cockpit Windshield
-  ctx.fillStyle = c.accentGlow;
-  ctx.beginPath();
-  ctx.roundRect(-12, -14, 26, 28, 4);
-  ctx.fill();
+    ctx.fillStyle = headGrad;
+    ctx.beginPath();
+    ctx.moveTo(36, ly - 4);
+    ctx.lineTo(36 + coneLen, ly - coneHalfW);
+    ctx.lineTo(36 + coneLen, ly + coneHalfW);
+    ctx.lineTo(36, ly + 4);
+    ctx.closePath();
+    ctx.fill();
 
-  // Headlight Cones projecting forward
-  ctx.fillStyle = 'rgba(251, 191, 36, 0.12)';
-  ctx.beginPath();
-  ctx.moveTo(36, -12);
-  ctx.lineTo(95, -28);
-  ctx.lineTo(95, 28);
-  ctx.lineTo(36, 12);
-  ctx.closePath();
-  ctx.fill();
+    // High-intensity LED lens bulb with bloom
+    ctx.save();
+    ctx.shadowColor = '#FBBF24';
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = '#FEF08A';
+    ctx.beginPath();
+    ctx.arc(36, ly, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 
-  // Ackermann Front Steerable Wheels vs Rear Drive Axle
-  const steerAngle = clamp(u * 0.6, -0.65, 0.65);
+  // Floating sparkling dust motes inside headlights
+  ctx.fillStyle = 'rgba(254, 240, 138, 0.75)';
+  for (let di = 0; di < 8; di++) {
+    const moteX = 42 + ((di * 21 + t * 50) % (coneLen - 35));
+    const moteY = (di % 2 === 0 ? -13 : 13) + Math.sin(t * 4.5 + di * 2) * (10 + (moteX - 42) * 0.14);
+    ctx.beginPath();
+    ctx.arc(moteX, moteY, 1.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 2. Twin Red Taillights & Light Trails
+  // Red light streaks stretching backward
+  const trailGrad = ctx.createLinearGradient(-37, 0, -115, 0);
+  trailGrad.addColorStop(0, 'rgba(239, 68, 68, 0.65)');
+  trailGrad.addColorStop(0.4, 'rgba(239, 68, 68, 0.22)');
+  trailGrad.addColorStop(1, 'rgba(239, 68, 68, 0.0)');
+  ctx.fillStyle = trailGrad;
+  ctx.fillRect(-115, -16, 78, 5.5);
+  ctx.fillRect(-115, 10.5, 78, 5.5);
+
+  // Red LED lenses with bloom
+  ctx.save();
+  ctx.shadowColor = '#EF4444';
+  ctx.shadowBlur = 14;
+  ctx.fillStyle = '#EF4444';
+  ctx.fillRect(-37, -16, 3.5, 5.5);
+  ctx.fillRect(-37, 10.5, 3.5, 5.5);
+  ctx.restore();
+
+  // 3. 4 Rubber Wheels with Ackermann Physical Front Steering
   const wheels = [
     { x: -25, y: -20, steer: false },
     { x: -25, y: 20, steer: false },
@@ -2448,25 +2718,109 @@ function drawAckermannVehicle(
     ctx.save();
     ctx.translate(wh.x, wh.y);
     if (wh.steer) ctx.rotate(steerAngle);
-    ctx.fillStyle = '#0F172A';
-    ctx.fillRect(-7, -4, 14, 8);
-    ctx.strokeStyle = c.metal;
+
+    // Dark rubber tire
+    ctx.fillStyle = '#090D16';
+    ctx.beginPath();
+    ctx.roundRect(-8, -4.5, 16, 9, 2);
+    ctx.fill();
+    ctx.strokeStyle = '#334155';
     ctx.lineWidth = 1;
-    ctx.strokeRect(-7, -4, 14, 8);
+    ctx.stroke();
+
+    // Alloy rim core
+    ctx.fillStyle = '#64748B';
+    ctx.fillRect(-5, -2.5, 10, 5);
+
+    // Cyan brake caliper accent
+    ctx.fillStyle = '#06B6D4';
+    ctx.fillRect(wh.steer ? -3 : -1, -3.5, 3, 2);
+
+    // Spinning rim spokes
+    const spokeAng = t * 32;
+    ctx.strokeStyle = '#94A3B8';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(spokeAng) * 4, Math.sin(spokeAng) * 2);
+    ctx.lineTo(-Math.cos(spokeAng) * 4, -Math.sin(spokeAng) * 2);
+    ctx.stroke();
+
     ctx.restore();
   }
+
+  // 4. Futuristic Aerodynamic Chassis
+  // Underbody shadow
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.beginPath();
+  ctx.roundRect(-37, -19, 75, 38, 8);
+  ctx.fill();
+
+  // Carbon body shell
+  const bodyGrad = ctx.createLinearGradient(-36, -18, 40, 18);
+  bodyGrad.addColorStop(0, '#0F172A');
+  bodyGrad.addColorStop(0.5, '#1E293B');
+  bodyGrad.addColorStop(1, '#0F172A');
+  ctx.fillStyle = bodyGrad;
+
+  // Neon edge glow
+  ctx.save();
+  ctx.shadowColor = '#06B6D4';
+  ctx.shadowBlur = 8;
+  ctx.strokeStyle = '#06B6D4';
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.roundRect(-36, -18, 74, 36, 7);
+  ctx.fill();
+  ctx.stroke();
   ctx.restore();
 
-  // Target Heading Vector
-  ctx.strokeStyle = c.warning;
-  ctx.lineWidth = 1.4;
-  ctx.setLineDash([5, 4]);
-  const targetAngle = (sp * Math.PI) / 180;
+  // Aerodynamic body contour lines
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(cx + Math.cos(targetAngle) * 75, cy + Math.sin(targetAngle) * 75);
+  ctx.moveTo(-20, -14);
+  ctx.lineTo(24, -12);
+  ctx.moveTo(-20, 14);
+  ctx.lineTo(24, 12);
   ctx.stroke();
-  ctx.setLineDash([]);
+
+  // Tinted Cockpit Windshield & Canopy Glass
+  const canopyGrad = ctx.createLinearGradient(-12, -13, 16, 13);
+  canopyGrad.addColorStop(0, 'rgba(6, 182, 212, 0.45)');
+  canopyGrad.addColorStop(0.4, 'rgba(15, 23, 42, 0.85)');
+  canopyGrad.addColorStop(1, 'rgba(6, 182, 212, 0.25)');
+  ctx.fillStyle = canopyGrad;
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.roundRect(-12, -13, 26, 26, 4);
+  ctx.fill();
+  ctx.stroke();
+
+  // Roof LiDAR / Autonomous Sensor Dome
+  ctx.fillStyle = '#0F172A';
+  ctx.beginPath();
+  ctx.arc(2, 0, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#06B6D4';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Pulsing laser sweep indicator
+  const lidarSweep = t * 16;
+  ctx.fillStyle = '#38BDF8';
+  ctx.beginPath();
+  ctx.arc(2 + Math.cos(lidarSweep) * 2.5, Math.sin(lidarSweep) * 2.5, 1.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Rear aero wing / diffuser
+  ctx.fillStyle = '#0F172A';
+  ctx.strokeStyle = '#38BDF8';
+  ctx.lineWidth = 1.2;
+  ctx.fillRect(-38, -15, 3, 30);
+  ctx.strokeRect(-38, -15, 3, 30);
+
+  ctx.restore();
 }
 
 // ── 3. Mecanum / Omni-Directional Platform ──

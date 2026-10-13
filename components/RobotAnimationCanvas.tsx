@@ -330,76 +330,140 @@ function drawLineFollower(
   ctx.fillText('LINE FOLLOWER — LATERAL TRACKING', w / 2, 18);
 }
 
-// ── Ackermann Vehicle ──
+// ── Ackermann Vehicle (Cinematic Highway) ──
 function drawAckermannVehicle(
   ctx: CanvasRenderingContext2D, w: number, h: number, c: Colors,
   pv: number, sp: number, u: number, t: number
 ) {
-  const groundY = h * 0.75;
-  ctx.fillStyle = c.ground;
-  ctx.fillRect(0, groundY, w, h - groundY);
-
   const cx = w / 2;
-  const cy = groundY - 35;
-  const heading = pv * Math.PI / 180;
+  const cy = h / 2;
+  const roadH = Math.min(180, h * 0.55);
+  const roadTop = cy - roadH / 2;
+  const roadBottom = cy + roadH / 2;
+  const forwardSpeed = 280;
 
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(heading);
+  // Outer dark terrain
+  ctx.fillStyle = '#060B14';
+  ctx.fillRect(0, 0, w, h);
 
-  // Car body
-  ctx.fillStyle = c.metalDark;
-  ctx.strokeStyle = c.accent;
-  ctx.lineWidth = 1.5;
+  // Asphalt road surface
+  const aspGrad = ctx.createLinearGradient(0, roadTop, 0, roadBottom);
+  aspGrad.addColorStop(0, '#0D1117');
+  aspGrad.addColorStop(0.5, '#161F2E');
+  aspGrad.addColorStop(1, '#0D1117');
+  ctx.fillStyle = aspGrad;
+  ctx.fillRect(0, roadTop, w, roadH);
+
+  // Road guardrails
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.roundRect(-30, -15, 60, 30, 5);
-  ctx.fill();
+  ctx.moveTo(0, roadTop); ctx.lineTo(w, roadTop);
+  ctx.moveTo(0, roadBottom); ctx.lineTo(w, roadBottom);
   ctx.stroke();
 
-  // Windshield
-  ctx.fillStyle = c.accentGlow;
+  // Solid white shoulder lines
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(10, -10, 12, 20, 2);
-  ctx.fill();
+  ctx.moveTo(0, roadTop + 10); ctx.lineTo(w, roadTop + 10);
+  ctx.moveTo(0, roadBottom - 10); ctx.lineTo(w, roadBottom - 10);
+  ctx.stroke();
+
+  // Center dashed dividing line (moving backward)
+  ctx.strokeStyle = '#FBBF24';
+  ctx.lineWidth = 2.5;
+  ctx.setLineDash([36, 28]);
+  ctx.lineDashOffset = t * forwardSpeed;
+  ctx.beginPath();
+  ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Car position
+  const lateralY = Math.max(-roadH * 0.35, Math.min(roadH * 0.35, pv * 1.2));
+  const carX = cx - 25;
+  const carY = cy + lateralY;
+  const heading = (pv * Math.PI) / 180;
+  const steerAngle = Math.max(-0.55, Math.min(0.55, u));
+
+  // Target trajectory arc
+  const targetY = cy + Math.max(-roadH * 0.35, Math.min(roadH * 0.35, sp * 1.2));
+  ctx.strokeStyle = c.warning;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 5]);
+  ctx.beginPath();
+  ctx.moveTo(carX + 35, carY);
+  ctx.lineTo(w, targetY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.save();
+  ctx.translate(carX, carY);
+  ctx.rotate(heading);
+
+  // Volumetric Headlights
+  for (const ly of [-12, 12]) {
+    const hGrad = ctx.createRadialGradient(32, ly, 2, 120, ly, 90);
+    hGrad.addColorStop(0, 'rgba(255, 255, 240, 0.85)');
+    hGrad.addColorStop(0.2, 'rgba(251, 191, 36, 0.35)');
+    hGrad.addColorStop(1, 'rgba(251, 191, 36, 0)');
+    ctx.fillStyle = hGrad;
+    ctx.beginPath();
+    ctx.moveTo(32, ly - 3);
+    ctx.lineTo(135, ly - 36);
+    ctx.lineTo(135, ly + 36);
+    ctx.lineTo(32, ly + 3);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Taillight trails
+  ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
+  ctx.fillRect(-85, -14, 55, 4);
+  ctx.fillRect(-85, 10, 55, 4);
 
   // Wheels
-  const steerAngle = u * 0.5;
   const wheelPositions = [
-    { x: -22, y: -18, steer: false },
-    { x: -22, y: 18, steer: false },
-    { x: 22, y: -18, steer: true },
-    { x: 22, y: 18, steer: true },
+    { x: -22, y: -17, steer: false },
+    { x: -22, y: 17, steer: false },
+    { x: 22, y: -17, steer: true },
+    { x: 22, y: 17, steer: true },
   ];
 
   for (const wp of wheelPositions) {
     ctx.save();
     ctx.translate(wp.x, wp.y);
     if (wp.steer) ctx.rotate(steerAngle);
-    ctx.fillStyle = c.metal;
-    ctx.fillRect(-5, -3, 10, 6);
+    ctx.fillStyle = '#090D16';
+    ctx.fillRect(-7, -4, 14, 8);
     ctx.strokeStyle = c.accent;
-    ctx.lineWidth = 0.5;
-    ctx.strokeRect(-5, -3, 10, 6);
+    ctx.lineWidth = 1;
+    ctx.strokeRect(-7, -4, 14, 8);
     ctx.restore();
   }
 
-  ctx.restore();
-
-  // Heading indicator
-  ctx.strokeStyle = c.warning;
-  ctx.lineWidth = 1;
-  ctx.setLineDash([4, 4]);
-  const targetAngle = sp * Math.PI / 180;
+  // Car body
+  ctx.fillStyle = '#1E293B';
+  ctx.strokeStyle = c.accent;
+  ctx.lineWidth = 1.8;
   ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(cx + Math.cos(targetAngle) * 60, cy + Math.sin(targetAngle) * 60);
+  ctx.roundRect(-30, -15, 62, 30, 6);
+  ctx.fill();
   ctx.stroke();
-  ctx.setLineDash([]);
+
+  // Windshield
+  ctx.fillStyle = c.accentGlow;
+  ctx.beginPath();
+  ctx.roundRect(-8, -11, 22, 22, 3);
+  ctx.fill();
+
+  ctx.restore();
 
   ctx.fillStyle = c.text;
   ctx.font = 'bold 11px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('ACKERMANN — HEADING TRACKING', w / 2, 18);
+  ctx.fillText('ACKERMANN — HIGHWAY PURSUIT', w / 2, 20);
 }
 
 // ── Mecanum Platform ──
