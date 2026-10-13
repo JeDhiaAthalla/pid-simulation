@@ -1,24 +1,18 @@
 # ⚡ PID Control Sim — Real-Time Multi-Plant Robotics Simulator
 
-<div align="center">
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=flat&logo=vercel)](https://pid-simulation.vercel.app)
-![Next.js](https://img.shields.io/badge/Next.js-16.4-black?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![Web Workers](https://img.shields.io/badge/Web_Workers-Parallel_Tuning-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Turbopack](https://img.shields.io/badge/Turbopack-Blazing_Fast-000000?style=for-the-badge&logo=vercel&logoColor=white)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://pid-simulation.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-16.4-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![HTML5 Canvas](https://img.shields.io/badge/HTML5_Canvas-2D-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![Web Workers](https://img.shields.io/badge/Web_Workers-Parallel_Tuning-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
+[![Turbopack](https://img.shields.io/badge/Turbopack-Blazing_Fast-000000?style=flat&logo=vercel&logoColor=white)](https://turbo.build/pack)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<p align="center">
-  <b>Simulator kendali PID industri berbasis web dengan integrasi numerik Runge-Kutta ke-4 (RK4), visualisasi kinematika 2D multi-archetype, auto-tuning non-blocking via Web Worker, dan telemetri instrumen zero-allocation.</b>
-</p>
+> Simulator kendali PID industri berbasis web dengan integrasi numerik Runge-Kutta ke-4 (RK4), visualisasi kinematika 2D multi-archetype, auto-tuning non-blocking via Web Worker, dan telemetri instrumen zero-allocation.
 
 [🌐 Live Demo](https://pid-simulation.vercel.app) • [Fitur Utama](#-fitur-unggulan-core-highlights) • [Formulasi Matematika](#-formulasi-matematis-mathematical-foundations) • [Robotic Archetypes](#-robotic-archetypes) • [Arsitektur Sistem](#-arsitektur-sistem--performa) • [Instalasi](#-instalasi--panduan-cepat)
-
-</div>
 
 ---
 
